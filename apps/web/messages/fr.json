@@ -1360,15 +1360,17 @@
   },
   "library": {
     "title": "Bibliothèque",
-    "intro": "De courts articles de référence sur les dix points d’expression écrite que Palier suit. Chacun présente la règle, les pièges que rencontre un rédacteur anglophone et des exemples.",
-    "skillHeading": "Expression écrite",
-    "readingLater": "Les articles sur la compréhension de l’écrit viendront après la version 1.0.",
+    "intro": "De courts articles de référence sur les dix-huit points de compréhension de l’écrit et d’expression écrite que Palier suit. Un article de lecture montre quoi repérer et les pièges des choix de réponse, avec des extraits à lire; un article d’écriture présente la règle, les pièges que rencontre un rédacteur anglophone et des exemples.",
+    "readingHeading": "Compréhension de l’écrit",
+    "writingHeading": "Expression écrite",
     "back": "Tous les articles",
     "examples": "Exemples",
+    "excerpt": "Lisez",
     "insteadOf": "Au lieu de",
     "write": "Écrivez",
     "related": "À lire ensuite",
     "practise": "S’exercer à l’expression écrite",
+    "practiseReading": "S’exercer à la compréhension de l’écrit",
     "readAbout": "Lire l’article « {subSkill} » dans la bibliothèque",
     "newTab": "(s’ouvre dans un nouvel onglet)"
   }

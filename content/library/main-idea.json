@@ -1,0 +1,73 @@
+{
+  "subSkill": "main-idea",
+  "lang": "fr",
+  "title": {
+    "en": "Main idea",
+    "fr": "L’idée principale"
+  },
+  "summary": {
+    "en": "Finding what a whole text sets out to say. At level C the main idea often holds two findings in tension and the conclusion drawn from them.",
+    "fr": "Dégager ce que l’ensemble d’un texte cherche à dire. Au niveau C, l’idée principale réunit souvent deux constats opposés et la conclusion qu’on en tire."
+  },
+  "sections": [
+    {
+      "heading": {
+        "en": "Where it sits",
+        "fr": "Où la trouver"
+      },
+      "paragraphs": [
+        {
+          "en": "An administrative text usually states its point near the start (the subject line, the purpose of a note) or at the end (a conclusion, a recommendation). Read the first and last paragraphs before the details. Phrases such as _en somme_, _il ressort de_ and _nous recommandons_ announce it.",
+          "fr": "Un texte administratif énonce généralement son propos au début (l’objet, le but de la note) ou à la fin (la conclusion, la recommandation). Lisez le premier et le dernier paragraphe avant les détails. Des expressions comme _en somme_, _il ressort de_ et _nous recommandons_ l’annoncent."
+        },
+        {
+          "en": "Sum up each paragraph in a few words, then ask what joins them. The main idea covers the whole text; a statement true of one paragraph only is a detail.",
+          "fr": "Résumez chaque paragraphe en quelques mots, puis demandez-vous ce qui les relie. L’idée principale couvre tout le texte; un énoncé vrai pour un seul paragraphe est un détail."
+        }
+      ]
+    },
+    {
+      "heading": {
+        "en": "The traps",
+        "fr": "Les pièges"
+      },
+      "paragraphs": [
+        {
+          "en": "An option that keeps one finding and drops the other. If the text says _les délais ont diminué, mais les plaintes ont augmenté_, “processing is faster” is only half of it.",
+          "fr": "Le choix qui garde un constat et oublie l’autre. Si le texte dit _les délais ont diminué, mais les plaintes ont augmenté_, « le traitement est plus rapide » n’en donne que la moitié."
+        },
+        {
+          "en": "An option that turns a nuance into a verdict, or stretches one finding to the whole organization. _Utile, mais réactive_ does not mean “useless”. And an option that repeats the text’s words is not right for that alone: check that it says what the text says.",
+          "fr": "Le choix qui transforme une nuance en verdict, ou étend un constat à toute l’organisation. _Utile, mais réactive_ ne veut pas dire « inutile ». Et un choix qui reprend les mots du texte n’est pas juste pour autant : vérifiez qu’il dit ce que dit le texte."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "excerpt": "Le nouveau système de gestion des demandes a réduit les délais de traitement de 20 %. Toutefois, le nombre de plaintes sur la qualité des réponses a doublé. Le comité recommande donc de revoir la formation du personnel avant d’étendre le système aux régions.",
+      "why": {
+        "en": "The main idea joins all three sentences: faster, but worse answers, so training before expansion. “The system is a success” keeps only the first.",
+        "fr": "L’idée principale relie les trois phrases : plus rapide, mais des réponses moins bonnes, donc la formation avant l’expansion. « Le système est une réussite » ne garde que la première."
+      }
+    },
+    {
+      "excerpt": "Objet : fermeture temporaire de l’édifice de la rue Laval. En raison de travaux de mise aux normes, l’édifice sera fermé du 3 au 14 mars. Le personnel travaillera à distance pendant cette période; les réunions prévues sur place se tiendront en mode virtuel.",
+      "why": {
+        "en": "The subject line states the main idea: the building closes for a time. The dates, the remote work and the virtual meetings are details.",
+        "fr": "L’objet énonce l’idée principale : l’édifice ferme pour un temps. Les dates, le travail à distance et les réunions virtuelles sont des détails."
+      }
+    },
+    {
+      "excerpt": "Les consultations menées cet automne ont été utiles, mais elles sont restées réactives : elles répondaient aux problèmes une fois ceux-ci apparus. La nouvelle stratégie mise plutôt sur la prévention.",
+      "why": {
+        "en": "The idea lies in the contrast between _réactives_ and _prévention_. “The consultations were useless” turns _utiles, mais_ into a condemnation.",
+        "fr": "L’idée tient dans l’opposition entre _réactives_ et _prévention_. « Les consultations ont été inutiles » transforme _utiles, mais_ en condamnation."
+      }
+    }
+  ],
+  "related": [
+    "text-structure",
+    "inference"
+  ]
+}

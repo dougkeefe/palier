@@ -1,7 +1,9 @@
 # Palier: Progress
 
-**Last updated:** 24 October 2026 (the translator's explanation moved into the card under the panes, and the visit's total and "goes only to OpenAI" below the card, D252)
-**Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
+**Last updated:** 24 October 2026 (**1.0 reached**: Gates O and M passed and bank v4 read by the human, D253; reading's library articles built, D254; next, D206's bank budget)
+**Current phase:** **1.0 is reached** (24 October 2026, D253): the human passed Gate O and Gate M and read bank v4 with no
+disagreement, so Phases 6 and 7 are complete. After 1.0, reading's library articles are built (D254), and D206's bank budget is next. The history follows.
+**Phase 7 (Polish and hardening, 1.0) opened** on 28 September 2026. **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
 resolved** (D145, human, 29 September 2026), **Slice 3 merged (#47**; D146–D152), the relicense merged (#48, D153), the
@@ -132,8 +134,8 @@ human for anything expensive.
 | 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (all four slices built, exit criteria 1–4 met; the product pilot is running, human, D97) |
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **complete** (four slices, D97, all merged, the last as #32; D98–D112; Gate G passed; all three exit criteria met) |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **complete, one criterion deferred** (Gate H resolved; three slices, D113; Slice 1 merged, #34, exit criterion 5 met; Slice 2 merged, #35, exit criterion 3 met; Slice 3 merged, #37, D122–D127; exit criterion 4 met, D128; Gate I passed, D129; criterion 2 deferred by the human, D130) |
-| 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | **in progress, in 1.0** (deferred 28 September 2026, D131; brought back into 1.0 29 September 2026, human, D165: three slices and Gates N and O, before Gate M); Slice 1 merged, #53, D166–D173; Gate N passed, D174, with its findings fixed, D175–D176 (#54), recorded on prompt v5 by `dougkeefe/next-dev-slice`; Slice 2 merged, #57, D180–D189; the human's session, D191; exit criterion 1 met on the deployed site, and the dial's levers built, D190, merged #58; Slice 3 merged, #60, D192–D194; Gate O next (human) |
-| 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 merged, #39; Slice 2 merged, #45; Gate K resolved, D145; Slice 3 merged, #47; the cleanup slice merged, #49, D154–D158; Slice 4 merged, #51, D159–D162; Gate L passed, D164; the repo is public, D195; Slice 5, launch readiness, merged, #61, D198–D200; Gate M waits on Phase 6, D165) |
+| 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | **complete** (in 1.0, D165; three slices merged, #53, #57, #60; Gates N and O passed, D174, D253) |
+| 7 Polish and hardening | 1.0 | 2–3 wk | **complete: 1.0** (five slices merged, #39, #45, #47, #51, #61; Gates K, L and M passed, D145, D164, D253; the repo is public, D195) |
 | 8 English mirror | Prove the architecture | 2 wk | not started |
 
 Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · `[!]` blocked or deferred, with a note.
@@ -142,16 +144,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/translate-page-output-order` | **The translator's explanation in the card** (D252, the human's request, 24 October 2026): the notes, or the strengths, corrections and study links, sit inside the white card right under the two panes; the visit's running total and "Your text goes only to OpenAI" move below the card. | 24 October 2026 |
-| `dougkeefe/translate-page-access` | **The translator reworked** (D251, the human's request, 24 October 2026): the page at 1160px with the two panes aligned on a shared subgrid, side by side from 900px; translation on a 1.5 s pause in typing, with no button, amending D237 for this screen, and a running total for the visit; past the soft cap a pause stops sending and one press does; a copy icon (`@palier/ui`'s new `IconButton`) at the French's top right; "Always in French", the intro and "Start again" removed; the header's About replaced by Translate. | 24 October 2026 |
-| `dougkeefe/today-s-plan-oral-ux` | **Today's plan as three equal tabs** (D248, the human's request, 22 October 2026): Reading, Written expression and Oral expression as `@palier/ui`'s `Tabs` in place of the plan's two-skill radio switch, as `/progress` took them (D247). Speaking's plan is one suggested session (the kind practised least lately, its length and practice-mode estimate, and a way to `/practice/oral`), and its "Where you stand" is the newest report's fixes. Nothing on Today spends. Also the E2E warmup's cold routes, which failed #95's medium lane (D249). | 22 October 2026 |
-| `dougkeefe/oral-progress-radio-buttons-ux` | **`/progress`'s detail as three equal tabs** (D247, the human's request, 22 October 2026): Reading, Written expression and Oral expression as WAI-ARIA tabs (`@palier/ui`'s new `Tabs`) in place of the two-skill radio switch; speaking gains a detail panel (its newest sessions, measured, beside the newest report's fixes, over `@palier/app`'s new `oralProgress`); each hero card has a way into its tab. Print is unchanged. | 22 October 2026 |
-| `dougkeefe/dependabot-status-resolve` | **Dependabot cleared** (D246, the human's request, 22 October 2026): PR #90's 18 minor and patch bumps installed with the repo's pnpm, since Dependabot's lockfile pulled in `@types/node` 26, and `vite` 8.3.5 named as a root devDependency to close alerts #16–#18. | 22 October 2026 |
-| `dougkeefe/klt79` | **`/progress` as a dashboard** (D245, the human's request, 22 October 2026): an overview of all three domains in Today's deep hero, then the chosen skill's trend beside its sub-skills, each sub-skill with a bar (`@palier/ui`'s new `TallyBar`). Print is unchanged. | 22 October 2026 |
-| `dougkeefe/keep-for-this-tab-less-prominent` | **"For this tab only" folded behind a quiet disclosure** (D242, the human's request, 19 October 2026): onboarding's key step and `/settings/key` no longer offer it as a peer of saving the key, and its hint says the key must be pasted again on every visit. And **the landing hero says Palier is unofficial and unaffiliated** (D243), and the landing way-in test no longer races D224's redirect (D244). | 19 October 2026 |
-| `dougkeefe/docs-outstanding-implementations-review` | **The review queue never serves a retired item** (D241; D205's named gap, scheduled by the human, 18 October 2026), and **this file reconciled with what has merged**: the slices and criteria `main` already holds, ticked, and *Next, decided* opening on Gate O. | 18 October 2026 |
+| `dougkeefe/palier-reading-comprehension-add` | **1.0 recorded** (D253: Gates O and M passed and v4 read, the human, 24 October 2026) and **reading's library articles** (D254, Gate K's "after 1.0"): one article per reading sub-skill, eight, in both languages, linked from every reading item's explanation. | 24 October 2026 |
 
-*(The prior rows — the translator (#96), the landing footer (#87), the README and the domain (#86), one press spends (#85), the Dependabot overrides (#83), the landing page's headline and pricing (#82), spoken practice spoken only (#80), the landing menu on a phone (#79), the explainer video (#78), the spoken-practice picker (#76), the nightly lane (#75), the sample question's language (#74), onboarding reordered (#73), step 5's disclosures (#72), onboarding's key step (#70), Today on the dashboard layout (#69), Today rebuilt around the next step (#68), the diagnostic that gives a result (#67), the full content run (#64), the app as designed (#63), the landing page as designed (#62), Phase 7 Slice 5 (#61), Phase 6 Slice 3 (#60), the human's studio session and the dial (#58), Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — the translator's explanation in the card (#99), the translator reworked (#97), Today's plan as tabs (#95), `/progress`'s tabs (#94), Dependabot cleared (#93), `/progress` as a dashboard (#92), "for this tab only" folded (#89), the review queue and retired items (#88), the translator (#96), the landing footer (#87), the README and the domain (#86), one press spends (#85), the Dependabot overrides (#83), the landing page's headline and pricing (#82), spoken practice spoken only (#80), the landing menu on a phone (#79), the explainer video (#78), the spoken-practice picker (#76), the nightly lane (#75), the sample question's language (#74), onboarding reordered (#73), step 5's disclosures (#72), onboarding's key step (#70), Today on the dashboard layout (#69), Today rebuilt around the next step (#68), the diagnostic that gives a result (#67), the full content run (#64), the app as designed (#63), the landing page as designed (#62), Phase 7 Slice 5 (#61), Phase 6 Slice 3 (#60), the human's studio session and the dial (#58), Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
@@ -251,80 +246,33 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-Phase 7 (D132): **Slices 1–5 merged** (Slice 5 as #61), **Gate L passed** (D164), and the repo is public (D195). **Studio
-mode is in 1.0** (D165): Phase 6's three slices merged (#53, #57, #60), Gate N passed (D174), the human's live session passed
-(D191), and exit criterion 1 is met on the deployed site (D190). `main` is protected, and a red lane blocks the merge (D177).
-**The full content run is built** (`dougkeefe/content-generation-run`; D203–D207; ADR 24): `content/bank/v4`, 626 items written by Claude and
-reviewed blind by Claude, with v3's synthetic content retired.
+**1.0 is reached** (D253, the human, 24 October 2026). Gate O and Gate M passed, and the human read bank v4 with no
+disagreement, so ADR 24 stands and Phases 6 and 7 are complete. **Reading's library articles are built** (D254,
+`dougkeefe/palier-reading-comprehension-add`), the first of Gate K's after-1.0 items (D145). XP, levels and the countdown are still named, not
+scheduled, and Phase 8, the English mirror, is the plan's next phase.
 
-What stands between the code and 1.0 is now **the human's**: **Gate O**, then the rest of **Gate M** (an outside item
-submission and the trademark check; the domain is done, D238). No agent slice is left before them.
+**Next: D206, the bank's first fetch back under architecture.md §13's 400 KB.** Bank v4 is about 515 KB gzipped, because
+`apps/web/src/sw/worker.ts` precaches every shard the manifest lists. It is the one known budget breach on the live site,
+and it costs a first visit on a phone the most.
+- **The choice is the human's** (D206 left it for them): lazy shard fetch, precaching only the study profile's skill, or
+  an amended budget. **The agent recommends the second, with the first behind it**: precache the manifest, the forms and
+  the shards of the skill the user studies, and fetch any other shard on first use, then cache it. An amended budget
+  would hide the cost rather than remove it.
+- **Then the slice:** the worker learns which shards to precache, from a list the page hands it, since the worker has no
+  runtime imports and cannot read the study profile; the bank adapter's shard fetch goes through the worker's runtime
+  cache, so a shard missed online is fetched once; and a test enforces the budget, which until now nothing did (D206).
+- **R4 must hold:** `offline.spec.ts`'s "every shard and form of the served bank is readable offline" becomes "every
+  shard of the studied skill", and a shard of the other skill, once opened online, stays readable offline. That is a
+  change to R4's reach, so it needs the human's yes with the choice.
 
-**The order: Gate O, then the human's read of v4, then Gate M** (all three the human's). Beside them, two agent tasks that
-need `OPENAI_SMOKE_KEY`, and one finding for the human to schedule.
+*Done:* a first visit's bank bytes under 400 KB gzipped, enforced by a test that fails on a deliberate breach, the
+offline journeys green, and R4's reach stated in the deviation.
 
-1. **Gate O (human)**: `docs/realtime-checklist.md` on its six browser and platform pairs (Phase 6 exit criterion 3); the
-   route, `apps/web/src/server/realtime-handlers.ts`, read line by line, **its rate limit included** (D195, D200): 60 posts an
-   hour per IP hash, counted before the key is read, refused as `429 throttled`, with no limit when there is no database and
-   the mint let through when the store fails. The count is kept, like the sync routes', under a day's HMAC of the address,
-   which `/privacy`'s "beyond using it for a moment to limit abuse" already covers, so no copy changed; say whether the key
-   copy's "which keeps nothing" (`key.offerStays`) still reads true to you. Then the self-hosted files in `selfhost/`, after
-   **deploying your own endpoint** from them with `ALLOWED_ORIGIN` set to `https://www.palier.study` (the checklist's section
-   7 needs one); `docs/deploy.md`'s log check, and whether D193's "nothing Vercel records can carry the key" is what ADR 3's
-   "request logging is disabled" should mean. Its pass completes Phase 6.
+**For the human, from D254:** read the eight reading articles' French and English (`/fr/library` and `/en/library`,
+the reading section), as Gate L read writing's. In particular, say whether each excerpt reads as federal administrative
+French and whether each "what to notice" is the only defensible reading.
 
-   **On the deployed site, in both languages, on a laptop and on a phone**, the screens built since Gate L, each with its
-   question:
-   - **Onboarding** (D224, D220, D222), as a new user at `/en/home`: it goes straight to step 1, with the statement there and
-     on no later step. On the key step, step 4, open the two disclosures: do they read right to a non-technical person, and
-     are the five estimates the right five? Play the video in Safari and Chrome. Paste a real key and see "This key works.",
-     then choose "Take the diagnostic" and see it lead to the launcher; once more with the key passed over, and see the
-     diagnostic's gate.
-   - **Today** (D214, D219), three times: as a new user, after a diagnostic, and with a test date two days out. Does the order
-     read right, does the mock exam's threshold feel like the right moment, and do the hero's skill cards, the statistics and
-     the calendar earn their place?
-   - **The diagnostic** (ADR 25): take one writing diagnostic on a real key. Does the written result read as useful, and
-     does the starting level match your sense of your French?
-   - **`/practice/oral`**: the picker's layout (D229): do the two steps read in order, and does the no-key card belong at the
-     top? Block the microphone in each mode (D234): do the links to the writing workshop and reading practice read as the
-     right offer?
-   - **The landing page**: the headline and the one pricing message (D235): does « Votre C est plus proche que vous ne le
-     pensez. » read right? It takes three lines at 1440×900, so the hero's button sits about 20px below the fold; « Votre C
-     n’est pas si loin. » would fit in two. The menu at the top right (D232): does "Start free" belong inside it or beside the
-     button? The explainer video (D230), in Safari and Chrome, on a phone too: does it sit right? In the French recording's
-     closing card a decorative circle covers the end of « votre »; re-render it if that matters, and recut its poster. The
-     sample question (D226): does the verdict's quoted word ("car", « because ») read naturally? The footer (D240).
-
-   **The French read**, of the copy added since Gate L:
-   - studio mode's (D186) and the endpoint's (D192, with `selfhost/`'s two lines);
-   - Slice 5's: `oral.failThrottled`, and `progress.historyTitle`, `historyNone`, `historyFigures`, `historyWeek`,
-     `historyAccuracy`, `historyCell`, `historyCellPaper`, `historyShort` (D198). Print `/fr/progress` with some history to
-     see the paper cells;
-   - the content run's: `about.bankMachine`, `landing.faq.source.a` and `progress.honestDoesNot` (D203);
-   - the progress dashboard's: `progress.glance*`, `progress.detailTitle` and `progress.subSkillOrder` (D245);
-   - the progress tabs': `progress.detailTabs`, `progress.seeDetail` and `progress.oral*` from `oralSessionsTitle` on (D247);
-     at 375px, does « Compré-hension » hyphenating in its tab read acceptably?
-   - the diagnostic's: `diagnostic.*`, `today.diagnostic*`, `today.plan*`, `start.placementDiagnosticHint`,
-     `key.continueToDiagnostic`, and the sentences added to `exam.intro` and `diagnostic.intro`;
-   - Today's: `today.*` (`next*`, `more*`, `pointer*`, `libraryAction`, `standEmpty`, `diagnosticWhat`, `examWhat`, and D219's
-     `hero*`, `skill*`, `oral*`, `stat*`, `calendar*`, `pointerViewAll`), and `content/pointers/pointers.json` (50 French
-     grammar pointers, D218);
-   - onboarding's: `start.key*`, `start.finishDiagnostic`, and `key.video*`, `newTab`, `guidePlatform`, `guideIntro` and
-     `guideStep1`–`guideStep7` with `guideStep6Below` (D220, D224). **A French version of the key video** is the human's to
-     record, if wanted: the French captions say the video is in English;
-   - spoken practice's (D234): `oral.micAlternatives`, `oral.micAlternativeWorkshop`, `oral.micAlternativeReading`,
-     `oral.recordFailed`, and the reworded `oral.micNoMic`, `oral.micUnsupported`, `oral.micFailed` and
-     `oral.modePracticeHint*`;
-   - the landing page's: `landing.hero.title`, `hero.lede`, `features.ai.body`, `how.body`, `faq.cost.q` and `.a`,
-     `close.body`, `footer.tagline`, `landing.video*`, `landing.sample.tag`, `metadata.description` and `about.what` (D226,
-     D230, D235).
-2. **The human's read of v4** (ADR 24's first *revisit when*; Gate M). Read about 20 items and 3 passages chosen at random
-   from `content/authored/claude-*.json`, and one scenario of each session type. For each, say whether the key is the only
-   defensible answer and whether the French reads as federal administrative French. **Disagreement on more than two items
-   reopens ADR 24**: re-review the bank cross-family before v5 (`run --authored-only --provider openai`).
-3. **Gate M (human)**: an outside item submission [R13] and §12.1's trademark check (the domain is done, D238).
-
-**Beside them, whenever a smoke key is to hand (agent):**
+**Beside it, whenever a smoke key is to hand (agent):**
 - **The translator's completions, recorded** (D250, two calls on the `assess` model, a few cents): the same
   `live-smoke --record` run writes `packages/testing/src/recorded/openai/translate.json`. Add its line to `RECORDED_RUNS`,
   `"translate"` to the replay test's coverage set and the method to the factory's `CONFORMANCE_METHODS`, and copy the
@@ -342,19 +290,11 @@ need `OPENAI_SMOKE_KEY`, and one finding for the human to schedule.
   *Done:* the twelve figures in the session log beside D190's. Over 2.5 s median, find the step that moved first. It needs
   `OPENAI_SMOKE_KEY` in `.env.local` at the repository root.
 
-**One finding waits for the human to schedule** (D206): bank v4 is about 515 KB gzipped against architecture.md §13's 400 KB
-first bank fetch, because the service worker precaches every shard. The options are lazy shard fetch, precaching only the
-study profile's skill, or an amended budget. (D206's other finding, the review queue serving retired items, is fixed: D241.)
-
-If an agent session opens before Gate O is done, it has no slice to build: the remaining work is the human's, and *named, not
-scheduled* below is after 1.0. It should do no more than keep `main` green (the Dependabot queue, the nightly) and say so.
+*(D206's other finding, the review queue serving retired items, is fixed: D241.)*
 
 Budget note (D178): a change to a core package puts the fast lane near 92 s of its 120 s. On this machine `pnpm verify` took
 48 s for Slice 5. A fresh worktree needs `pnpm --filter @palier/web build` first, or the medium lane's production server
 cannot start, and `pnpm exec playwright install chromium` if Playwright's browser is missing.
-
-*(Phase 6's three slices' items for the human are folded into Gate O above: the endpoint, D193's read and studio mode's
-copy. Their other items are done: the dial merged as #58, the route answered on the deployed build, 30 September 2026.)*
 
 **For the human, from Slice 4:**
 - **look at the milestone moment and Coco's cheering pose** (seed or reach a milestone; D159, D160) and the self-hosted type
@@ -729,7 +669,8 @@ band, a table beside the chart, and the printout still one page in both language
 - [x] **Merged with Slice 4 (#51).** The library: MDX reference articles on the taxonomy's grammar and register points, linked from item explanations.
   Slice 4: one article per written-expression sub-skill, ten, in both languages; reading's after 1.0 (Gate K, D145). The
   articles' French is part of Gate L. **Slice 4, built on this branch** (D162): ten articles as structured JSON, not MDX, at
-  `/library`, linked from every written-expression explanation
+  `/library`, linked from every written-expression explanation. **Reading's eight, after 1.0** (D254): excerpts in place
+  of sentences to write, linked from every reading explanation
 - [x] **Merged with Slice 2 (#45); the realtime route's log exclusion is Phase 6 Slice 3's (D193).** Observability: the client diagnostic bundle, the prefilled issue path, no error reporting service (ADR 15). **The
   item-report issue path exists** (Phase 2). **Slice 2, merged (#45)** (D140–D142): the diagnostic bundle, the error
   states with a prefilled issue, and `/api/health`. The realtime route's exclusion from Vercel logging moves with studio
@@ -773,17 +714,17 @@ band, a table beside the chart, and the printout still one page in both language
 
   **Built 3 October 2026, merged (#61)** (`dougkeefe/docs-content-development`; D198–D200; session-log evidence): all four, the 404 by the
   rewrite, which Next 16 carries.
-- [ ] **Gate M — public (human).** ~~The repo made public~~ (**public**, confirmed 2 October 2026, D195), an outside item
+- [x] **Gate M — public (human).** **Passed 24 October 2026** (D253): the outside item submission and the trademark check. ~~The repo made public~~ (**public**, confirmed 2 October 2026, D195), an outside item
   submission [R13], the domain, §12.1's trademark check, and ~~the full-volume bank (D54)~~ (**built**: `content/bank/v4`,
   written by Claude and reviewed blind by Claude, 4 October 2026, D203, ADR 24). **It waits on Phase 6's Gate O** (D165).
 
 **Exit criteria** (the actual gate)
 
-- [ ] Every gate green, no known accessibility defects, no known security defects. The accessibility and security halves
-  passed at Gate L (D164); ticked when Gate M is green
+- [x] Every gate green, no known accessibility defects, no known security defects. The accessibility and security halves
+  passed at Gate L (D164); Gate M passed (D253)
 - [x] Both languages reviewed by a human [R8]. Gate L (D164)
-- [ ] Repo public, licences in place, contribution path tested by someone else submitting an item [R13]. **Public and
-  licensed** (D153, D195); the outside submission is what remains
+- [x] Repo public, licences in place, contribution path tested by someone else submitting an item [R13]. **Public and
+  licensed** (D153, D195); the outside submission made at Gate M (D253)
 
 ### Phase 6: Oral, studio mode — in 1.0, before Gate M
 
@@ -855,7 +796,7 @@ built after Phase 7's slices and before Gate M.
   - the manual realtime checklist written out as `docs/realtime-checklist.md`.
 
   *Done:* the self-hosted path working end to end against a local endpoint.
-- [ ] **Gate O — studio mode's release reads (human).** The checklist on Chrome, Safari and Firefox, desktop and mobile (exit
+- [x] **Gate O — studio mode's release reads (human).** **Passed 24 October 2026** (D253). The checklist on Chrome, Safari and Firefox, desktop and mobile (exit
   criterion 3), the route read line by line, and the French of the new copy. Then Gate M.
 
 **Exit criteria** (the actual gate). Two are added by D165.
@@ -867,11 +808,12 @@ built after Phase 7's slices and before Gate M.
   run 18 October 2026, session log, `dougkeefe/docs-outstanding-implementations-review`): `container-studio.test.ts` reconnects once and fails cleanly on the
   second drop with every turn and note kept, through both graphs, and `oral-session.test.ts` keeps the transcript on a
   drop either way. A real browser's drop is the checklist's (`docs/realtime-checklist.md`), read at Gate O
-- [ ] Manual realtime checklist (`architecture.md` §14) passes on Chrome, Safari, Firefox, desktop and mobile
+- [x] Manual realtime checklist (`architecture.md` §14) passes on Chrome, Safari, Firefox, desktop and mobile. **Passed at
+  Gate O** (D253)
 - [x] The examiner's French voice is judged credible at C level by a human (Gate N) — `cedar`, D174
-- [ ] The key exception is stated wherever the copy promised otherwise, in both languages, and the self-hosted escape works.
+- [x] The key exception is stated wherever the copy promised otherwise, in both languages, and the self-hosted escape works.
   **Met on `dougkeefe/conductor/settings.local.toml-update`** (D186, D192): the escape runs end to end under the production CSP; ticked once merged and
-  the French is read at Gate O
+  the French is read at Gate O. Merged (#60), and the French read at Gate O (D253)
 
 ### Phase 8: English mirror
 
@@ -886,19 +828,19 @@ From `implementation-plan.md` §8. Status is *satisfied and verified*, not *work
 
 | # | Requirement | Phase | Status |
 | --- | --- | --- | --- |
-| R1 | Practises all three tested skills | 2, 5, 6 | reading and written expression practised end to end (24 September 2026); **oral in practice mode** since Phase 5 (28 September 2026, Gate I, D129); **studio mode is in 1.0** (D165): Slices 1–3 built (D166–D194), its real-browser pass is Gate O |
-| R2 | Format and register match the real tests | 1 | **built, verified at the full-volume bank**: the factory's register and format gates run on every batch (Phase 1, D51–D54) and passed on the baseline bank; Gate L read the bank's register (D164). **The full-volume bank, v4, is 626 items written to §13.1's register and reviewed blind for it** (D203, ADR 24); a human read of a sample is still owed |
+| R1 | Practises all three tested skills | 2, 5, 6 | reading and written expression practised end to end (24 September 2026); **oral in practice mode** since Phase 5 (28 September 2026, Gate I, D129); **studio mode is in 1.0** (D165): Slices 1–3 built (D166–D194), and its real-browser pass made at Gate O (D253) |
+| R2 | Format and register match the real tests | 1 | **built, verified at the full-volume bank**: the factory's register and format gates run on every batch (Phase 1, D51–D54) and passed on the baseline bank; Gate L read the bank's register (D164). **The full-volume bank, v4, is 626 items written to §13.1's register and reviewed blind for it** (D203, ADR 24); the human read a sample and disagreed with none (D253) |
 | R3 | Mock exams mirror published structure and cuts | 3 | **satisfied for reading and written expression** (25 September 2026): goldens at every cut (Slice 1), a form per variant at its exact counts, time and cuts (Slice 2), and all four variants runnable and scored in the app (Slice 3). Since v4 the forms are drawn from real French, authored by Claude (D203) |
 | R4 | Works with no key and offline after first load | 2 | practice and progress verified offline (journey 2 on the `offline` project, 24 September 2026); mock exams too: journey 3 finishes and submits a full exam with the network off and reads its results offline (25 September 2026) |
 | R5 | Never presents as official | 0, 7 | **satisfied and verified**: the statement in every footer since Phase 0, beside every band estimate and at the head of onboarding (Gate K, D145; Slice 3, D146), through one component, `NonAffiliation.tsx`; read in both languages at Gate L (D164) |
 | R6 | No real test items, no PSC reproduction | 1 | **built, verified at the full-volume bank**: the factory generates every item and its review gate refuses a reproduction (Phase 1, D51–D54); authored items attest originality (`CONTRIBUTING.md`, D152). **v4's 626 items are original by brief, fictional and checked for stage 5's rules** (D203) |
 | R7 | Rationale per option, explanation per item | 1 | **built, verified at the full-volume bank**: the item schema requires both and the factory's deterministic checks refuse a draft without them (Phase 1); every committed item carries them, **v4's 626 included, in both languages** (D203) |
-| R8 | Fully bilingual, equal prominence | 0, 1, 7 | **satisfied and verified**: key parity is a fast-lane gate since Phase 0, the toggle has equal prominence, and every string was read by a human at Gate L (D164). Copy added since (studio mode, the self-hosted endpoint, Slice 5) is read at Gate O |
+| R8 | Fully bilingual, equal prominence | 0, 1, 7 | **satisfied and verified**: key parity is a fast-lane gate since Phase 0, the toggle has equal prominence, and every string was read by a human at Gate L (D164). Copy added since (studio mode, the self-hosted endpoint, Slice 5, and the screens since Gate L) was read at Gate O (D253) |
 | R9 | WCAG 2.2 AA | 0, all | **satisfied and verified**: axe on every route and session state and the contrast test on the token set are build gates since Phase 0 (ADR 13); the VoiceOver and NVDA pass at Gate L found nothing (D164) |
 | R10 | No estimate without evidence and uncertainty | 2 | satisfied and verified (24 September 2026): below `MIN_EVIDENCE` a band shows no bar, only how many more answers it needs; above it, the Wilson interval is drawn beside the estimate (journey 1, `trend-lines.test.ts`, `BandMeter` tests) |
 | R11 | Export, import, delete, each in one action | 2, 7 | **satisfied and verified**: `/settings/data` exports, imports and deletes in one action each (journey 6), and delete-everywhere removes the server copy too, with sync (Phase 2 Slice 2) |
 | R12 | Key, audio, transcripts and submissions stay local | 4, 5 | **the key half is satisfied and verified** (26 September 2026). The tier-11 key-leak test asserts the sentinel reaches no origin but `api.openai.com`, no storage but the vault's ciphertext, no synced document, no export and no error (D100). **The writing half is satisfied and verified** (26 September 2026, Slice 3): the leak guard follows a submission's text and finds it only in requests to `api.openai.com` and in this device's own copy (the page, the field, `writingSubmissions`), never in a push, a pull, an export, Web Storage or the paired phone; proven to bite three ways (D106). **Runtime-generated items are held the same way** (27 September 2026, Slice 4, D110): a generated stem reaches only OpenAI, in review requests, and this device's `generated` table and page. It never appears in a push, an export, Web Storage or on the paired phone, and no attempt is ever written for it. Audio and transcripts are Phase 5: **the store that holds them is device-local by construction** (27 September 2026, Slice 1, D115). It is never synced and never exported, and a wipe and a delete-everywhere clear it, over both graphs. **The audio half is satisfied and verified** (27 September 2026, Slice 2, D120): each answer's clip reaches only OpenAI's transcription endpoint; the session recording reaches no request at all; and the transcript stays on this device, going back to OpenAI only in the examiner's next question and never to a push, an export, Web Storage or the paired phone. Proven to bite three ways |
-| R13 | Free and source-available, non-commercial (amended by the human, 29 September 2026, D153) | 0, 7 | licences committed (PolyForm Noncommercial 1.0.0 and CC BY-NC-SA 4.0, ADR 23); **the repository is public** (human, confirmed 2 October 2026, D195). An outside item submission, Gate M, completes it |
+| R13 | Free and source-available, non-commercial (amended by the human, 29 September 2026, D153) | 0, 7 | licences committed (PolyForm Noncommercial 1.0.0 and CC BY-NC-SA 4.0, ADR 23); **the repository is public** (human, confirmed 2 October 2026, D195); **an outside item submission was made at Gate M** (D253). **Satisfied** |
 | R14 | Progress across devices, with an off switch | 2 | satisfied and verified on the hermetic lane (24 September 2026): journey 8 pairs two devices by code and both show the same progress; the switch is tested off, with server deletion offered, in `sync.spec.ts`. A public deployment with a real database is Slice 3 |
 
 Eleven of fourteen are covered by the end of phase 3. That is the evidence behind
@@ -8368,9 +8310,109 @@ explanation is what the user values most, so it should sit closest to the text a
   no-key card is shown without one.
 - The explanation keeps its 760px reading measure inside the 1160px card. No message, decision or style changed.
 
+### D253 — Gates O and M passed and bank v4 read: 1.0
+**Date:** 24 October 2026 · **Status:** accepted (human decision); resolves Gate O and Gate M, completes Phases 6 and 7, and
+answers ADR 24's first *revisit when*
+
+- **The human reported all three done**, asked which in turn: the read of bank v4, Gate O and Gate M. Their scope is the one
+  *Next, decided* gave them, which is superseded now but visible in git history.
+  - **v4:** "I've read the bank and we're good to go." No disagreement was reported, so ADR 24's first *revisit when*
+    (disagreement on more than two items) is not met, and **ADR 24 stands**. No cross-family re-review is owed before v5.
+  - **Gate O:** `docs/realtime-checklist.md` on its six browser and platform pairs, the realtime route read line by line with
+    its rate limit, the self-hosted endpoint deployed and read, `docs/deploy.md`'s log check, the screens built since Gate L
+    on the deployed site, and the French of the copy added since Gate L.
+  - **Gate M:** an outside item submission [R13] and §12.1's trademark check. The repo was public (D195), the domain done
+    (D238) and the full-volume bank shipped (D203) before.
+- **No finding came with it, so no message, content or code changed.** Gate O asked open questions: whether
+  `key.offerStays`'s "which keeps nothing" still reads true, whether D193's reading is what ADR 3 meant, the landing
+  headline's three lines, "Start free" in the menu, the circle on the French video's closing card, and a French key video.
+  No change was asked for, so each stands as built. They are not recorded as separate answers.
+- **Not reported:** which submission was the outside one, and the trademark check's detail. The gate holds the tick, as
+  D164's unreported screen-reader user's pass did not.
+- **Ticked:** Phase 6's Gate O and exit criteria 3 and 5; Phase 7's Gate M and exit criteria 1 and 3; R1's real-browser pass,
+  R2's human read of a sample, R8's copy since Gate L, and R13.
+- **What stays open, outside both gates:** the product pilot (Gate E, Phase 3's last criterion), Gate J, Phase 5's deferred
+  criterion (D130), the standing human items in *Next, decided* (`PALIER_SITE_URL`, the retention dry run, the examiner's
+  `tts-1` voice), and D206's bank-size finding.
+- **After 1.0**, Gate K's deferrals open (D145): reading's library articles, XP and levels, and the countdown. Reading's
+  articles come first (D254).
+
+
+### D254 — reading's library articles: eight, with excerpts in place of sentences to write
+**Date:** 24 October 2026 · **Status:** accepted (agent), Gate K's "after 1.0" (D145) now that 1.0 is reached (D253); the
+human asked about the library's "Articles on reading comprehension come after 1.0." Amends D162's "one article per
+written-expression sub-skill"; `architecture.md` §5's tree and PRD §8's `/library` row amended in place
+
+- **One article per reading sub-skill, eight**, at `content/library/<subSkill>.json`, beside writing's ten. Each has a
+  bilingual title and summary, two sections of two paragraphs on what to look for and the traps in the options, and three
+  **original** excerpts in federal administrative French, each with what to notice. They are the agent's drafts, French
+  included, written from how bank v4's reading items test each sub-skill; they are the human's to read (*Next, decided*).
+- **The article's shape follows its sub-skill.** `LibraryArticle` is now a union: `WritingLibraryArticle` keeps
+  `{ avoid?, write, why }` examples, and `ReadingLibraryArticle` takes `LibraryExcerpt`, `{ excerpt, why }`. "Instead
+  of / Write" means nothing for a reading point, and a reading article cannot pass with sentences to write, nor relate to
+  a writing article. The schema is a `z.discriminatedUnion` on `subSkill`, so a mismatch is reported at its own path
+  (`3.examples.0…`), not as one "invalid input".
+- **`parseLibrary` requires one article per `LIBRARY_SUB_SKILLS`** (reading's eight, then writing's ten), and an oral
+  sub-skill is refused. `articleHref` answers for reading too, so **a reading item's explanation now links its article**,
+  in the drill (a new tab) and the exam review, through the existing `ArticleLink`, with no change to either screen.
+- **The web:** `/library` lists reading first, then writing, each under its heading, and `library.readingLater` is gone.
+  A reading article's excerpts are tagged "Read" / « Lisez » with the article's `lang`, and its button leads to
+  `/practice/reading`. `skillHeading` became `writingHeading` beside `readingHeading`; `intro` names both skills. The eight
+  routes joined `routes.json` (so the warmup visits them) and the precache, by file name, with no script change.
+- **A content bar for reading:** at least three excerpts per article, beside writing's four sentences to write.
+  Excerpts are longer, and three cover each sub-skill's traps.
+- **Tests whose premise changed, said here as D207 did:**
+  - `links.test.ts`'s "links a reading sub-skill nowhere, since reading's articles come after 1.0" now holds that every
+    reading sub-skill links to an article, and that an oral one links nowhere.
+  - `lib/library.test.ts` counted ten articles; `library-content.test.ts` counted `WRITING_SUB_SKILLS` files and required
+    four `avoid` examples of every article; `library.test.ts` built writing articles only. Each now covers both skills.
+  - `content.spec.ts`'s library test counted ten entries and probed `/en/library/main-idea` as a 404. It counts eighteen,
+    and probes an oral sub-skill, `/en/library/fluency-and-hesitation`. A reading drill's journey into its article is new.
+- **Lighthouse's list is unchanged** (19 URLs): a reading article is the same server template as `/fr/library/agreement`,
+  which it already measures, and a 20th URL adds five runs to the medium lane. `csp-production.spec.ts` gained
+  `/library/inference`, which costs one page load.
+- **The bank grows by nothing**; the precache gains eight article pages in each locale.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 24 October 2026 — `dougkeefe/palier-reading-comprehension-add` (reading's library articles; D254)
+
+*Next, decided*'s slice, which the first commit on this branch set (D253).
+- **Domain:** `LibraryArticle` a union over reading and writing (`LibraryExcerpt`, `LIBRARY_SUB_SKILLS`), the schema a
+  discriminated union on `subSkill`, `parseLibrary` over all eighteen; `docs/schemas/library-article.schema.json`
+  regenerated (`pnpm run test -u`).
+- **Content:** eight reading articles in `content/library/`.
+- **Web:** `/library` in two sections; the article page's excerpts and reading button; `articleHref` for reading;
+  `readingHeading`, `writingHeading`, `excerpt` and `practiseReading` in both languages, `readingLater` removed;
+  `routes.json` regenerated by `prepare-public.mjs`.
+- **Docs:** D254; `packages/domain/CLAUDE.md` and `apps/web/CLAUDE.md`; architecture.md §5 and PRD §8 in place;
+  *Next, decided* now D206.
+
+**Verified:**
+- `pnpm verify`: check-types, lint and boundaries clean; `pnpm test` passed 283 files, 4,578 tests (8 todo).
+- **Proven to bite:** with `content/library/inference.json` moved away, `library-content.test.ts` failed all five tests,
+  naming `(root): "inference" has no article`; restored, it passed.
+- `content.spec.ts` on the `chromium` project, with the warmup: 12 of 12, the new reading-drill journey and the
+  eighteen-article library test included. Run through a temporary, uncommitted config on port 3010, since another
+  project's dev server held 3000.
+- After `pnpm --filter @palier/web build`, the `offline` project's `csp-production.spec.ts` (every page in both locales,
+  `/library/inference` included, zero violations), `offline.spec.ts`, `exam-offline.spec.ts` and
+  `telemetry-offline.spec.ts`: 17 of 17.
+- Not run: Lighthouse, the rest of the medium lane and the live smoke. CI runs the medium lane on the pull request.
+
+### 24 October 2026 — `dougkeefe/palier-reading-comprehension-add` (1.0 recorded: Gates O and M passed, bank v4 read; D253)
+
+The human asked about the library's "Articles on reading comprehension come after 1.0", and then reported the read of bank v4,
+Gate O and Gate M done. This commit changes documents only.
+- **D253:** the three recorded as passed with no finding; ADR 24 stands.
+- **Ticked:** Phase 6's Gate O and exit criteria 3 and 5, Phase 7's Gate M and exit criteria 1 and 3, and R1, R2, R8 and
+  R13 in the requirement table. The status table reads Phase 6 complete and Phase 7 complete, 1.0.
+- **In flight:** the rows merged as #88–#99 removed; this branch's row added.
+- **Next, decided:** reading's library articles (D254), claimed by this branch.
+
+**Verified:** documents only, so no command proves this commit; the next commit on the branch runs `pnpm verify`.
 
 ### 24 October 2026 — `dougkeefe/translate-page-output-order` (the translator's explanation in the card; D252)
 

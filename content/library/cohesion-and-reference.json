@@ -1,0 +1,73 @@
+{
+  "subSkill": "cohesion-and-reference",
+  "lang": "fr",
+  "title": {
+    "en": "Cohesion and reference",
+    "fr": "La cohésion et la référence"
+  },
+  "summary": {
+    "en": "Following what each pronoun, synonym and linking phrase takes up, so that you know who does what, and to what, from one sentence to the next.",
+    "fr": "Suivre ce que reprend chaque pronom, synonyme ou locution de liaison, pour savoir qui fait quoi, et à quoi, d’une phrase à l’autre."
+  },
+  "sections": [
+    {
+      "heading": {
+        "en": "Find the antecedent",
+        "fr": "Trouvez l’antécédent"
+      },
+      "paragraphs": [
+        {
+          "en": "A pronoun (_celle-ci_, _ce dernier_, _en_, _y_, _dont_) or a phrase such as _cette mesure_ takes up something said earlier. Go back to it, check that it agrees in gender and number, and read the sentence with it in place.",
+          "fr": "Un pronom (_celle-ci_, _ce dernier_, _en_, _y_, _dont_) ou un groupe comme _cette mesure_ reprend un élément déjà nommé. Remontez jusqu’à lui, vérifiez qu’il s’accorde en genre et en nombre, et relisez la phrase en le remettant à sa place."
+        },
+        {
+          "en": "_En_ stands for a complement with _de_, _y_ for one with _à_: rebuild the construction (_contribuer à quoi?_) to find what they replace. _Ce dernier_ points to the last-named of two.",
+          "fr": "_En_ remplace un complément introduit par _de_, _y_ un complément introduit par _à_ : reconstruisez la construction (_contribuer à quoi?_) pour trouver ce qu’ils remplacent. _Ce dernier_ désigne le dernier nommé de deux éléments."
+        }
+      ]
+    },
+    {
+      "heading": {
+        "en": "Phrases that take up a whole idea",
+        "fr": "Les locutions qui reprennent toute une idée"
+      },
+      "paragraphs": [
+        {
+          "en": "_Faute de quoi_, _sans quoi_, _à cet égard_ and _dans ce cas_ take up the whole previous sentence, not one noun. Read that sentence again before you interpret them.",
+          "fr": "_Faute de quoi_, _sans quoi_, _à cet égard_ et _dans ce cas_ reprennent toute la phrase précédente, et non un seul nom. Relisez cette phrase avant de les interpréter."
+        },
+        {
+          "en": "Administrative French avoids repeating a noun and uses a synonym instead: _le projet_, then _l’initiative_, then _celle-ci_. A wrong option often treats the synonym as something new.",
+          "fr": "Le français administratif évite de répéter un nom et emploie un synonyme : _le projet_, puis _l’initiative_, puis _celle-ci_. Un mauvais choix traite souvent le synonyme comme un élément nouveau."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "excerpt": "Le ministère a consulté les syndicats et les gestionnaires régionaux. Ces derniers ont demandé un délai supplémentaire.",
+      "why": {
+        "en": "_Ces derniers_ takes up the last-named: the regional managers, not the unions.",
+        "fr": "_Ces derniers_ reprend le dernier élément nommé : les gestionnaires régionaux, et non les syndicats."
+      }
+    },
+    {
+      "excerpt": "Les employés doivent suivre la formation avant le 30 juin, faute de quoi leur accès au système sera suspendu.",
+      "why": {
+        "en": "_Faute de quoi_ takes up the whole obligation: access is suspended if the training is not taken by June 30.",
+        "fr": "_Faute de quoi_ reprend toute l’obligation : l’accès est suspendu si la formation n’est pas suivie avant le 30 juin."
+      }
+    },
+    {
+      "excerpt": "La politique sur le télétravail sera révisée cet automne. Celle-ci tiendra compte des résultats du sondage mené auprès du personnel.",
+      "why": {
+        "en": "_Celle-ci_ is feminine singular, so it takes up _la politique_, not _le télétravail_.",
+        "fr": "_Celle-ci_ est au féminin singulier : il reprend _la politique_, et non _le télétravail_."
+      }
+    }
+  ],
+  "related": [
+    "text-structure",
+    "vocabulary-in-context"
+  ]
+}

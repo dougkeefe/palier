@@ -1,0 +1,72 @@
+{
+  "subSkill": "numerical-and-tabular-detail",
+  "lang": "fr",
+  "title": {
+    "en": "Numerical and tabular detail",
+    "fr": "Les données chiffrées et les tableaux"
+  },
+  "summary": {
+    "en": "Reading figures, dates and tables accurately: tying each number to what it measures and to its period before you compare.",
+    "fr": "Lire avec exactitude les chiffres, les dates et les tableaux : rattacher chaque nombre à ce qu’il mesure et à sa période avant de comparer."
+  },
+  "sections": [
+    {
+      "heading": {
+        "en": "Tie every number to its label",
+        "fr": "Rattachez chaque nombre à ce qu’il mesure"
+      },
+      "paragraphs": [
+        {
+          "en": "Before you answer, note for each figure what it counts, where and when. Most traps pair a correct number with the wrong label: the warehouse’s rate given for the offices, last year’s figure for this year’s.",
+          "fr": "Avant de répondre, notez pour chaque chiffre ce qu’il compte, où et quand. La plupart des pièges associent un nombre exact à la mauvaise étiquette : le taux de l’entrepôt donné pour les bureaux, le chiffre de l’an dernier pour celui de cette année."
+        },
+        {
+          "en": "Watch the units and the words around them: _par mois_ or _par année_, _jours ouvrables_ or _jours civils_, _pourcentage_ or _points de pourcentage_. Convert where the question needs it: 14 days is two weeks.",
+          "fr": "Surveillez les unités et les mots qui les entourent : _par mois_ ou _par année_, _jours ouvrables_ ou _jours civils_, _pourcentage_ ou _points de pourcentage_. Convertissez quand la question l’exige : 14 jours font deux semaines."
+        }
+      ]
+    },
+    {
+      "heading": {
+        "en": "Comparisons and trends",
+        "fr": "Les comparaisons et les tendances"
+      },
+      "paragraphs": [
+        {
+          "en": "_Hausse_, _baisse_, _stable_, _a doublé_ and _a diminué de moitié_ describe change. Check the direction and the starting point: a rate that goes from 10 % to 15 % has risen by five points, or by half.",
+          "fr": "_Hausse_, _baisse_, _stable_, _a doublé_ et _a diminué de moitié_ décrivent une évolution. Vérifiez le sens et le point de départ : un taux qui passe de 10 % à 15 % a augmenté de cinq points, soit de moitié."
+        },
+        {
+          "en": "Qualifiers matter: _près de_, _plus de_, _au moins_, _environ_. _Près de la moitié_ is just under half, so it is not a majority.",
+          "fr": "Les nuances comptent : _près de_, _plus de_, _au moins_, _environ_. _Près de la moitié_ est un peu moins de la moitié : ce n’est donc pas une majorité."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "excerpt": "Au printemps, le taux d’absentéisme était de 6 % à l’entrepôt et de 3 % dans les bureaux. Au troisième trimestre, il a atteint 4,5 % dans les bureaux.",
+      "why": {
+        "en": "In the offices the rate rose from 3% to 4.5%: up 1.5 points, or by half. The 6% belongs to the warehouse alone.",
+        "fr": "Dans les bureaux, le taux est passé de 3 % à 4,5 % : une hausse de 1,5 point, soit de moitié. Le 6 % ne concerne que l’entrepôt."
+      }
+    },
+    {
+      "excerpt": "L’affichage restera ouvert pendant 14 jours civils à compter de sa publication, le 2 juin.",
+      "why": {
+        "en": "Fourteen calendar days, weekends included, from June 2: two weeks, until June 16.",
+        "fr": "Quatorze jours civils, fins de semaine comprises, à compter du 2 juin : deux semaines, jusqu’au 16 juin."
+      }
+    },
+    {
+      "excerpt": "Près de la moitié des répondants (48 %) se disent satisfaits du nouveau portail.",
+      "why": {
+        "en": "_Près de la moitié_ is just under half: “most respondents are satisfied” is wrong.",
+        "fr": "_Près de la moitié_ est un peu moins de la moitié : « la plupart des répondants sont satisfaits » est faux."
+      }
+    }
+  ],
+  "related": [
+    "specific-detail"
+  ]
+}

@@ -1,186 +1,367 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "type": "object",
-  "properties": {
-    "subSkill": {
-      "type": "string",
-      "enum": [
-        "verb-tense-and-mood",
-        "agreement",
-        "prepositions-and-government",
-        "pronouns",
-        "connectors-and-discourse-markers",
-        "register-and-formality",
-        "word-choice-precision",
-        "false-friends-and-anglicisms",
-        "punctuation-and-mechanics",
-        "sentence-structure"
-      ]
-    },
-    "lang": {
-      "type": "string",
-      "enum": [
-        "en",
-        "fr"
-      ]
-    },
-    "title": {
+  "oneOf": [
+    {
       "type": "object",
       "properties": {
-        "en": {
+        "subSkill": {
           "type": "string",
-          "minLength": 1
+          "enum": [
+            "main-idea",
+            "specific-detail",
+            "inference",
+            "vocabulary-in-context",
+            "cohesion-and-reference",
+            "tone-and-intent",
+            "text-structure",
+            "numerical-and-tabular-detail"
+          ]
         },
-        "fr": {
+        "lang": {
           "type": "string",
-          "minLength": 1
-        }
-      },
-      "required": [
-        "en",
-        "fr"
-      ],
-      "additionalProperties": false
-    },
-    "summary": {
-      "type": "object",
-      "properties": {
-        "en": {
-          "type": "string",
-          "minLength": 1
+          "enum": [
+            "en",
+            "fr"
+          ]
         },
-        "fr": {
-          "type": "string",
-          "minLength": 1
-        }
-      },
-      "required": [
-        "en",
-        "fr"
-      ],
-      "additionalProperties": false
-    },
-    "sections": {
-      "minItems": 1,
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "heading": {
-            "type": "object",
-            "properties": {
-              "en": {
-                "type": "string",
-                "minLength": 1
-              },
-              "fr": {
-                "type": "string",
-                "minLength": 1
-              }
+        "title": {
+          "type": "object",
+          "properties": {
+            "en": {
+              "type": "string",
+              "minLength": 1
             },
-            "required": [
-              "en",
-              "fr"
-            ],
-            "additionalProperties": false
-          },
-          "paragraphs": {
-            "minItems": 1,
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "en": {
-                  "type": "string",
-                  "minLength": 1
-                },
-                "fr": {
-                  "type": "string",
-                  "minLength": 1
-                }
-              },
-              "required": [
-                "en",
-                "fr"
-              ],
-              "additionalProperties": false
+            "fr": {
+              "type": "string",
+              "minLength": 1
             }
-          }
+          },
+          "required": [
+            "en",
+            "fr"
+          ],
+          "additionalProperties": false
         },
-        "required": [
-          "heading",
-          "paragraphs"
-        ],
-        "additionalProperties": false
-      }
-    },
-    "examples": {
-      "minItems": 1,
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "avoid": {
-            "type": "string",
-            "minLength": 1
+        "summary": {
+          "type": "object",
+          "properties": {
+            "en": {
+              "type": "string",
+              "minLength": 1
+            },
+            "fr": {
+              "type": "string",
+              "minLength": 1
+            }
           },
-          "write": {
-            "type": "string",
-            "minLength": 1
-          },
-          "why": {
+          "required": [
+            "en",
+            "fr"
+          ],
+          "additionalProperties": false
+        },
+        "sections": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
             "type": "object",
             "properties": {
-              "en": {
-                "type": "string",
-                "minLength": 1
+              "heading": {
+                "type": "object",
+                "properties": {
+                  "en": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "fr": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "en",
+                  "fr"
+                ],
+                "additionalProperties": false
               },
-              "fr": {
-                "type": "string",
-                "minLength": 1
+              "paragraphs": {
+                "minItems": 1,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "en": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "fr": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "en",
+                    "fr"
+                  ],
+                  "additionalProperties": false
+                }
               }
             },
             "required": [
-              "en",
-              "fr"
+              "heading",
+              "paragraphs"
             ],
             "additionalProperties": false
           }
         },
-        "required": [
-          "write",
-          "why"
-        ],
-        "additionalProperties": false
-      }
+        "examples": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "excerpt": {
+                "type": "string",
+                "minLength": 1
+              },
+              "why": {
+                "type": "object",
+                "properties": {
+                  "en": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "fr": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "en",
+                  "fr"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "excerpt",
+              "why"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "related": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "main-idea",
+              "specific-detail",
+              "inference",
+              "vocabulary-in-context",
+              "cohesion-and-reference",
+              "tone-and-intent",
+              "text-structure",
+              "numerical-and-tabular-detail"
+            ]
+          }
+        }
+      },
+      "required": [
+        "subSkill",
+        "lang",
+        "title",
+        "summary",
+        "sections",
+        "examples"
+      ],
+      "additionalProperties": false
     },
-    "related": {
-      "minItems": 1,
-      "type": "array",
-      "items": {
-        "type": "string",
-        "enum": [
-          "verb-tense-and-mood",
-          "agreement",
-          "prepositions-and-government",
-          "pronouns",
-          "connectors-and-discourse-markers",
-          "register-and-formality",
-          "word-choice-precision",
-          "false-friends-and-anglicisms",
-          "punctuation-and-mechanics",
-          "sentence-structure"
-        ]
-      }
+    {
+      "type": "object",
+      "properties": {
+        "subSkill": {
+          "type": "string",
+          "enum": [
+            "verb-tense-and-mood",
+            "agreement",
+            "prepositions-and-government",
+            "pronouns",
+            "connectors-and-discourse-markers",
+            "register-and-formality",
+            "word-choice-precision",
+            "false-friends-and-anglicisms",
+            "punctuation-and-mechanics",
+            "sentence-structure"
+          ]
+        },
+        "lang": {
+          "type": "string",
+          "enum": [
+            "en",
+            "fr"
+          ]
+        },
+        "title": {
+          "type": "object",
+          "properties": {
+            "en": {
+              "type": "string",
+              "minLength": 1
+            },
+            "fr": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "en",
+            "fr"
+          ],
+          "additionalProperties": false
+        },
+        "summary": {
+          "type": "object",
+          "properties": {
+            "en": {
+              "type": "string",
+              "minLength": 1
+            },
+            "fr": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "en",
+            "fr"
+          ],
+          "additionalProperties": false
+        },
+        "sections": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "heading": {
+                "type": "object",
+                "properties": {
+                  "en": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "fr": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "en",
+                  "fr"
+                ],
+                "additionalProperties": false
+              },
+              "paragraphs": {
+                "minItems": 1,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "en": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "fr": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "en",
+                    "fr"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "heading",
+              "paragraphs"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "examples": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "avoid": {
+                "type": "string",
+                "minLength": 1
+              },
+              "write": {
+                "type": "string",
+                "minLength": 1
+              },
+              "why": {
+                "type": "object",
+                "properties": {
+                  "en": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "fr": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "en",
+                  "fr"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "write",
+              "why"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "related": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "verb-tense-and-mood",
+              "agreement",
+              "prepositions-and-government",
+              "pronouns",
+              "connectors-and-discourse-markers",
+              "register-and-formality",
+              "word-choice-precision",
+              "false-friends-and-anglicisms",
+              "punctuation-and-mechanics",
+              "sentence-structure"
+            ]
+          }
+        }
+      },
+      "required": [
+        "subSkill",
+        "lang",
+        "title",
+        "summary",
+        "sections",
+        "examples"
+      ],
+      "additionalProperties": false
     }
-  },
-  "required": [
-    "subSkill",
-    "lang",
-    "title",
-    "summary",
-    "sections",
-    "examples"
-  ],
-  "additionalProperties": false
+  ]
 }

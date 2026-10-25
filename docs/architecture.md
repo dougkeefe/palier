@@ -122,7 +122,7 @@ palier/
 │   ├── items/en/
 │   ├── passages/              Source passages with provenance metadata
 │   ├── forms/                 Fixed mock exam forms
-│   ├── library/               Reference articles, one JSON file per written-expression sub-skill (D162)
+│   ├── library/               Reference articles, one JSON file per reading and written-expression sub-skill (D162, D254)
 │   ├── pointers/              Today's grammar pointers, in the practised language, five per written-expression sub-skill (D218)
 │   └── resources/             The translator's curated study links, on three government hosts, every written-expression sub-skill covered (D250)
 └── docs/                      These specs, the contribution guide, ADRs

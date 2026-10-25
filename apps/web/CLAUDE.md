@@ -155,10 +155,11 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   `next/font/local` (its arguments must be literals), as `--font-serif` on `<html>`, **preloaded**: it sets every page
   (D202; Inter and Figtree were removed). `SOURCES.md` records the file's origin and hash, and `fonts.test.ts` holds it
   to it. **The service worker follows each precached stylesheet to the fonts it loads** (`staticAssetsInCss`).
-- **The library** (D162) is `/library` and `/library/[subSkill]`, server components over `lib/library.ts`, which parses
-  `@palier/content/library/*.json` once. **Never import `lib/library.ts` into a client component**: it would put every
-  article in the JavaScript; a link needs only `features/library/links.ts`. Every written-expression item's explanation
-  links its article (`components/library/ArticleLink.tsx`), in a new tab from a drill so the session is never left. Cited
+- **The library** (D162, D254) is `/library` and `/library/[subSkill]`, server components over `lib/library.ts`, which
+  parses `@palier/content/library/*.json` once. The index lists reading's eight, then writing's ten (`libraryArticlesFor`);
+  a reading article's examples are excerpts and its button leads to reading practice. **Never import `lib/library.ts` into
+  a client component**: it would put every article in the JavaScript; a link needs only `features/library/links.ts`.
+  Every reading and written-expression item's explanation links its article (`components/library/ArticleLink.tsx`), in a new tab from a drill so the session is never left. Cited
   French in the prose renders through `Cited` with the article's `lang`. `prepare-public.mjs` expands the article route
   from the content's file names, so every article is precached.
 - **The error states** (Phase 7 Slice 2, architecture.md §16, ADR 15; D141–D142).
@@ -477,7 +478,7 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   titles, **journey 5 and onboarding's key step** (`key.spec.ts`), **the hermetic key-leak test** (`key-leak.spec.ts`),
   `errors.spec.ts` (the 404, a thrown route with its bundle and the key-leak sentinel, and the global view, D141–D142),
   `content.spec.ts` (the about page and privacy notice, onboarding's statement, the shortcut sheet, `/progress`
-  printed to one page, D145, and the library with a drill's link into it, D162), `motion.spec.ts` (D160),
+  printed to one page, D145, and the library with a writing and a reading drill's link into it, D162, D254), `motion.spec.ts` (D160),
   and `sync.spec.ts`: journey 8 (two contexts, two devices), journey 7's sync half,
   and the sync settings' states, and `exam.spec.ts` (a fixture exam from the picker to its results), and `oral.spec.ts` (spoken practice's
   states, a refused microphone, a refused call and a French pass).
