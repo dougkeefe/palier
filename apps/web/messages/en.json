@@ -1360,10 +1360,9 @@
   },
   "library": {
     "title": "Library",
-    "intro": "Short reference articles on the eighteen points of reading and written expression Palier tracks. A reading article shows what to look for and the traps in the options, with excerpts to read; a writing article sets out the rule, the traps an anglophone writer meets, and examples.",
+    "intro": "Short reference articles on the eighteen points of reading and written expression Palier tracks, each with examples in federal French.",
     "readingHeading": "Reading comprehension",
     "writingHeading": "Written expression",
-    "back": "All articles",
     "examples": "Examples",
     "excerpt": "Read",
     "insteadOf": "Instead of",
@@ -1372,6 +1371,18 @@
     "practise": "Practise written expression",
     "practiseReading": "Practise reading comprehension",
     "readAbout": "Read about {subSkill} in the library",
-    "newTab": "(opens in a new tab)"
+    "newTab": "(opens in a new tab)",
+    "jumpLabel": "In this library",
+    "articleCount": "{count, plural, one {# article} other {# articles}}",
+    "readingLede": "What to look for in a text and the traps in the options, with excerpts to read.",
+    "writingLede": "The rule, the traps an anglophone writer meets, and sentences to write.",
+    "breadcrumb": "Breadcrumb",
+    "onThisPage": "On this page",
+    "siblings": "More in {skill}",
+    "previous": "Previous article",
+    "next": "Next article",
+    "practiseTitle": "Put it into practice",
+    "photosBy": "{count, plural, one {Photograph:} other {Photographs:}}",
+    "onUnsplash": "on Unsplash."
   }
 }

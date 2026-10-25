@@ -1360,10 +1360,9 @@
   },
   "library": {
     "title": "Bibliothèque",
-    "intro": "De courts articles de référence sur les dix-huit points de compréhension de l’écrit et d’expression écrite que Palier suit. Un article de lecture montre quoi repérer et les pièges des choix de réponse, avec des extraits à lire; un article d’écriture présente la règle, les pièges que rencontre un rédacteur anglophone et des exemples.",
+    "intro": "De courts articles de référence sur les dix-huit points de compréhension de l’écrit et d’expression écrite que Palier suit, chacun avec des exemples en français de l’administration fédérale.",
     "readingHeading": "Compréhension de l’écrit",
     "writingHeading": "Expression écrite",
-    "back": "Tous les articles",
     "examples": "Exemples",
     "excerpt": "Lisez",
     "insteadOf": "Au lieu de",
@@ -1372,6 +1371,18 @@
     "practise": "S’exercer à l’expression écrite",
     "practiseReading": "S’exercer à la compréhension de l’écrit",
     "readAbout": "Lire l’article « {subSkill} » dans la bibliothèque",
-    "newTab": "(s’ouvre dans un nouvel onglet)"
+    "newTab": "(s’ouvre dans un nouvel onglet)",
+    "jumpLabel": "Dans cette bibliothèque",
+    "articleCount": "{count, plural, one {# article} other {# articles}}",
+    "readingLede": "Quoi repérer dans un texte et les pièges des choix de réponse, avec des extraits à lire.",
+    "writingLede": "La règle, les pièges que rencontre un rédacteur anglophone et des phrases à écrire.",
+    "breadcrumb": "Fil d’Ariane",
+    "onThisPage": "Sur cette page",
+    "siblings": "Autres articles : {skill}",
+    "previous": "Article précédent",
+    "next": "Article suivant",
+    "practiseTitle": "Passez à la pratique",
+    "photosBy": "{count, plural, one {Photographie :} other {Photographies :}}",
+    "onUnsplash": "sur Unsplash."
   }
 }

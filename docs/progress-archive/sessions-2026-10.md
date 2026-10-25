@@ -3,6 +3,27 @@
 Newest first. Moved verbatim from `docs/progress.md` on 24 October 2026 (D255). Its index there points here. The rules are
 `progress.md`'s: never edit a session entry, and mark a deviation resolved in place, updating its index line too.
 
+### 22 October 2026 — `dougkeefe/oral-progress-radio-buttons-ux` (`/progress`'s detail as three equal tabs, speaking included; D247)
+
+Not *Next, decided*, which is unchanged (Gate O). The human asked why `/progress`'s detail offered only Reading and
+Writing, and for a better control than radio buttons.
+- **The detail is three WAI-ARIA tabs** (`@palier/ui`'s new `Tabs`/`TabPanel`), one per domain, in its glyph and fill.
+- **Speaking has its own panel**: the newest five sessions, each with its measured pace, beside what the newest report
+  says to work on (`@palier/app`'s new `oralProgress`). No criterion level is shown off the report (R10), and nothing on
+  the page spends.
+- **Each hero card links into its tab.** Print is unchanged (D247).
+
+**Verified:**
+- A review pass then fixed three findings: the tab list's 1px overhang, which gave it a vertical scrollbar wherever
+  scrollbars show (measured 48 against 47, now 48 against 48); the no-report link, which now skips a session no report
+  can be asked of; and a prop type.
+- `pnpm verify` was green after those fixes: 276 files, 4,464 tests passed (8 todo), with no dependency violations.
+- After `pnpm --filter @palier/web build`, the offline project's `progress-history-production` (both tests, the new one
+  seeding three spoken sessions into real IndexedDB) and `csp-production` passed: 9 tests.
+- The chromium project's `journeys`, `sync` and `content` passed (26 tests), on port 3400 through a throwaway config,
+  since another app held port 3000.
+- Screenshots at 1280px and 375px in both languages; at 375px the tab list does not overflow in either.
+
 ### 22 October 2026 — `dougkeefe/dependabot-status-resolve` (Dependabot: the 18-update group and the `vite` alerts; D246)
 
 Not *Next, decided*, which is unchanged. The human asked for Dependabot's status to be reviewed and its issues resolved.
