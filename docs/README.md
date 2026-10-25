@@ -17,13 +17,13 @@ A free, source-available web app for practising the Public Service Commission's 
 | `content-factory.md` | How the item bank gets made | The production pipeline, its assumptions, its metrics, its descoping options | The pipeline changes, independently of the app |
 | `implementation-plan.md` | In what order, with what boundaries | Module structure, testing strategy, phases, requirement coverage, definition of done | The plan meets reality, which it will first |
 | `adr/` | Why each significant choice was made, and what would reverse it | The reasoning, the alternatives, the revisit conditions | Never edited. Superseded by a new ADR |
-| `progress.md` | Where the build actually is | What is done, what is in flight, deviations from the plan, the session log | Every session that changes something |
+| `progress.md` | Where the build actually is | What is done, what is in flight, deviations from the plan, the session log; the older entries of the last two in `progress-archive/`, found through its deviation index | Every session that changes something |
 | `deploy.md` | How to deploy it, check it and roll it back | The provisioning steps, the environment variables, the smoke checks | The hosting or the migration step changes |
 | `realtime-checklist.md` | Whether studio mode's live conversation works on real browsers | The manual checks on six browser and platform pairs, before each release that touches studio mode, and the results table | Studio mode's screen, transport or secret path changes |
 
 Read them in that order the first time. After that, `adr/` is usually the one you want, because it holds the arguments the other documents deliberately do not.
 
-If you are resuming work rather than reading in, start at `progress.md`. It is the only document that changes weekly, and its deviations log is the part that cannot be reconstructed from the code. The repository's `CLAUDE.md` is the router into all of it and is the right first read for an agent session.
+If you are resuming work rather than reading in, start at `progress.md`. It is the only document that changes weekly, and its deviations log is the part that cannot be reconstructed from the code. Only the newest deviations and sessions are there in full; the rest are in `progress-archive/`, moved verbatim, and `progress.md`'s index names the file for each deviation. The repository's `CLAUDE.md` is the router into all of it and is the right first read for an agent session.
 
 **When two documents disagree, the table above decides.** Each document names what it is authoritative for, and a statement outside that column is orientation rather than law: the plan owns module structure and testing, this set's `adr/` owns reasoning, `product-requirements.md` §0.1 owns the requirements, `content-factory.md` owns the pipeline. Rather than reconcile a conflict in passing, fix the document that is not authoritative for the statement, and say in the edit which decision it was brought in line with.
 
