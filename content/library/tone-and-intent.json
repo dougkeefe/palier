@@ -1,6 +1,7 @@
 {
   "subSkill": "tone-and-intent",
   "lang": "fr",
+  "topic": "register",
   "title": {
     "en": "Tone and intent",
     "fr": "Le ton et l’intention"

@@ -1,6 +1,7 @@
 {
   "subSkill": "inference",
   "lang": "fr",
+  "topic": "comprehension",
   "title": {
     "en": "Inference",
     "fr": "L’inférence"

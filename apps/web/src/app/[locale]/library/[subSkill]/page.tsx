@@ -12,6 +12,7 @@ import { PhotoCredit } from "../../../../components/library/PhotoCredit";
 import "../../../../components/library/library.css";
 import { EXAMPLES_ID, READ_NEXT_ID, contentsOf, sectionId } from "../../../../features/library/contents";
 import { photosFor } from "../../../../features/library/photos";
+import { readingMinutes } from "../../../../features/library/reading-time";
 import { Link } from "../../../../i18n/navigation";
 import { adjacentArticles, articleFor, skillOf } from "../../../../lib/library";
 
@@ -28,7 +29,8 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/library/
 }
 
 /**
- * One library article (PRD §13.2, progress.md D162, D254, D256): where it sits, then the point,
+ * One library article (PRD §13.2, progress.md D162, D254, D256, D257): where it sits, its topic,
+ * its reading time and its own photograph, then the point,
  * the traps and the examples, with the page's contents beside them. A writing article's examples
  * are each a sentence to write and, usually, the one it replaces; a reading article's are each an
  * excerpt to read. The examples are in the article's language and marked up with it, and so is
@@ -68,7 +70,7 @@ export default function LibraryArticlePage({ params }: PageProps<"/[locale]/libr
             </Link>
           </li>
           <li>
-            <Link href={`/library#library-${skill}`} className="pl-focusable">
+            <Link href={`/library#${skill}`} className="pl-focusable">
               {skillName}
             </Link>
           </li>
@@ -82,8 +84,15 @@ export default function LibraryArticlePage({ params }: PageProps<"/[locale]/libr
           <p className="app-library__summary">
             <Cited text={article.summary[lang]} lang={article.lang} />
           </p>
+          <ul className="app-library__chips app-library__head-chips">
+            <li className="app-library__chip">{t(`topics.${article.topic}`)}</li>
+            <li className="app-library__chip">
+              <Glyph name="clock" className="app-library__chip-glyph" />
+              {t("minutes", { count: readingMinutes(article, lang) })}
+            </li>
+          </ul>
         </div>
-        <LibraryPhoto photo={skill} className="app-library__head-photo" />
+        <LibraryPhoto photo={article.subSkill} className="app-library__head-photo" />
       </header>
 
       <div className="app-library__body">
@@ -159,7 +168,7 @@ export default function LibraryArticlePage({ params }: PageProps<"/[locale]/libr
               <h2 id={READ_NEXT_ID}>{t("related")}</h2>
               <ul className="app-library__cards app-library__cards--related">
                 {related.map((other) => (
-                  <LibraryCard key={other.subSkill} article={other} lang={lang} />
+                  <LibraryCard key={other.subSkill} article={other} lang={lang} heading="h3" />
                 ))}
               </ul>
             </section>
@@ -192,7 +201,7 @@ export default function LibraryArticlePage({ params }: PageProps<"/[locale]/libr
         </div>
       </div>
 
-      <PhotoCredit photos={photosFor(skill)} />
+      <PhotoCredit photos={photosFor(article)} />
     </article>
   );
 }

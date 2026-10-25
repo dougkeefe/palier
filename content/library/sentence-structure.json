@@ -1,6 +1,7 @@
 {
   "subSkill": "sentence-structure",
   "lang": "fr",
+  "topic": "grammar",
   "title": {
     "en": "Sentence structure",
     "fr": "La structure de la phrase"

@@ -397,6 +397,7 @@ describe("libraryArticleSchema", () => {
   const anArticle = (over: Record<string, unknown> = {}) => ({
     subSkill: "agreement",
     lang: "fr",
+    topic: "grammar",
     title: { en: "Agreement", fr: "L'accord" },
     summary: { en: "Make the words agree.", fr: "Faites accorder les mots." },
     sections: [{ heading: { en: "The rule", fr: "La règle" }, paragraphs: [{ en: "One.", fr: "Un." }] }],

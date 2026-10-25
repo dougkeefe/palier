@@ -1,6 +1,7 @@
 {
   "subSkill": "numerical-and-tabular-detail",
   "lang": "fr",
+  "topic": "comprehension",
   "title": {
     "en": "Numerical and tabular detail",
     "fr": "Les données chiffrées et les tableaux"

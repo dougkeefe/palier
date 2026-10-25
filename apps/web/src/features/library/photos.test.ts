@@ -1,19 +1,31 @@
-import { readFileSync, readdirSync } from "node:fs";
+import { readFileSync, readdirSync, statSync } from "node:fs";
 
+import { LIBRARY_SUB_SKILLS } from "@palier/domain";
 import { describe, expect, it } from "vitest";
 
 import { LIBRARY_PHOTOS, type LibraryPhotoName, photosFor } from "./photos";
 
 const IMAGES = new URL("../../components/library/images/", import.meta.url);
 
-describe("the library's photographs (D256)", () => {
-  it("credits all three on the index, the library's own first", () => {
-    expect(photosFor("index")).toEqual(["library", "reading", "writing"]);
+/** Every photograph is precached through the stylesheet (D201), so each is held small (D257). */
+const MAX_BYTES = 25_000;
+
+describe("the library's photographs (D256, D257)", () => {
+  it("credits the library's own first on the index, then every article's in the taxonomy's order", () => {
+    expect(photosFor("index")).toEqual(["library", ...LIBRARY_SUB_SKILLS]);
   });
 
-  it("credits only its skill's photograph on an article", () => {
-    expect(photosFor("reading")).toEqual(["reading"]);
-    expect(photosFor("writing")).toEqual(["writing"]);
+  it("credits an article's own photograph, then its Read next cards'", () => {
+    expect(photosFor({ subSkill: "agreement", related: ["pronouns", "verb-tense-and-mood"] })).toEqual([
+      "agreement",
+      "pronouns",
+      "verb-tense-and-mood",
+    ]);
+    expect(photosFor({ subSkill: "inference" })).toEqual(["inference"]);
+  });
+
+  it("has a photograph for every article", () => {
+    for (const subSkill of LIBRARY_SUB_SKILLS) expect(LIBRARY_PHOTOS[subSkill], subSkill).toBeDefined();
   });
 
   it("links every credit to its photo on Unsplash", () => {
@@ -29,6 +41,12 @@ describe("the library's photographs (D256)", () => {
       const row = sources.split("\n").find((line) => line.startsWith(`| \`${name}.webp\``));
       expect(row).toContain(LIBRARY_PHOTOS[name].photographer);
       expect(row).toContain(LIBRARY_PHOTOS[name].url);
+    }
+  });
+
+  it(`keeps every article's photograph under ${MAX_BYTES / 1000} KB, since the worker precaches them all`, () => {
+    for (const subSkill of LIBRARY_SUB_SKILLS) {
+      expect(statSync(new URL(`${subSkill}.webp`, IMAGES)).size, subSkill).toBeLessThanOrEqual(MAX_BYTES);
     }
   });
 });

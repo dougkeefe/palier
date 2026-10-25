@@ -143,19 +143,37 @@ test("progress prints as a one-page summary of both skills, with the statement (
 test("the library lists eighteen articles, reading first, and an article reads its examples in French, in both languages (D162, D254)", async ({ page }) => {
   await page.goto("/en/library");
   await expect(page.getByRole("heading", { level: 1, name: "Library" })).toBeVisible();
-  await expect(page.locator(".app-library__entry")).toHaveCount(18);
-  const sections = page.locator("main").getByRole("heading", { level: 2 });
-  await expect(sections).toHaveText(["Reading comprehension", "Written expression"]);
-  // Each article is a heading under its skill's, so a screen reader moves article by article (D256).
-  await expect(page.locator("main").getByRole("heading", { level: 3 })).toHaveCount(18);
-  // The photographs are decoration, and each photographer is credited, linked to the photo.
-  await expect(page.locator(".app-library__photo")).toHaveCount(3);
+  const entries = page.locator(".app-library__entry");
+  await expect(entries).toHaveCount(18);
+  // One grid, reading's first: each article is a heading, so a screen reader moves article by article (D257).
+  await expect(page.locator("main").getByRole("heading", { level: 2 })).toHaveCount(18);
+  await expect(page.locator("main").getByRole("heading", { level: 2 }).first()).toHaveText("Main idea");
+  // The photographs are decoration, the library's and one per article, and each photographer is credited, linked to the photo.
+  await expect(page.locator(".app-library__photo")).toHaveCount(19);
   for (const photo of await page.locator(".app-library__photo").all()) await expect(photo).toHaveAttribute("aria-hidden", "true");
   const credits = page.locator(".app-library__credit a");
-  await expect(credits).toHaveCount(3);
+  await expect(credits).toHaveCount(19);
   for (const credit of await credits.all()) await expect(credit).toHaveAttribute("href", /^https:\/\/unsplash\.com\/photos\//);
   await axeClean(page);
 
+  // The pills filter by skill or by topic, one at a time, and the hash says which (D257).
+  const filter = page.getByRole("group", { name: "Filter the articles" });
+  await expect(filter.getByRole("button", { name: /^All/ })).toHaveAttribute("aria-pressed", "true");
+  await filter.getByRole("button", { name: /^Grammar/ }).click();
+  await expect(filter.getByRole("button", { name: /^Grammar/ })).toHaveAttribute("aria-pressed", "true");
+  await expect(filter.getByRole("button", { name: /^All/ })).toHaveAttribute("aria-pressed", "false");
+  await expect(page).toHaveURL(/\/en\/library#grammar$/);
+  await expect(entries.filter({ visible: true })).toHaveCount(6);
+  await expect(page.getByRole("status").filter({ hasText: "articles shown" })).toHaveText("6 articles shown");
+  await axeClean(page);
+  await filter.getByRole("button", { name: /^All/ }).click();
+  await expect(page).toHaveURL(/\/en\/library$/);
+  await expect(entries.filter({ visible: true })).toHaveCount(18);
+  await page.goto("/en/library#reading");
+  await expect(entries.filter({ visible: true })).toHaveCount(8);
+  await expect(page.getByRole("link", { name: "Agreement", exact: true })).toBeHidden();
+
+  await page.goto("/en/library");
   await page.getByRole("link", { name: "Agreement", exact: true }).click();
   await expect(page).toHaveURL(/\/en\/library\/agreement$/);
   await expect(page).toHaveTitle("Agreement · Palier");
@@ -169,7 +187,9 @@ test("the library lists eighteen articles, reading first, and an article reads i
   // Where it sits, and the articles either side in its skill (D256).
   const breadcrumb = page.getByRole("navigation", { name: "Breadcrumb" });
   await expect(breadcrumb.getByRole("link")).toHaveText(["Library", "Written expression"]);
-  await expect(page.locator(".app-library__credit a")).toHaveText(["Marcos Paulo Prado"]);
+  // Its own photograph and its Read next cards' are credited, its own first (D257).
+  await expect(page.locator(".app-library__photo")).toHaveCount(await page.locator(".app-library__credit a").count());
+  await expect(page.locator(".app-library__credit a").first()).toHaveText("Mockup Graphics");
   await page.getByRole("link", { name: /^Next article/ }).click();
   await expect(page.getByRole("heading", { level: 1, name: "Prepositions and government" })).toBeVisible();
   await page.getByRole("link", { name: /^Previous article/ }).click();
@@ -178,7 +198,8 @@ test("the library lists eighteen articles, reading first, and an article reads i
   await page.getByRole("link", { name: "Pronouns" }).click();
   await expect(page.getByRole("heading", { level: 1, name: "Pronouns" })).toBeVisible();
   await page.getByRole("navigation", { name: "Breadcrumb" }).getByRole("link", { name: "Written expression" }).click();
-  await expect(page).toHaveURL(/\/en\/library#library-writing$/);
+  await expect(page).toHaveURL(/\/en\/library#writing$/);
+  await expect(entries.filter({ visible: true })).toHaveCount(10);
 
   await page.goto("/fr/library/agreement");
   await expect(page.getByRole("heading", { level: 1, name: "Les accords" })).toBeVisible();

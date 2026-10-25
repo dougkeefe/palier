@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 24 October 2026 (this file split into a live file and `progress-archive/`, D255; next, D206's bank budget)
+**Last updated:** 25 October 2026 (the library's index as one filterable grid, D257; next, D206's bank budget)
 **Current phase:** **1.0 is reached** (24 October 2026, D253): the human passed Gate O and Gate M and read bank v4 with no
 disagreement, so Phases 6 and 7 are complete. After 1.0, reading's library articles are built (D254), and D206's bank
 budget is next. Phase 3's product pilot still runs (Gate E, D97), and Phase 8, the English mirror, is the plan's next
@@ -98,11 +98,11 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/palier-library-redesign` | **The library redesigned** (D256): the index as a browsable set of cards by skill, articles with a breadcrumb, contents, previous and next, and three Unsplash photographs served from this origin, credited. | 24 October 2026 |
+| `dougkeefe/screenshot-layout-update` | **The library as a filterable grid** (D257): the index's sections become one grid of cards under pills that filter by skill or topic, and every article has its own photograph. | 25 October 2026 |
 
 *(Merged rows are removed: this table tracks current work, and the session log is the permanent record. The rows
 removed up to 24 October 2026, the last of them the reading articles (#100), are listed in
-[`progress-archive/history.md`](progress-archive/history.md); the archive's split (#101) was removed with D256's claim.)*
+[`progress-archive/history.md`](progress-archive/history.md); the library's redesign (#102) was removed with D257's claim.)*
 
 ---
 
@@ -134,9 +134,11 @@ offline journeys green, and R4's reach stated in the deviation.
 the reading section), as Gate L read writing's. In particular, say whether each excerpt reads as federal administrative
 French and whether each "what to notice" is the only defensible reading.
 
-**For the human, from D256:** look at the library's new layout and its three photographs (`/en/library`, an article in
-each skill, and on a phone), and read its new French strings (`library.jumpLabel` to `library.onUnsplash` in `fr.json`).
-Say whether any photograph should be swapped; `components/library/images/SOURCES.md` says how.
+**For the human, from D257:** look at the library's grid, its pills and its nineteen photographs (`/en/library`, the
+pills, an article in each skill, and on a phone), and read the new French strings (`library.filterLabel` to
+`library.readArticle` in `fr.json`), the short skill names *Lecture* and *Rédaction* especially. Say whether any photograph
+should be swapped, or any article sits under the wrong topic; `components/library/images/SOURCES.md` says how to swap a
+photograph, and an article's `topic` is one line in its JSON.
 
 **Beside it, whenever a smoke key is to hand (agent):**
 - **The translator's completions, recorded** (D250, two calls on the `assess` model, a few cents): the same
@@ -582,46 +584,7 @@ full.
 - **D244** — the landing page's way-in test asserts the link and where a new visitor lands, not a page they pass through · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d244--the-landing-pages-way-in-test-asserts-the-link-and-where-a-new-visitor-lands-not-a-page-they-pass-through)
 - **D245** — `/progress` is a dashboard: the three domains at a glance, then the chosen skill in detail · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d245--progress-is-a-dashboard-the-three-domains-at-a-glance-then-the-chosen-skill-in-detail)
 - **D246** — `vite` is a pinned root devDependency, not an auto-installed peer; Dependabot's group is rebuilt locally · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d246--vite-is-a-pinned-root-devdependency-not-an-auto-installed-peer-dependabots-group-is-rebuilt-locally)
-
-### D247 — `/progress`'s detail is three equal tabs, speaking included; never a radio switch
-**Date:** 22 October 2026 · **Status:** accepted (human's request; agent's design and copy). Amends D245's "In detail" bullet, not its print
-
-The human asked why the detail offered only Reading and Writing, and asked for all three domains to be equal there, with a
-better control than radio buttons.
-
-- **Why tabs, not radios.** A radio group reads as a question to answer, and its dots made the switch look like one. This
-  control shows another view of the same place, which is what a tab means, and a screen reader now says "tab, 3 of 3,
-  selected".
-  - The control is `@palier/ui`'s new `Tabs` and `TabPanel`: WAI-ARIA's pattern, controlled, and selection follows focus
-    (←/→ wrap, Home/End). Only the selected tab is in the tab order, and the keyboard rule is `tabsKeydown` in `logic.ts`.
-  - Each tab is its domain's glyph on its fill from `SKILL_LOOK`, then its name. The shown tab has a 3px `primary`
-    underline, and `Highlight` under forced colours. The faint rule under the list is an inset shadow, not a border, so
-    no tab hangs past the list: a 1px overhang gave the scrolling list a vertical scrollbar wherever scrollbars show.
-  - Below 600px the three share the width, mark over name, and a long French name hyphenates, so all three stay in view
-    (no overflow at 375px in either language).
-  - `SKILL_LOOK`'s tone is now typed `TabTone`, a subset of `CardTone`.
-- **Speaking was missing because the detail was built from `ProgressReport`**, which only the scored skills have. It now
-  has a panel of the same shape, two cards from 900px (`components/progress/OralCards.tsx`):
-  - **Your spoken sessions**: the totals, then the newest five ended sessions (`ORAL_RECENT_SESSIONS`, a display rule in
-    `progress-view.ts`, not the exam's). Each row has its type, date, minutes spoken and words a minute, and opens its
-    report. Pace is the engine's `fluencyMetrics`, measured and never judged (principle 8).
-  - **From your latest report**: the newest assessed session's fixes, each the criterion it cost and a link into the
-    drill for its sub-skill. Then a link to the full report.
-  - **No criterion level appears here.** On the report each level stands beside its quoted evidence; repeating "Level B"
-    without it is the bare estimate R10 forbids. The panel says where the levels are.
-  - **Nothing on `/progress` spends.** With no report yet, the panel links the newest session a report can still be
-    asked of: one with a spoken answer, whose scenario the bank still holds. There the report is asked for with its cost
-    shown (D237). With no such session, or no session at all, it links `/practice/oral`.
-  - The data is `@palier/app`'s new `oralProgress(limit, { oral, items })`, beside `oralHistory`. It reads no filler list,
-    since pace needs none. The view states (`empty`, `unreported`, `reported`) are `progress-view.ts`'s `oralDetail`.
-- **The hero points into the tabs.** Each glance card ends in "{skill} in detail", which selects and focuses that tab
-  and brings the detail's heading to the top. Inside the deep panel it is drawn in `primary` with a `primary` focus ring:
-  the deep panel's white `--accent` would vanish on a light fill.
-- **Print is unchanged.** The tabs sit in the screen-only head; paper renders the plain detail with both scored skills
-  and D145's oral card, whichever tab was chosen. `progress-history-production.spec.ts` now prints with speaking's tab
-  chosen and asserts that the tab list is hidden on paper.
-- **Not changed:** Today's plan switch and the exam picker keep their radios. The picker's is a real form choice. Today's
-  plan switch is a view switch like this one and could take `Tabs` next, if the human wants it.
+- **D247** — `/progress`'s detail is three equal tabs, speaking included; never a radio switch · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d247--progresss-detail-is-three-equal-tabs-speaking-included-never-a-radio-switch)
 
 ### D248 — Today's plan is three equal tabs, speaking included; its plan is one suggested session
 **Date:** 22 October 2026 · **Status:** accepted (human's request; agent's design and copy). Amends D219's plan switch, and
@@ -950,9 +913,91 @@ eighteen bold links, the article titles were not headings, and an article was a 
     contents list only when an article has related articles.
 - **For the human:** look at the photographs and the pages (the pull request has screenshots), and read the new French.
 
+### D257 — the library's index is one grid of cards under pills that filter by skill or topic, each article with its own photograph
+**Date:** 25 October 2026 · **Status:** accepted (human request and choices; the agent's design, topics and photographs, for the human's look). Amends D256's index, its photographs and its "no text over a photograph"
+
+The human asked for the library's index to keep its look but take the layout of a course catalogue they showed: tag pills
+at the top that filter the articles, one grid of cards each with its own royalty-free photograph, and no separate
+sections, since the tags do that. Asked, they chose: pills for both the skills and topics, each article's own photograph
+on its page too, and the index's photograph kept beside its title.
+- **The index:**
+  - The title and its line keep the library's photograph beside them. D256's pills to each skill's section, and the two
+    sections with their marks, counts, lines and photographs, are gone.
+  - Under them, a centred row of pills: All, Reading, Writing, then, after a rule, Comprehension, Vocabulary, Grammar,
+    Structure, Tone and register, each with its count. From 1,100px or so they sit on one row. One is pressed at a time.
+  - Then **one grid of all eighteen cards**, reading's eight first, each skill's in the taxonomy's order. The headings run
+    h1, then **h2 per article**, since no section heading is left between them.
+- **A card** keeps its skill's fill, the link covering it and the ring outside it, and gains:
+  - its article's photograph on top, 16:9, inset in the card;
+  - **its skill on a badge over the photograph's corner**. This is the one place text sits on a photograph, which D256
+    ruled out: the badge is a solid `surface` pill with `ink` words and the skill's glyph, so its contrast is its own
+    fill's and never the photograph's;
+  - after the summary, its topic and an estimated reading time as chips (`features/library/reading-time.ts`: the
+    interface language's prose and the examples at 200 words a minute, never under one), and a decorative "Read →";
+  - no number: across a filter the taxonomy's numbering says nothing.
+- **The filter** (`components/library/LibraryFilter.tsx`, the library's only client component):
+  - The server renders every card, with `data-tags` of its skill and topic, and hands them in as `children`. So no
+    article reaches the client's JavaScript, as `apps/web/CLAUDE.md` requires. The filter sets `hidden` on the cards
+    the pressed pill does not match. A polite status says how many are shown.
+  - **The pressed pill is the URL's hash** (`#grammar`), not a query: the worker precaches `/en/library` by its exact
+    URL, and a hash never reaches it, so a filtered link opens offline and the page stays static. An empty or unknown
+    hash is All. The article breadcrumb's skill link is now `/library#reading` or `#writing`, which opens the index on
+    that skill, where D256's opened its section.
+  - Without JavaScript, or before hydration, every card shows, which is what All shows.
+  - The logic is `features/library/filter.ts`: the pills' order, `matches`, the hash both ways and each pill's count.
+- **Topics are content** (ADR 9's spirit, ADR 18): `LIBRARY_TOPICS` and a required `topic` on every `LibraryArticle` in
+  `@palier/domain`, one line in each article's JSON, and `docs/schemas/library-article.schema.json` regenerated. The
+  labels are messages. Each article has exactly one:
+  - comprehension: main idea, specific detail, inference, numerical and tabular detail;
+  - vocabulary: vocabulary in context, word choice, false friends and anglicisms;
+  - grammar: verb tense and mood, agreement, prepositions, pronouns, punctuation, sentence structure;
+  - structure: cohesion and reference, text structure, connectors;
+  - register: tone and intent, register and formality.
+- **The photographs, D256's way:** eighteen new Unsplash photographs, one per article, chosen to suggest each point without a word on them (a compass for the main idea, a magnifying glass for a detail, footprints for inference, an hourglass for tense, two matching eggs for agreement, a bridge for connectors, wax-sealed envelopes for register), quiet in detail so each fits 25 KB. Each was downloaded
+  once, cut to 900×600 WebP and committed, so `img-src 'self'` is unchanged, and each is a CSS background in
+  `library.css`, so the worker precaches it through the stylesheet and every card and article is whole offline. D256's
+  `reading.webp` and `writing.webp` are retired; `library.webp` stays.
+  - **Their weight:** 322 KB in all, against D256's 72 KB, all precached on install. `photos.test.ts` fails any
+    article's photograph over 25 KB. It is not the bank (D206), and it is the price of a photograph per card offline.
+  - An article's page shows its own photograph in its head, and its Read next cards show theirs, so its credit names
+    its own photographer, then its related articles' (`photosFor`). The index credits all nineteen.
+- **Messages:** `jumpLabel`, `articleCount`, `readingLede` and `writingLede` are gone. New in both languages:
+  `filterLabel`, `all`, `skillReading`, `skillWriting`, `topics.*`, `shown`, `minutes` and `readArticle`. The French is
+  the agent's.
+- **Tests added, none loosened:** `filter.test.ts` and `reading-time.test.ts` are new; `photos.test.ts` holds nineteen
+  files and rows, the new `photosFor` and the size cap; the domain's `library.test.ts` refuses an article with no topic
+  or an unknown one. `content.spec.ts`'s library test now asserts eighteen h2s, nineteen photographs and credits, the
+  Grammar pill pressing, the hash, six cards shown and the status, All restoring eighteen, `#reading` opening on eight,
+  and the breadcrumb opening the index on writing's ten, with an axe check on the filtered index too.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 25 October 2026 — `dougkeefe/screenshot-layout-update` (the library's index as one filterable grid, a photograph per article; D257)
+
+Not *Next, decided*, which is unchanged (D206). The human asked for the library to keep its look but take a course
+catalogue's layout: tag pills that filter, a photograph per article, and no sections.
+- **Domain:** `LIBRARY_TOPICS` and a required `topic` on `LibraryArticle` and its schema; `docs/schemas/library-article.schema.json`
+  regenerated; `packages/domain/CLAUDE.md`.
+- **Content:** a `topic` line in each of the eighteen articles.
+- **Web:** `/library` rebuilt as a hero over one grid under pills. `components/library/` gains `LibraryFilter`; `LibraryCard`
+  gains its photograph, skill badge, chips and heading level; the article page shows its own photograph, its topic and
+  its reading time. `features/library/filter.ts` and `reading-time.ts` are new; `photos.ts` names nineteen photographs.
+  Eighteen WebP files added, `reading.webp` and `writing.webp` removed, `SOURCES.md` rewritten. Messages in both languages.
+- **Tests:** `filter.test.ts` and `reading-time.test.ts` are new; `photos.test.ts`, the domain's `library.test.ts` and
+  `content.spec.ts`'s library test as D257 lists. `schemas.test.ts`'s article fixture gains the now-required `topic`; no
+  assertion changed.
+- **Docs:** D257; D247 and the 22 October entry for Today's tabs are archived (rule 8); `apps/web/CLAUDE.md`'s library
+  invariant; *In flight*; *Next, decided*'s human item.
+
+**Verified:**
+- `pnpm verify`: check-types, lint and boundaries clean; `pnpm test` passed 288 files, 4,615 tests (8 todo).
+- After `pnpm --filter @palier/web build`: `content.spec.ts`'s three library tests on the `chromium` project, with the
+  warmup, 4 of 4, axe clean on the index, the index filtered to Grammar, two articles in English and one in French; the
+  `offline` project's `csp-production.spec.ts` and `offline.spec.ts`, 15 of 15.
+- Screenshots at 1280px and 390px, English and French, and the pills measured on one row at 1280px in both languages.
+- Not run: the rest of the medium lane, and Lighthouse. CI runs the lane on the pull request.
 
 
 ### 24 October 2026 — `dougkeefe/palier-library-redesign` (the library redesigned, with three photographs; D256)
@@ -1165,30 +1210,6 @@ The human reported #95's red medium lane: `content.spec.ts`'s library test, whic
 - `pnpm verify` exit 0: 277 files, 4,473 tests passed (8 todo), no dependency violations.
 - The whole hermetic `chromium` project from a cold dev server (port 3400, a throwaway config, since another app held
   3000): 85 passed in 3.6 min, the warmup and the library test included.
-
-### 22 October 2026 — `dougkeefe/today-s-plan-oral-ux` (Today's plan as three equal tabs, speaking included; D248)
-
-Not *Next, decided*, which is unchanged (Gate O). The human asked why Today's plan offered only Reading and Writing, and
-for a better control than its radio buttons, as D247 had done for `/progress`.
-- **The plan's switch is `@palier/ui`'s `Tabs`**, one per domain in its glyph and fill, sharing the card's width.
-- **Speaking has a plan**: one suggested session, the kind practised least lately, with its length and practice mode's
-  estimate, leading to `/practice/oral`; "Done for today" once a session has ended; a line and a link with no key.
-- **Speaking's "Where you stand"** is the newest report's fixes, never a criterion level (R10). Nothing on Today spends.
-
-**Verified:**
-- A review pass then fixed five small findings: the plan card's tab padding no longer overrides the primitive's on a
-  phone, a dead class, an unwrapped line, and two copies (`reportHref`, now exported from `OralCards.tsx`, and the minute
-  rounding, now `today-view.ts`'s `minutesOf`).
-- `pnpm verify` exit 0 after those fixes: 277 files, 4,473 tests passed (8 todo), no dependency violations.
-  `oral-plan.test.ts` names each branch of the suggestion and the plan.
-- The chromium project's `journeys`, `content`, `generate` and `key-leak` on port 3400 through a throwaway config, since
-  another app held port 3000: 28 passed, including the new D248 journey (three tabs, no radio, the arrow keys, the
-  warm-up suggested, axe-clean, Start lands on `/practice/oral`). The library test failed once on the parallel dev
-  server's first compile, then passed alone; this change does not touch it.
-- After `pnpm --filter @palier/web build`, the offline project's `csp-production`: 7 passed.
-- Screenshots at 1280px and 375px in both languages through a throwaway production spec, which measured the tab list's
-  overflow: 107px in French at 1280px before the equal-width rule, 0 in all four after. The no-key state was checked
-  the same way.
 
 Older entries, newest first: [October 2026](progress-archive/sessions-2026-10.md) ·
 [September 2026](progress-archive/sessions-2026-09.md).

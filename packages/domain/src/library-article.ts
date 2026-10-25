@@ -35,8 +35,16 @@ export type LibraryExcerpt = {
   readonly why: Localised;
 };
 
+/**
+ * The library's topics (progress.md D257): what an article is about, across the two skills, so the
+ * index can be filtered by it. Every article has exactly one. The labels are the app's messages.
+ */
+export const LIBRARY_TOPICS = ["comprehension", "vocabulary", "grammar", "structure", "register"] as const;
+export type LibraryTopic = (typeof LIBRARY_TOPICS)[number];
+
 type ArticleCommon = {
   readonly lang: Lang;
+  readonly topic: LibraryTopic;
   readonly title: Localised;
   /** One or two sentences: what the point is, and why a C-level candidate gets it right. */
   readonly summary: Localised;

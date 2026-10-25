@@ -1362,3 +1362,43 @@ together and speaking reduced to one line below the fold. It now uses Today's la
   - The same `package.json` specifiers, installed with the repo's pnpm 10.13.1, resolve every peer to 22.20.5. That
     includes `apps/web`'s `^22`, which had been left at 22.18.11.
   - Read a Dependabot lockfile for a stray major before merging it, as well as for the bumps it lists.
+
+### D247 — `/progress`'s detail is three equal tabs, speaking included; never a radio switch
+**Date:** 22 October 2026 · **Status:** accepted (human's request; agent's design and copy). Amends D245's "In detail" bullet, not its print
+
+The human asked why the detail offered only Reading and Writing, and asked for all three domains to be equal there, with a
+better control than radio buttons.
+
+- **Why tabs, not radios.** A radio group reads as a question to answer, and its dots made the switch look like one. This
+  control shows another view of the same place, which is what a tab means, and a screen reader now says "tab, 3 of 3,
+  selected".
+  - The control is `@palier/ui`'s new `Tabs` and `TabPanel`: WAI-ARIA's pattern, controlled, and selection follows focus
+    (←/→ wrap, Home/End). Only the selected tab is in the tab order, and the keyboard rule is `tabsKeydown` in `logic.ts`.
+  - Each tab is its domain's glyph on its fill from `SKILL_LOOK`, then its name. The shown tab has a 3px `primary`
+    underline, and `Highlight` under forced colours. The faint rule under the list is an inset shadow, not a border, so
+    no tab hangs past the list: a 1px overhang gave the scrolling list a vertical scrollbar wherever scrollbars show.
+  - Below 600px the three share the width, mark over name, and a long French name hyphenates, so all three stay in view
+    (no overflow at 375px in either language).
+  - `SKILL_LOOK`'s tone is now typed `TabTone`, a subset of `CardTone`.
+- **Speaking was missing because the detail was built from `ProgressReport`**, which only the scored skills have. It now
+  has a panel of the same shape, two cards from 900px (`components/progress/OralCards.tsx`):
+  - **Your spoken sessions**: the totals, then the newest five ended sessions (`ORAL_RECENT_SESSIONS`, a display rule in
+    `progress-view.ts`, not the exam's). Each row has its type, date, minutes spoken and words a minute, and opens its
+    report. Pace is the engine's `fluencyMetrics`, measured and never judged (principle 8).
+  - **From your latest report**: the newest assessed session's fixes, each the criterion it cost and a link into the
+    drill for its sub-skill. Then a link to the full report.
+  - **No criterion level appears here.** On the report each level stands beside its quoted evidence; repeating "Level B"
+    without it is the bare estimate R10 forbids. The panel says where the levels are.
+  - **Nothing on `/progress` spends.** With no report yet, the panel links the newest session a report can still be
+    asked of: one with a spoken answer, whose scenario the bank still holds. There the report is asked for with its cost
+    shown (D237). With no such session, or no session at all, it links `/practice/oral`.
+  - The data is `@palier/app`'s new `oralProgress(limit, { oral, items })`, beside `oralHistory`. It reads no filler list,
+    since pace needs none. The view states (`empty`, `unreported`, `reported`) are `progress-view.ts`'s `oralDetail`.
+- **The hero points into the tabs.** Each glance card ends in "{skill} in detail", which selects and focuses that tab
+  and brings the detail's heading to the top. Inside the deep panel it is drawn in `primary` with a `primary` focus ring:
+  the deep panel's white `--accent` would vanish on a light fill.
+- **Print is unchanged.** The tabs sit in the screen-only head; paper renders the plain detail with both scored skills
+  and D145's oral card, whichever tab was chosen. `progress-history-production.spec.ts` now prints with speaking's tab
+  chosen and asserts that the tab list is hidden on paper.
+- **Not changed:** Today's plan switch and the exam picker keep their radios. The picker's is a real form choice. Today's
+  plan switch is a view switch like this one and could take `Tabs` next, if the human wants it.

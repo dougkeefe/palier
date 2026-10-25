@@ -3,6 +3,30 @@
 Newest first. Moved verbatim from `docs/progress.md` on 24 October 2026 (D255). Its index there points here. The rules are
 `progress.md`'s: never edit a session entry, and mark a deviation resolved in place, updating its index line too.
 
+### 22 October 2026 — `dougkeefe/today-s-plan-oral-ux` (Today's plan as three equal tabs, speaking included; D248)
+
+Not *Next, decided*, which is unchanged (Gate O). The human asked why Today's plan offered only Reading and Writing, and
+for a better control than its radio buttons, as D247 had done for `/progress`.
+- **The plan's switch is `@palier/ui`'s `Tabs`**, one per domain in its glyph and fill, sharing the card's width.
+- **Speaking has a plan**: one suggested session, the kind practised least lately, with its length and practice mode's
+  estimate, leading to `/practice/oral`; "Done for today" once a session has ended; a line and a link with no key.
+- **Speaking's "Where you stand"** is the newest report's fixes, never a criterion level (R10). Nothing on Today spends.
+
+**Verified:**
+- A review pass then fixed five small findings: the plan card's tab padding no longer overrides the primitive's on a
+  phone, a dead class, an unwrapped line, and two copies (`reportHref`, now exported from `OralCards.tsx`, and the minute
+  rounding, now `today-view.ts`'s `minutesOf`).
+- `pnpm verify` exit 0 after those fixes: 277 files, 4,473 tests passed (8 todo), no dependency violations.
+  `oral-plan.test.ts` names each branch of the suggestion and the plan.
+- The chromium project's `journeys`, `content`, `generate` and `key-leak` on port 3400 through a throwaway config, since
+  another app held port 3000: 28 passed, including the new D248 journey (three tabs, no radio, the arrow keys, the
+  warm-up suggested, axe-clean, Start lands on `/practice/oral`). The library test failed once on the parallel dev
+  server's first compile, then passed alone; this change does not touch it.
+- After `pnpm --filter @palier/web build`, the offline project's `csp-production`: 7 passed.
+- Screenshots at 1280px and 375px in both languages through a throwaway production spec, which measured the tab list's
+  overflow: 107px in French at 1280px before the equal-width rule, 0 in all four after. The no-key state was checked
+  the same way.
+
 ### 22 October 2026 — `dougkeefe/oral-progress-radio-buttons-ux` (`/progress`'s detail as three equal tabs, speaking included; D247)
 
 Not *Next, decided*, which is unchanged (Gate O). The human asked why `/progress`'s detail offered only Reading and

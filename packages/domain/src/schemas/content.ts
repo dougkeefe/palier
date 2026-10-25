@@ -2,6 +2,7 @@ import * as z from "zod";
 
 import { DOC_TYPES, LICENCES } from "../passage.js";
 import { ATTEMPT_MODES } from "../attempt.js";
+import { LIBRARY_TOPICS } from "../library-article.js";
 import { ORAL_SESSION_TYPES } from "../oral-scenario.js";
 import { STUDY_RESOURCE_SOURCES } from "../study-resource.js";
 import { READING_SUB_SKILLS, WRITING_SUB_SKILLS } from "../sub-skills.js";
@@ -288,13 +289,15 @@ export const writingPromptShape = z.strictObject({
  * reference page. Prose in both interface languages, examples in `lang`. A writing article's
  * examples are sentences, `avoid` optional since some only show the form to write; a reading
  * article's are excerpts. The sub-skill decides which shape applies, so a reading article with a
- * sentence to write, or a `related` from the other skill, is refused.
+ * sentence to write, or a `related` from the other skill, is refused. Its `topic` is one of
+ * `LIBRARY_TOPICS` (D257), which the index filters by.
  */
 const writingSubSkillSchema = z.enum(WRITING_SUB_SKILLS);
 const readingSubSkillSchema = z.enum(READING_SUB_SKILLS);
 
 const articleCommon = {
   lang: langSchema,
+  topic: z.enum(LIBRARY_TOPICS),
   title: localisedSchema,
   summary: localisedSchema,
   sections: z

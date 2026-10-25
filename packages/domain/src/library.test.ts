@@ -8,6 +8,7 @@ const isReading = (subSkill: string): boolean => (READING_SUB_SKILLS as readonly
 const anArticle = (subSkill: string, over: Record<string, unknown> = {}) => ({
   subSkill,
   lang: "fr",
+  topic: "grammar",
   title: { en: "Agreement", fr: "L'accord" },
   summary: { en: "Make the words agree.", fr: "Faites accorder les mots." },
   sections: [{ heading: { en: "The rule", fr: "La règle" }, paragraphs: [{ en: "One.", fr: "Un." }] }],
@@ -93,6 +94,18 @@ describe("parseLibrary", () => {
       errors: [`${indexOf("inference")}.examples.0.why.fr: an unpaired "_"`],
     });
     expect(parseLibrary(withMarks("agreement", { summary: { en: "Make _les mots_ agree.", fr: "Faites _accorder_." } })).ok).toBe(true);
+  });
+
+  it("refuses an article with no topic, or one outside LIBRARY_TOPICS, since the index filters by it (D257)", () => {
+    const at = indexOf("agreement");
+    const missing = everyArticle().map((a) => {
+      if (a.subSkill !== "agreement") return a;
+      const { topic: _topic, ...rest } = a;
+      return rest;
+    });
+    expect(parseLibrary(missing)).toMatchObject({ ok: false, errors: [expect.stringMatching(new RegExp(`^${at}\\.topic: `))] });
+    const unknown = everyArticle().map((a) => (a.subSkill === "agreement" ? { ...a, topic: "spelling" } : a));
+    expect(parseLibrary(unknown)).toMatchObject({ ok: false, errors: [expect.stringMatching(new RegExp(`^${at}\\.topic: `))] });
   });
 
   it("names the path of a schema problem, and the root when the library is not an array", () => {
