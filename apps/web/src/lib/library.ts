@@ -58,3 +58,19 @@ export const libraryArticlesFor = (skill: ScoredSkill): readonly LibraryArticle[
 /** The article for a route segment, or null for anything that is not a reading or written-expression sub-skill. */
 export const articleFor = (segment: string): LibraryArticle | null =>
   LIBRARY.find((article) => article.subSkill === segment) ?? null;
+
+/** The skill an article belongs to, which its look, its photograph and its practice follow. */
+export const skillOf = (article: LibraryArticle): ScoredSkill =>
+  (READING_SUB_SKILLS as readonly string[]).includes(article.subSkill) ? "reading" : "writing";
+
+/**
+ * The articles either side of one in its skill's order (D256), for the article's previous and next
+ * links. Neither wraps, and neither crosses into the other skill: reading's last has no next.
+ */
+export const adjacentArticles = (
+  article: LibraryArticle,
+): { readonly previous: LibraryArticle | null; readonly next: LibraryArticle | null } => {
+  const articles = libraryArticlesFor(skillOf(article));
+  const at = articles.findIndex((a) => a.subSkill === article.subSkill);
+  return { previous: articles[at - 1] ?? null, next: articles[at + 1] ?? null };
+};

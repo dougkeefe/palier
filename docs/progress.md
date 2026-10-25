@@ -98,11 +98,11 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/progress.md-archive` | **This file split into a live file and `progress-archive/`** (D255): the deviations and session entries moved verbatim, an index of every deviation, and a fast-lane test that holds the split. | 24 October 2026 |
+| `dougkeefe/palier-library-redesign` | **The library redesigned** (D256): the index as a browsable set of cards by skill, articles with a breadcrumb, contents, previous and next, and three Unsplash photographs served from this origin, credited. | 24 October 2026 |
 
 *(Merged rows are removed: this table tracks current work, and the session log is the permanent record. The rows
 removed up to 24 October 2026, the last of them the reading articles (#100), are listed in
-[`progress-archive/history.md`](progress-archive/history.md).)*
+[`progress-archive/history.md`](progress-archive/history.md); the archive's split (#101) was removed with D256's claim.)*
 
 ---
 
@@ -133,6 +133,10 @@ offline journeys green, and R4's reach stated in the deviation.
 **For the human, from D254:** read the eight reading articles' French and English (`/fr/library` and `/en/library`,
 the reading section), as Gate L read writing's. In particular, say whether each excerpt reads as federal administrative
 French and whether each "what to notice" is the only defensible reading.
+
+**For the human, from D256:** look at the library's new layout and its three photographs (`/en/library`, an article in
+each skill, and on a phone), and read its new French strings (`library.jumpLabel` to `library.onUnsplash` in `fr.json`).
+Say whether any photograph should be swapped; `components/library/images/SOURCES.md` says how.
 
 **Beside it, whenever a smoke key is to hand (agent):**
 - **The translator's completions, recorded** (D250, two calls on the `assess` model, a few cents): the same
@@ -577,27 +581,7 @@ full.
 - **D243** — the landing hero says Palier is unofficial and not affiliated with the Commission · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d243--the-landing-hero-says-palier-is-unofficial-and-not-affiliated-with-the-commission)
 - **D244** — the landing page's way-in test asserts the link and where a new visitor lands, not a page they pass through · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d244--the-landing-pages-way-in-test-asserts-the-link-and-where-a-new-visitor-lands-not-a-page-they-pass-through)
 - **D245** — `/progress` is a dashboard: the three domains at a glance, then the chosen skill in detail · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d245--progress-is-a-dashboard-the-three-domains-at-a-glance-then-the-chosen-skill-in-detail)
-
-### D246 — `vite` is a pinned root devDependency, not an auto-installed peer; Dependabot's group is rebuilt locally
-**Date:** 22 October 2026 · **Status:** accepted. Extends D155 and D236
-
-- **Three Dependabot alerts were open on `vite` 8.3.0**: #16, #17 (high) and #18, all on its bundled `launch-editor`,
-  fixed in 8.3.3. `vite` was in no `package.json`. pnpm auto-installed it as the peer of `vitest` and `@vitest/mocker`,
-  both of which accept `^8.0.0`.
-- **D155's scoped override does not work here.** An `overrides` entry for `vite` reached the lockfile and changed
-  nothing: pnpm resolves an auto-installed peer from the versions already in the graph, not through overrides.
-  `pnpm update vite -r` left it alone for the same reason.
-- **So the root names it: `"vite": "8.3.5"`**, beside `vitest` and pinned exactly like the other devDependencies. It
-  adds no package to the tree, since it was already there, and `vitest` and `@vitest/mocker` now resolve their peer
-  to it. Dependabot can now see it and will propose its updates in the minor-and-patch group, where before it could
-  only raise alerts.
-- **Dependabot's PR #90 (the 18-update group) was rebuilt rather than merged.** Its lockfile resolved
-  `packages/testing`'s `msw` and `vitest` against an optional `@types/node` peer at **26.6.5**. That left three
-  `@types/node` versions in the tree, one of them the major D155 holds back with the runtime.
-  - The `dependabot.yml` ignore rule cannot catch this, because it only governs the versions Dependabot proposes.
-  - The same `package.json` specifiers, installed with the repo's pnpm 10.13.1, resolve every peer to 22.20.5. That
-    includes `apps/web`'s `^22`, which had been left at 22.18.11.
-  - Read a Dependabot lockfile for a stray major before merging it, as well as for the bumps it lists.
+- **D246** — `vite` is a pinned root devDependency, not an auto-installed peer; Dependabot's group is rebuilt locally · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d246--vite-is-a-pinned-root-devdependency-not-an-auto-installed-peer-dependabots-group-is-rebuilt-locally)
 
 ### D247 — `/progress`'s detail is three equal tabs, speaking included; never a radio switch
 **Date:** 22 October 2026 · **Status:** accepted (human's request; agent's design and copy). Amends D245's "In detail" bullet, not its print
@@ -902,10 +886,104 @@ written-expression sub-skill"; `architecture.md` §5's tree and PRD §8's `/libr
 - **Not done:** no entry was edited, and none was summarised in place of its text. An archived deviation's status is
   still marked in place when it is resolved, as before, with its index line changed to match.
 
+### D256 — the library as a browsable index and readable articles, with three photographs served from this origin
+**Date:** 24 October 2026 · **Status:** accepted (human request; the agent's design and choice of photographs, for the human's look). Amends D162's and D254's page shape
+
+The human asked for an easier, more visually appealing library, with royalty-free photographs credited, without losing
+the information hierarchy, accessibility or ease of navigation, and chose: both the index and the articles, the agent
+picks the photographs and shows screenshots, and a linked credit at the foot of the page. The index was one column of
+eighteen bold links, the article titles were not headings, and an article was a run of prose ending in a bulleted list.
+
+- **The index, on `.app-wide`:**
+  - The title, a line, and a way to each skill, beside the library's photograph. Each way is a pill with the skill's
+    glyph, name and count, linking to `#library-reading` or `#library-writing`.
+  - Each skill's section has its `SKILL_LOOK` mark, its name, its count and a line on what its articles hold (the old
+    intro's second sentence, split), with its photograph beside them from 600px. Its articles follow as cards in the
+    skill's fill, numbered in the taxonomy's order.
+  - The headings run h1, then h2 per skill, then **h3 per article**, so a screen reader can move from article to article.
+  - A card's link covers the card by `::after`, so the whole card answers a click while the link's name stays the
+    title alone.
+- **An article:**
+  - A breadcrumb (Library › its skill › its title, `aria-current="page"`) replaces "All articles". The skill's link
+    goes to its section on the index.
+  - The head sits beside the skill's photograph from 900px.
+  - **"On this page"** lists the sections, Examples and Read next. From 1000px it is sticky beside the prose; below
+    that it is a quiet panel above it. The DOM order is the same at every width.
+  - **The examples are white panels.**
+    - A writing example sets the sentence to write against the one it replaces. ✓ and ✗ in `correct` and `incorrect`
+      mark them, and the labels stay, so colour is never the only signal.
+    - A reading example is an excerpt in passage type (19px at 1.65) with a rule at its start.
+  - Read next uses the index's cards.
+  - The practise button sits in a deep panel and is still the page's only one.
+  - **Previous and next stay within the skill** (`adjacentArticles`). Neither wraps, and reading's last article never
+    runs on into writing.
+- **The photographs, the way D201 did it:**
+  - Three photos under the Unsplash License: Fang-Wei Lin's open book, Praise Judah's reader of a document and Marcos
+    Paulo Prado's hand writing in a notebook.
+  - Each was downloaded at 2400px and cut to WebP: 33, 22 and 17 KB, in `components/library/images/`.
+  - They are CSS backgrounds in `library.css`, so `img-src 'self'` is unchanged and the worker precaches them by
+    following the stylesheet. An article is whole offline, photograph included.
+  - They are decorative: `aria-hidden`, with no text over them. The index preloads its own, which is its largest paint.
+  - Each page credits the ones it shows, each name linked to its photo (`features/library/photos.ts`, `PhotoCredit`).
+    Unsplash asks for that, though its licence does not require it.
+  - `images/SOURCES.md` records each photo, and `photos.test.ts` holds the file, the row and the credit together.
+  - None repeats a landing photographer, and none shows anything official, any maple leaf or any red and white
+    (PRD §10.1).
+- **Contrast, by the gate's own pairs.** On a skill's fill only the inks and `primary` are held (D219), so a card's title
+  is `ink`, never `link`. A card's focus ring is drawn outside it, on the paper, where `accent` clears 3:1. No new token
+  and no new pair were needed.
+- **`components/library/library.css`:** the library's rules left `globals.css` for a sheet only its two pages import.
+  Every rule is scoped under `.app-library`, as `landing.css` is under `.landing`, since Next keeps a page's stylesheet
+  after a soft navigation. `motion.test.ts` reads it, and the hover lift applies only under
+  `prefers-reduced-motion: no-preference`.
+- **Messages:**
+  - `intro` is shorter, and `back` is gone.
+  - New in both languages: `jumpLabel`, `articleCount`, `readingLede`, `writingLede`, `breadcrumb`, `onThisPage`,
+    `siblings`, `previous`, `next`, `practiseTitle`, `photosBy` and `onUnsplash`.
+  - The French is the agent's.
+- **Tests added, none loosened:**
+  - `content.spec.ts`'s library test now also asserts eighteen h3s, three `aria-hidden` photographs and three credit
+    links to Unsplash on the index. On an article it asserts the breadcrumb's links, the one credit, next and back
+    again, and the breadcrumb's way to the skill's section. Its axe checks are the same four pages.
+  - `lib/library.test.ts` covers `skillOf`, and `adjacentArticles` at a skill's two ends and in its middle.
+  - `features/library/photos.test.ts` and `contents.test.ts` are new. The second covers "Read next", which the
+    contents list only when an article has related articles.
+- **For the human:** look at the photographs and the pages (the pull request has screenshots), and read the new French.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
 
+
+### 24 October 2026 — `dougkeefe/palier-library-redesign` (the library redesigned, with three photographs; D256)
+
+Not *Next, decided*, which is unchanged (D206). The human asked for the library to be easier to use and better looking,
+with royalty-free photographs credited, keeping its hierarchy, accessibility and navigation.
+- **Web:** `/library` and `/library/[subSkill]` rebuilt. `components/library/` gains `LibraryCard`, `LibraryPhoto`,
+  `PhotoCredit`, `library.css` (the library's rules, moved out of `globals.css`), and `images/` with three WebP files and
+  `SOURCES.md`.
+  - `features/library/photos.ts` and `features/library/contents.ts` are new. The article's contents and the headings
+    they link to take their ids from `contents.ts`. `lib/library.ts` gains `skillOf` and `adjacentArticles`.
+  - Twelve message keys in both languages; `back` removed and `intro` shortened.
+- **Tests:** `photos.test.ts` and `contents.test.ts` are new. `library.test.ts` gains `skillOf` and `adjacentArticles`. `motion.test.ts` now
+  reads `library.css`. `content.spec.ts`'s library test gains the assertions D256 lists.
+- **Docs:** D256; D246 and the 22 October entry for `/progress`'s tabs are archived (rule 8); `apps/web/CLAUDE.md`'s
+  library invariant; *In flight*; *Next, decided*'s human item.
+
+**Verified:**
+- `pnpm verify`: check-types, lint and boundaries clean; `pnpm test` passed 286 files, 4,602 tests (8 todo).
+- `content.spec.ts`'s three library tests on the `chromium` project, with the warmup: 4 of 4, axe clean on `/en/library`,
+  `/en/library/agreement`, `/fr/library/agreement` and `/en/library/inference`.
+- After `pnpm --filter @palier/web build`, the `offline` project's `csp-production.spec.ts` and `offline.spec.ts`: 15 of
+  15, so every page in both locales has zero violations with the photographs.
+- **Lighthouse** with `lighthouserc.json`'s desktop preset, three runs each:
+  - `/en/library`: performance 0.98, 1 and 1;
+  - `/fr/library/agreement` and `/en/library/inference`: 1 on every run;
+  - accessibility 1 and CLS 0 on all nine runs, and LCP 670–1,096 ms.
+- **On the production build** (`next start`), the worker's caches held all three library photographs after one load of
+  `/en/home`. With the network off, `/fr/library/pronouns` drew its photograph from the cache (200).
+- Screenshots at 1280px and 390px, English and French, with a keyboard pass to a card's focus ring.
+- Not run: the rest of the medium lane. CI runs it on the pull request.
 
 ### 24 October 2026 — `dougkeefe/progress.md-archive` (this file split into a live file and `progress-archive/`; D255)
 
@@ -1111,27 +1189,6 @@ for a better control than its radio buttons, as D247 had done for `/progress`.
 - Screenshots at 1280px and 375px in both languages through a throwaway production spec, which measured the tab list's
   overflow: 107px in French at 1280px before the equal-width rule, 0 in all four after. The no-key state was checked
   the same way.
-
-### 22 October 2026 — `dougkeefe/oral-progress-radio-buttons-ux` (`/progress`'s detail as three equal tabs, speaking included; D247)
-
-Not *Next, decided*, which is unchanged (Gate O). The human asked why `/progress`'s detail offered only Reading and
-Writing, and for a better control than radio buttons.
-- **The detail is three WAI-ARIA tabs** (`@palier/ui`'s new `Tabs`/`TabPanel`), one per domain, in its glyph and fill.
-- **Speaking has its own panel**: the newest five sessions, each with its measured pace, beside what the newest report
-  says to work on (`@palier/app`'s new `oralProgress`). No criterion level is shown off the report (R10), and nothing on
-  the page spends.
-- **Each hero card links into its tab.** Print is unchanged (D247).
-
-**Verified:**
-- A review pass then fixed three findings: the tab list's 1px overhang, which gave it a vertical scrollbar wherever
-  scrollbars show (measured 48 against 47, now 48 against 48); the no-report link, which now skips a session no report
-  can be asked of; and a prop type.
-- `pnpm verify` was green after those fixes: 276 files, 4,464 tests passed (8 todo), with no dependency violations.
-- After `pnpm --filter @palier/web build`, the offline project's `progress-history-production` (both tests, the new one
-  seeding three spoken sessions into real IndexedDB) and `csp-production` passed: 9 tests.
-- The chromium project's `journeys`, `sync` and `content` passed (26 tests), on port 3400 through a throwaway config,
-  since another app held port 3000.
-- Screenshots at 1280px and 375px in both languages; at 375px the tab list does not overflow in either.
 
 Older entries, newest first: [October 2026](progress-archive/sessions-2026-10.md) ·
 [September 2026](progress-archive/sessions-2026-09.md).

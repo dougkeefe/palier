@@ -29,7 +29,7 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   and Source Serif 4, light only. The header is the wordmark, the destinations on a quiet pill track (`HeaderNav`, a
   client component that marks the current page `aria-current="page"` from `features/nav/nav.ts`), then sync and the
   language. The footer is deep teal with the giant wordmark, drawn by `::before` from a `data-` attribute. `.app-main`
-  is 760px, and a page whose section carries `.app-wide` (today, the translator) takes 1160px. Every colour in `globals.css` is a token.
+  is 760px, and a page whose section carries `.app-wide` (today, the translator, the library) takes 1160px. Every colour in `globals.css` is a token.
   **Today** (D214–D219) is the dashboard design (D219): a deep hero with the week's answers and the three skills as cards,
   each a link to its practice with today's plan done (`features/home/today-view.ts`, over the container's
   `practiceActivity`); then `.app-home__main` (the statistics, the plan, Where you stand) beside `.app-home__side` (the
@@ -162,6 +162,13 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   Every reading and written-expression item's explanation links its article (`components/library/ArticleLink.tsx`), in a new tab from a drill so the session is never left. Cited
   French in the prose renders through `Cited` with the article's `lang`. `prepare-public.mjs` expands the article route
   from the content's file names, so every article is precached.
+  **Its layout** (D256) is `components/library/`: `LibraryCard` (the index's cards and Read next, h3 titles, the link
+  covering the card), `LibraryPhoto` and `PhotoCredit`, styled by `library.css`, which only the two pages import and which
+  scopes every rule under `.app-library`. Previous and next stay within a skill (`lib/library.ts`'s `adjacentArticles`).
+  **Its three photographs** are the landing page's kind: WebP in `components/library/images/`, CSS backgrounds,
+  `aria-hidden`, never under text, each credited and linked on the page that shows it (`features/library/photos.ts`),
+  with `images/SOURCES.md` the record `photos.test.ts` holds them to. On a skill's fill only the inks and `primary` clear
+  contrast, so a card's ring is drawn outside it.
 - **The error states** (Phase 7 Slice 2, architecture.md §16, ADR 15; D141–D142).
   - `[locale]/error.tsx`, `[locale]/not-found.tsx` and `global-error.tsx` are one-line bindings; the screens are named
     components in `src/components/errors/`, so `NO_JSX_LITERALS` still applies to them.

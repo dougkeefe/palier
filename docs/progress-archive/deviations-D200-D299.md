@@ -1341,3 +1341,24 @@ together and speaking reduced to one line below the fold. It now uses Today's la
   - The bars are hidden, which keeps the one page.
   - `progress-history-production.spec.ts` gained assertions on the hero, the bars and print. No assertion was loosened.
 - The page takes `.app-wide` (1160px), as Today does. Every screen rule sits under `@media screen`.
+
+### D246 — `vite` is a pinned root devDependency, not an auto-installed peer; Dependabot's group is rebuilt locally
+**Date:** 22 October 2026 · **Status:** accepted. Extends D155 and D236
+
+- **Three Dependabot alerts were open on `vite` 8.3.0**: #16, #17 (high) and #18, all on its bundled `launch-editor`,
+  fixed in 8.3.3. `vite` was in no `package.json`. pnpm auto-installed it as the peer of `vitest` and `@vitest/mocker`,
+  both of which accept `^8.0.0`.
+- **D155's scoped override does not work here.** An `overrides` entry for `vite` reached the lockfile and changed
+  nothing: pnpm resolves an auto-installed peer from the versions already in the graph, not through overrides.
+  `pnpm update vite -r` left it alone for the same reason.
+- **So the root names it: `"vite": "8.3.5"`**, beside `vitest` and pinned exactly like the other devDependencies. It
+  adds no package to the tree, since it was already there, and `vitest` and `@vitest/mocker` now resolve their peer
+  to it. Dependabot can now see it and will propose its updates in the minor-and-patch group, where before it could
+  only raise alerts.
+- **Dependabot's PR #90 (the 18-update group) was rebuilt rather than merged.** Its lockfile resolved
+  `packages/testing`'s `msw` and `vitest` against an optional `@types/node` peer at **26.6.5**. That left three
+  `@types/node` versions in the tree, one of them the major D155 holds back with the runtime.
+  - The `dependabot.yml` ignore rule cannot catch this, because it only governs the versions Dependabot proposes.
+  - The same `package.json` specifiers, installed with the repo's pnpm 10.13.1, resolve every peer to 22.20.5. That
+    includes `apps/web`'s `^22`, which had been left at 22.18.11.
+  - Read a Dependabot lockfile for a stray major before merging it, as well as for the bumps it lists.

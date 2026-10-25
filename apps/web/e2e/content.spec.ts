@@ -146,6 +146,14 @@ test("the library lists eighteen articles, reading first, and an article reads i
   await expect(page.locator(".app-library__entry")).toHaveCount(18);
   const sections = page.locator("main").getByRole("heading", { level: 2 });
   await expect(sections).toHaveText(["Reading comprehension", "Written expression"]);
+  // Each article is a heading under its skill's, so a screen reader moves article by article (D256).
+  await expect(page.locator("main").getByRole("heading", { level: 3 })).toHaveCount(18);
+  // The photographs are decoration, and each photographer is credited, linked to the photo.
+  await expect(page.locator(".app-library__photo")).toHaveCount(3);
+  for (const photo of await page.locator(".app-library__photo").all()) await expect(photo).toHaveAttribute("aria-hidden", "true");
+  const credits = page.locator(".app-library__credit a");
+  await expect(credits).toHaveCount(3);
+  for (const credit of await credits.all()) await expect(credit).toHaveAttribute("href", /^https:\/\/unsplash\.com\/photos\//);
   await axeClean(page);
 
   await page.getByRole("link", { name: "Agreement", exact: true }).click();
@@ -158,8 +166,19 @@ test("the library lists eighteen articles, reading first, and an article reads i
   expect(await page.locator("main i:not([lang='fr'])").count()).toBe(0);
   await axeClean(page);
 
+  // Where it sits, and the articles either side in its skill (D256).
+  const breadcrumb = page.getByRole("navigation", { name: "Breadcrumb" });
+  await expect(breadcrumb.getByRole("link")).toHaveText(["Library", "Written expression"]);
+  await expect(page.locator(".app-library__credit a")).toHaveText(["Marcos Paulo Prado"]);
+  await page.getByRole("link", { name: /^Next article/ }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "Prepositions and government" })).toBeVisible();
+  await page.getByRole("link", { name: /^Previous article/ }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "Agreement" })).toBeVisible();
+
   await page.getByRole("link", { name: "Pronouns" }).click();
   await expect(page.getByRole("heading", { level: 1, name: "Pronouns" })).toBeVisible();
+  await page.getByRole("navigation", { name: "Breadcrumb" }).getByRole("link", { name: "Written expression" }).click();
+  await expect(page).toHaveURL(/\/en\/library#library-writing$/);
 
   await page.goto("/fr/library/agreement");
   await expect(page.getByRole("heading", { level: 1, name: "Les accords" })).toBeVisible();

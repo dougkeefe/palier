@@ -1,0 +1,582 @@
+/*
+ * The library (PRD §13.2, progress.md D162, D254, D256): the index as a title with its photograph
+ * and a way to each skill, then each skill's articles as cards; an article as where it sits, its
+ * contents beside its prose, its examples, related cards, the way to practise and the articles
+ * either side. Only the library's two pages import this sheet, and Next keeps a page's stylesheet
+ * after a soft navigation away, so every rule is scoped under `.app-library`, as `landing.css` is
+ * under `.landing` (D201). Every colour is a token. On a skill's fill (tint, mint) only the inks
+ * and primary are held to contrast, so nothing there is coloured `--link`, and a card's focus ring
+ * is drawn outside it, on the paper.
+ */
+
+/* ---- The photographs: decoration, never under text, on a quiet fill until they load ---- */
+
+.app-library .app-library__photo {
+  border-radius: 12px;
+  background-color: var(--surface-quiet);
+  background-position: center;
+  background-size: cover;
+}
+
+.app-library .app-library__photo--library {
+  background-image: url("./images/library.webp");
+}
+
+.app-library .app-library__photo--reading {
+  background-image: url("./images/reading.webp");
+}
+
+.app-library .app-library__photo--writing {
+  background-image: url("./images/writing.webp");
+}
+
+/* ---- The index's head: the title, a line, the way to each skill; the photograph beside ---- */
+
+.app-library .app-library__hero {
+  display: grid;
+  gap: clamp(24px, 4vw, 56px);
+  align-items: center;
+}
+
+.app-library .app-library__hero-text > h1 {
+  margin: 0;
+}
+
+.app-library .app-library__lede {
+  margin: 20px 0 0;
+  max-width: 46ch;
+  color: var(--ink-soft);
+  font-size: 1.1875rem;
+  line-height: 1.55;
+}
+
+.app-library .app-library__hero-photo {
+  aspect-ratio: 2 / 1;
+}
+
+@media (min-width: 900px) {
+  .app-library .app-library__hero {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  }
+
+  .app-library .app-library__hero-photo {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+/* One under the other at every width: side by side they would wrap at some widths and not others. */
+.app-library .app-library__jump {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+  margin: 28px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.app-library .app-library__jump-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  box-sizing: border-box;
+  padding: 8px 20px 8px 14px;
+  border-radius: 999px;
+  background-color: var(--surface);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.app-library .app-library__jump-link:hover .app-library__jump-name {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.app-library .app-library__jump-glyph {
+  width: 22px;
+  height: 22px;
+  color: var(--primary);
+}
+
+.app-library .app-library__jump-name {
+  font-weight: 600;
+}
+
+.app-library .app-library__jump-count {
+  color: var(--ink-muted);
+  font-size: 0.9375rem;
+}
+
+/* ---- A skill's section: its mark, name, count and line, its photograph, then its cards ---- */
+
+.app-library .app-library__skill {
+  margin-top: clamp(56px, 8vw, 96px);
+}
+
+.app-library .app-library__skill-head {
+  display: grid;
+  gap: 32px;
+  align-items: end;
+  margin-bottom: 28px;
+}
+
+.app-library .app-library__mark {
+  display: inline-grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  color: var(--primary);
+}
+
+.app-library .app-library__mark svg {
+  width: 26px;
+  height: 26px;
+}
+
+.app-library .app-library__mark--tint {
+  background-color: var(--surface-tint);
+}
+
+.app-library .app-library__mark--mint {
+  background-color: var(--surface-mint);
+}
+
+.app-library .app-library__skill-title {
+  margin: 16px 0 4px;
+  font-size: clamp(1.75rem, 3vw, 2.375rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  scroll-margin-top: 24px;
+}
+
+.app-library .app-library__skill-count {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 0.9375rem;
+}
+
+.app-library .app-library__skill-lede {
+  margin: 8px 0 0;
+  max-width: 56ch;
+  color: var(--ink-soft);
+  font-size: 1.0625rem;
+}
+
+/* On a phone the cards come straight after the words: the photograph would only push them down. */
+.app-library .app-library__skill-photo {
+  display: none;
+}
+
+@media (min-width: 600px) {
+  .app-library .app-library__skill-head {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 300px);
+  }
+
+  .app-library .app-library__skill-photo {
+    display: block;
+    aspect-ratio: 3 / 2;
+  }
+}
+
+@media (min-width: 900px) {
+  .app-library .app-library__skill-head {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 380px);
+  }
+}
+
+/* ---- An article as a card ---- */
+
+.app-library .app-library__cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.app-library .app-library__card {
+  position: relative;
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  transition: transform var(--pl-motion-state) var(--pl-ease);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .app-library .app-library__card:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* The card's ring is outside it, on the paper, where the bright teal clears 3:1 (D202). */
+.app-library .app-library__card:has(.app-library__entry:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.app-library .app-library__number {
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.app-library .app-library__card-title {
+  margin: 0;
+  font-size: 1.25rem;
+  line-height: 1.2;
+}
+
+.app-library .app-library__entry {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.app-library .app-library__entry:focus-visible {
+  outline: none;
+}
+
+/* The whole card answers a click; the link's name stays the title alone. */
+.app-library .app-library__entry::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+}
+
+.app-library .app-library__card:hover .app-library__entry {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.app-library .app-library__card-summary {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+/* ---- The credit for the photographs ---- */
+
+.app-library .app-library__credit {
+  margin: clamp(48px, 6vw, 72px) 0 0;
+  padding-top: 16px;
+  border-top: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+}
+
+/* ---- An article: where it sits, its head ---- */
+
+.app-library .app-library__breadcrumb ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  margin: 0 0 24px;
+  padding: 0;
+  list-style: none;
+  color: var(--ink-muted);
+  font-size: 0.9375rem;
+}
+
+.app-library .app-library__breadcrumb li + li::before {
+  content: "›" / "";
+  margin-right: 8px;
+}
+
+.app-library .app-library__breadcrumb a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+}
+
+.app-library .app-library__head {
+  display: grid;
+  gap: 32px;
+  align-items: center;
+}
+
+.app-library .app-library__title {
+  margin: 0;
+  font-size: clamp(2.25rem, 4.5vw, 3.25rem);
+  line-height: 1.06;
+}
+
+.app-library .app-library__summary {
+  margin: 16px 0 0;
+  max-width: 60ch;
+  color: var(--ink-soft);
+  font-size: 1.1875rem;
+  line-height: 1.55;
+}
+
+.app-library .app-library__head-photo {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .app-library .app-library__head {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 360px);
+  }
+
+  .app-library .app-library__head-photo {
+    display: block;
+    aspect-ratio: 3 / 2;
+  }
+}
+
+/* ---- An article's body: its contents beside its prose from 1000px, above it below ---- */
+
+.app-library .app-library__body {
+  display: grid;
+  gap: 32px;
+  margin-top: clamp(32px, 5vw, 56px);
+}
+
+.app-library .app-library__contents {
+  padding: 16px 20px;
+  border-radius: 12px;
+  background-color: var(--surface-quiet);
+}
+
+.app-library .app-library__contents-title {
+  margin: 0 0 6px;
+  color: var(--ink-muted);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.app-library .app-library__contents ol {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.app-library .app-library__contents a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  text-decoration: none;
+}
+
+.app-library .app-library__contents a:hover {
+  text-decoration: underline;
+}
+
+@media (min-width: 1000px) {
+  .app-library .app-library__body {
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 56px;
+    align-items: start;
+  }
+
+  .app-library .app-library__contents {
+    position: sticky;
+    top: 24px;
+    padding: 4px 0 4px 20px;
+    border-radius: 0;
+    background-color: transparent;
+    border-left: 2px solid color-mix(in srgb, var(--ink) 12%, transparent);
+  }
+}
+
+.app-library .app-library__content {
+  max-width: 70ch;
+}
+
+.app-library .app-library__content > section + section {
+  margin-top: 40px;
+}
+
+.app-library .app-library__content h2 {
+  margin: 0 0 12px;
+  font-size: 1.625rem;
+  line-height: 1.2;
+  scroll-margin-top: 24px;
+}
+
+.app-library .app-library__content section > p {
+  margin: 0 0 1rem;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+}
+
+/* ---- The examples: white panels; a sentence to write against the one it replaces, or an excerpt ---- */
+
+.app-library .app-library__examples {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.app-library .app-library__example {
+  display: grid;
+  gap: 10px;
+  padding: 20px 24px;
+  border-radius: 12px;
+  background-color: var(--surface);
+}
+
+.app-library .app-library__example p {
+  margin: 0;
+}
+
+.app-library .app-library__tag {
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+/* A line is its glyph, its label and its sentence; the label always says it, never the colour alone. */
+.app-library .app-library__line {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  column-gap: 10px;
+  align-items: start;
+}
+
+/* On a phone the label sits above its sentence, so the French keeps the line's width. */
+.app-library .app-library__line > [lang] {
+  grid-column: 2;
+}
+
+@media (min-width: 600px) {
+  .app-library .app-library__line {
+    grid-template-columns: 20px 6.5rem minmax(0, 1fr);
+  }
+
+  .app-library .app-library__line > [lang] {
+    grid-column: auto;
+  }
+}
+
+.app-library .app-library__line .app-library__tag {
+  padding-top: 2px;
+}
+
+.app-library .app-library__line-glyph {
+  width: 20px;
+  height: 20px;
+  margin-top: 3px;
+}
+
+.app-library .app-library__line--avoid .app-library__line-glyph {
+  color: var(--incorrect);
+}
+
+.app-library .app-library__line--write .app-library__line-glyph {
+  color: var(--correct);
+}
+
+.app-library .app-library__avoid {
+  color: var(--ink-soft);
+  font-size: 1.0625rem;
+}
+
+.app-library .app-library__write {
+  color: var(--ink);
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+
+/* An excerpt reads as a passage does: 19px at 1.65 (PRD §10.3), with a rule at its start. */
+.app-library .app-library__excerpt {
+  padding-inline-start: 16px;
+  border-inline-start: 4px solid var(--primary);
+  font-size: 1.1875rem;
+  line-height: 1.65;
+}
+
+.app-library .app-library__why {
+  padding-top: 10px;
+  border-top: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+  color: var(--ink-soft);
+  font-size: 0.9375rem;
+}
+
+/* ---- Read next, the way to practise, and the articles either side ---- */
+
+.app-library .app-library__cards--related {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+}
+
+.app-library .app-library__practise {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 24px;
+  margin-top: 48px;
+}
+
+.app-library .app-library__practise-title {
+  margin: 0;
+  color: var(--on-deep);
+  font-size: 1.5rem;
+}
+
+.app-library .app-library__pager {
+  display: grid;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+@media (min-width: 600px) {
+  .app-library .app-library__pager {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  /* A lone next keeps to its side. */
+  .app-library .app-library__pager-link--next {
+    grid-column: 2;
+  }
+}
+
+.app-library .app-library__pager-link {
+  display: grid;
+  gap: 2px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  background-color: var(--surface);
+  text-decoration: none;
+}
+
+.app-library .app-library__pager-link--next {
+  text-align: end;
+}
+
+.app-library .app-library__pager-label {
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+}
+
+.app-library .app-library__pager-label::before {
+  content: "← " / "";
+}
+
+.app-library .app-library__pager-link--next .app-library__pager-label::before {
+  content: none;
+}
+
+.app-library .app-library__pager-link--next .app-library__pager-label::after {
+  content: " →" / "";
+}
+
+.app-library .app-library__pager-title {
+  color: var(--link);
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+
+.app-library .app-library__pager-link:hover .app-library__pager-title {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

@@ -18,6 +18,7 @@ const SHEETS = {
   "components.css": readFileSync(require.resolve("@palier/ui/components.css"), "utf8"),
   "globals.css": readFileSync(new URL("./globals.css", import.meta.url), "utf8"),
   "landing.css": readFileSync(new URL("../components/landing/landing.css", import.meta.url), "utf8"),
+  "library.css": readFileSync(new URL("../components/library/library.css", import.meta.url), "utf8"),
 };
 
 const uncommented = (css: string): string => css.replace(/\/\*[\s\S]*?\*\//g, "");
