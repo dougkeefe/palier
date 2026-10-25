@@ -456,7 +456,8 @@ import every package; holds the concrete-adapter wiring nothing else may name.
 
 ## Gates this app owns
 
-- Fast lane: i18n key parity (`messages.test.ts`), container wiring test — including the
+- Fast lane: `docs/progress.md`'s bounds and its archive's integrity (`src/docs/progress.test.ts`, D255: `docs/` is no
+  workspace, so its one test lives here, reading by file URL), i18n key parity (`messages.test.ts`), container wiring test — including the
   production graph over `fake-indexeddb` planning a day from the committed bank, and one sync
   round trip through the real routes — and the service worker's behaviour over an in-memory
   `CacheStorage` (`src/sw/`). The sync handlers run over an in-memory `SyncRepository`

@@ -11,8 +11,11 @@ lives in `content/profiles/psc-sle.json` rather than in code (ADR 9).
 **Read `docs/progress.md` before anything else** — the status table, then the deviations
 log, which is the part you cannot reconstruct from the code, then *Next, decided*, which is
 the single next slice to build. Its working agreement says how to claim work, how to record
-what you did, and — rule 7 — how to leave the next step decided rather than a menu before you
-finish. Follow it.
+what you did, how to leave the next step decided rather than a menu before you finish (rule
+7), and how to rotate old entries into `docs/progress-archive/` (rule 8). Follow it.
+`progress.md` keeps the newest ten deviations and session entries in full. Every older
+deviation has a line in its index naming the archive file that holds it, so `progress.md D###`
+always resolves (D255).
 
 ## The eight principles (`implementation-plan.md` §2)
 
@@ -51,7 +54,7 @@ accounts so studio mode's key never reaches Palier's server. Nothing imports the
 - **No vendor type crosses a package boundary.** An OpenAI response, a Dexie table, a React node: translate at the adapter edge. `openai`, `dexie`, `next` and `react` are banned outside the packages allowed them.
 - **Exam rules live in the profile JSON, never in code** (ADR 9). Item counts, time limits, cut scores, level descriptors, the sub-skill taxonomy, and the four Leitner intervals (ADR 8). Typing a number from `product-requirements.md` §5 into a `.ts` file is the mistake.
 - **Before proposing any architectural change, read `docs/adr/`** and check whether the decision is already recorded. If it is, quote its *revisit when* clause and say honestly whether that evidence has appeared. If it has not, drop the proposal.
-- **Never edit an accepted ADR — supersede it** with a new one (§4). Same discipline in `progress.md`: append to the session log, never rewrite an entry.
+- **Never edit an accepted ADR — supersede it** with a new one (§4). Same discipline in `progress.md`: append to the session log, never rewrite an entry; moving one to `docs/progress-archive/` verbatim is not a rewrite.
 - **No new dependency without stating what it replaces**, or why nothing already present does the job. One that changes the architecture needs an ADR.
 - **Every new branch in every package gets a unit test that names the behaviour** (§10) — adapters, route handlers, factory stages and UI logic included, not only the core. A coverage number going up is not a test.
 - **Never change a test to make an implementation pass.** If a test is wrong, stop and say which one and why.
@@ -65,7 +68,7 @@ accounts so studio mode's key never reaches Palier's server. Nothing imports the
 
 | When you need | Read |
 | --- | --- |
-| What is built, in flight, or deliberately deviated from the plan | `docs/progress.md` — status, then deviations |
+| What is built, in flight, or deliberately deviated from the plan | `docs/progress.md` — status, then deviations; older deviations and sessions in `docs/progress-archive/` |
 | Why a choice was made, and what evidence would reverse it | `docs/adr/`, 24 records, each with a *revisit when*. Take the next free number |
 | Whether something is a requirement or an opinion | `product-requirements.md` §0 and §0.1 (the 14 requirements) |
 | Exam variants, item counts, time limits, band cut tables | `product-requirements.md` §5 |
