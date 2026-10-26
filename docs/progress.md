@@ -98,11 +98,11 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/current-levels-input` | **The SLE results a user holds shape the plan**: declared in onboarding and at `/settings/study`, an E leaves the plan, a result at the target keeps it sharp, with a staircase for each skill (D259). | 25 October 2026 |
+| `dougkeefe/jq472` | **The open Dependabot alerts**: three dev-only transitive packages refreshed within their parents' ranges, and Lighthouse's `zod` 3 dismissed as unreachable (D261). | 26 October 2026 |
 
 *(Merged rows are removed: this table tracks current work, and the session log is the permanent record. The rows
 removed up to 24 October 2026, the last of them the reading articles (#100), are listed in
-[`progress-archive/history.md`](progress-archive/history.md); the library's redesign (#102) was removed with D257's claim, and the library's grid (#103) with D258's, and the translator's no-key card (#104) with D259's.)*
+[`progress-archive/history.md`](progress-archive/history.md); the library's redesign (#102) was removed with D257's claim, and the library's grid (#103) with D258's, and the translator's no-key card (#104) with D259's, and the SLE results a user holds (#105) with D261's.)*
 
 ---
 
@@ -594,62 +594,7 @@ full.
 - **D248** — Today's plan is three equal tabs, speaking included; its plan is one suggested session · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d248--todays-plan-is-three-equal-tabs-speaking-included-its-plan-is-one-suggested-session)
 - **D249** — the E2E warmup reads `routes.json`, articles included, and compiles the pages it cannot name · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d249--the-e2e-warmup-reads-routesjson-articles-included-and-compiles-the-pages-it-cannot-name)
 - **D250** — The translator: one call, two jobs, and study links that are data, never a model's · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d250--the-translator-one-call-two-jobs-and-study-links-that-are-data-never-a-models)
-
-### D251 — The translator translates on a pause, Google Translate's way, on a page wide enough for two panes
-**Date:** 24 October 2026 · **Status:** accepted (human's request; agent's pause length, cap rule and layout). Amends
-D237 for the translator only, D250's screen, and D202's header
-
-The human looked at D250's screen on the deployed site and asked for it to work like Google Translate:
-- the panes were cramped in the 760px column, and the French box sat about 56px below the editor;
-- "Always in French", the intro paragraph and "Start again" were noise;
-- it should translate after a pause in typing, with no button. No estimate before each call was needed, but a running
-  total while in use was welcome;
-- copying should be a standard icon at the French's top right;
-- the header's About should become Translate, with About kept in the footer.
-
-- **No ADR records "one press spends"**: D237 made it, amending D108. This entry amends D237 for this screen only. Every
-  other spending screen keeps its button and its estimate beside it.
-- **Wide, not stacked.** The page carries `.app-wide` (1160px, as Today does). The panes sit side by side from 900px and
-  stack below that. Each pane is a CSS subgrid over three shared rows (its label, its box, what goes under it).
-  - **Why they misaligned:** each pane was its own grid stretched to the taller pane's height. The French pane has one
-    row fewer under its box, so its spare height went into its rows and pushed the box down.
-  - With the subgrid the boxes start on one line and are one height, and the French grows when the editor is resized.
-  - The explanation below keeps a 760px reading measure.
-- **The pause is 1.5 s** (`TRANSLATE_PAUSE_MS`, a product rule beside `MAX_TRANSLATION_CHARS`, not an exam rule). The
-  human suggested about 2 s and left it to the agent.
-  - It is roughly the end of a burst of typing and short of a mid-sentence think.
-  - Each send is a paid call on the `assess` model, whose own latency dwarfs the pause, so a shorter one would mostly buy
-    calls for half-written sentences.
-  - `shouldTranslate` sends only a text with words in it, within the limit, with nothing out or failed, whose French is
-    not already on screen. Space typed at the end is no change (`isStale` compares `trimEnd`), so the space before the
-    next word buys nothing.
-- **Typing never stops.** The reducer takes edits and a language change while a request is out, which D250 held.
-  - The answer lands with the request it answered, so its marks point into the text that was sent.
-  - It then reads as stale (drawn muted), and the next pause sends the newest text. Only one request is out at a time,
-    as `translationInFlight` already joins.
-  - Emptying the text empties the French, which replaced "Start again" and its `clear` action.
-- **A failure is never retried on its own.** It waits for the text to change, or for "Try again", which stays a press
-  with its estimate beside it (D237).
-- **Past the cap a pause no longer sends** (`autoTranslates`, from the pre-flight's `after`). The cap is soft and never
-  blocks (D104, D237), but a call on every pause must not quietly run past it.
-  - There the screen says translating as you type is paused, and offers one "Translate" press with its estimate:
-    D237's way.
-  - Near the cap it keeps translating and shows the reminder.
-- **The running total** is the visit's: `@palier/app`'s new `featureSpendSince({ feature, from })` over the ledger,
-  from the container's clock when the screen opened. It reads "This visit so far: US$0.04 on your OpenAI key, for 2
-  texts", re-read as each request settles, and it says "at least" when a call could not be priced.
-  - The estimate before a call is gone, as the human allowed.
-  - The no-key card still states the per-text cost.
-  - "Your text goes only to OpenAI" stays.
-- **Focus never moves.** D250 moved focus to the status line and then to the answer's heading; on every pause that would
-  pull the cursor out of the editor. A polite live region now says "The French is ready." as each answer lands. The
-  editor is never read-only, and the wait (`Waiting`, `live={false}`) sits under the French.
-- **The copy icon** is `@palier/ui`'s new `IconButton`, a glyph alone at the 44px target. Its `label` is required, as
-  its accessible name and its tooltip. `copy` joins `GLYPH_PATHS`, a new entry, never a case. "Copied." is still said in
-  a status line, and the glyph shows a tick for 2 s.
-- **The header's fifth destination is Translate** (`NAV_ITEMS`, `nav.translate`), in About's place. About stays in the
-  footer, where it always was, so D145's "about" link is unchanged. The specs that clicked the first "About" now reach
-  the footer's, and still land on `/about`.
+- **D251** — The translator translates on a pause, Google Translate's way, on a page wide enough for two panes · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d251--the-translator-translates-on-a-pause-google-translates-way-on-a-page-wide-enough-for-two-panes)
 
 ### D252 — The translator's explanation sits in the card, under the panes; the running total and the privacy line below it
 **Date:** 24 October 2026 · **Status:** accepted (human's request). Amends D251's layout only
@@ -950,9 +895,66 @@ failed the same shard at 300 s on #104's merge, and had taken 231 s, then 282 s,
 - **Not changed:** the budget, and the warmup's serial order (D67). Shard 2 remains the tighter of the two, since nothing
   runs beside its warmup; splitting the hermetic project would be the next lever, if the creep continues.
 
+### D261 — three dev-only advisories close with a lockfile refresh, not an override; Lighthouse's `zod` 3 is dismissed as unreachable
+**Date:** 26 October 2026 · **Status:** accepted (human's request; agent's fix and dismissal). Extends D155, D236 and D246
+
+The human asked for the open high and moderate Dependabot alerts to be resolved. Seven were open, all transitive and
+dev-only.
+
+| Alert | Package | Severity | Path | Parent's range | Now |
+| --- | --- | --- | --- | --- | --- |
+| #21 | `body-parser` 1.20.8 | high | `@lhci/cli` → `express` 4.22.3 | `~1.20.5` | 1.20.9 |
+| #22–#25 | `fast-uri` 3.1.8 | two moderate, two low | `@stryker-mutator/core` → `ajv` 8.20.0 | `^3.0.1` | 3.1.9 |
+| #19 | `ip-address` 10.7.2 | moderate | `@lhci/cli` → … → `proxy-agent` → `socks` 2.8.10 | `^10.1.1` | 10.7.5 |
+| #20 | `zod` 3.25.76 | high | `@lhci/cli` → `lighthouse` 12.6.1 → `puppeteer-core` 24.43.1 → `chromium-bidi` 14.0.0 | `^3.24.1` | dismissed |
+
+- **Unlike D155 and D236, the first three needed no override.** Each patched version fits inside the range its parent
+  already asks for, so `pnpm update -r --depth Infinity body-parser fast-uri ip-address` moved them. `pnpm-workspace.yaml`
+  is unchanged. Dependabot's security updates are enabled, but none had been opened for these three.
+- **The lockfile also takes `legacy-javascript` 0.0.3 → 0.0.4.** Lighthouse's `@paulirish/trace_engine` asks for it as
+  `latest`, so any re-resolve picks up the newest. That is the whole of Dependabot's PR #98, which was titled "Bump zod
+  from 3.25.76 to 4.6.7" but changed no `zod`. It passed CI, and is closed in favour of this one. Nothing else moves, and
+  no package is added.
+- **`zod` 3 is dismissed on GitHub as `not_used`, not overridden.** No 3.x release is patched (GHSA fixed in 4.6.6).
+  - An override to zod 4 would break `chromium-bidi` 14. Its parser reads `parseResult.error.errors`, which zod 4
+    removed.
+  - Every `chromium-bidi` up to 17.0.2 asks for zod 3. `@lhci/cli` 0.15.1 is its latest release and pins `lighthouse`
+    12.6.1, which holds `puppeteer-core` at 24.
+  - The vulnerable code never runs. `puppeteer-core` requires `chromium-bidi` lazily, only in `createBiDiBrowser` and
+    `createBiDiOverCdpBrowser` (`BrowserLauncher.js`), which serve the `webDriverBiDi` protocol. Lighthouse drives Chrome
+    over CDP. Even on that path, the only input zod would validate is puppeteer's own protocol messages, on CI's
+    Lighthouse step.
+  - **Revisit when** `@lhci/cli` moves to a `lighthouse` whose `puppeteer-core` ships a `chromium-bidi` on zod 4
+    (157.x asks for `^4.6.5`).
+- **Smoke checks:** `lhci --version` answers 0.15.1. From `express`'s directory, `body-parser` 1.20.9 loads with `json` and
+  `urlencoded`. From `ajv`'s directory, a `$ref` across two `$id`s resolves through `fast-uri` 3.1.9 and validates both
+  ways. From `socks`'s directory, `ip-address` 10.7.5's `Address6` and `Address4` answer.
+- **`pnpm audit` over the whole tree** now shows the two `extract-zip` entries D155 dismissed and the `zod` entry. D236's
+  `braces` entry no longer appears. CI's `--prod --audit-level=high` gate is unchanged and exits 0, showing only D135's
+  two ignored `content` entries.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 26 October 2026 — `dougkeefe/jq472` (the open Dependabot alerts; D261)
+
+Not *Next, decided*, which is unchanged (D206). The human asked for the open high and moderate Dependabot alerts to be
+resolved.
+- **`body-parser`, `fast-uri` and `ip-address` were refreshed in the lockfile** to 1.20.9, 3.1.9 and 10.7.5, each within
+  its parent's range, with no override. That closes alerts #19 and #21–#25, the two low `fast-uri` ones included.
+  `legacy-javascript` came along to 0.0.4, the whole of Dependabot's no-op PR #98, which is closed in favour of this one.
+- **Alert #20, `zod` 3.25.76 under Lighthouse's `chromium-bidi`, is dismissed as `not_used`.** zod 4 would break
+  `chromium-bidi`'s parser, and the BiDi code never loads on Lighthouse's CDP path (D261).
+- The rotation moved D251 to `deviations-D200-D299.md` and the oldest session entry to `sessions-2026-10.md`.
+
+**Verified:**
+- Run with the repo's pnpm 10.13.1, through `npx pnpm@10.13.1`, since this machine's global `pnpm` is another front end.
+- `pnpm audit` shows the two `extract-zip` entries and the `zod` one. `pnpm audit --prod --audit-level=high` exited 0,
+  showing only the two ignored `content` entries.
+- The smoke checks in D261 passed.
+- `pnpm verify` was green: 291 files, 4,686 tests passed (8 todo), with no dependency violations.
+- Not run: the medium lane's Lighthouse step locally; CI runs it.
 
 ### 25 October 2026 — `dougkeefe/current-levels-input` (the SLE results a user holds shape the plan, with a staircase for each skill; D259)
 
@@ -1183,35 +1185,6 @@ like Google Translate, on a page wide enough for its two panes, after looking at
   through a temporary, uncommitted config, since another project's dev server held 3000.
 - In Chrome at 1440px the editor and the French measured one top (392px) and one height (286px). At 375px they stack.
 - Not run: the `offline` project, `csp-production` and the live smoke.
-
-### 23 October 2026 — `dougkeefe/translate-to-french` (the translator reviewed against the standards; D250)
-
-Not *Next, decided*, which is unchanged (Gate O). The human asked whether PR #96 met the project's standards, its
-documentation especially. The code and its tests did; the documents outside this file did not, and the prompt
-contradicted itself.
-- **The documents brought in line with D250.** `implementation-plan.md` §3.3 gains `translate`, and `interpretDiagnostic`,
-  which ADR 25 added without amending it; `architecture.md` §4's tree gains `content/resources/`; `product-requirements.md`
-  §8.7 gains an "As built" paragraph for the translator; `apps/web/CLAUDE.md`'s island list names it.
-- **The prompt no longer asks for every value.** Its example shows both jobs' fields, and its closing line, shared with
-  the other prompts, said "filling every value", which asks for the mixed shape `checkTranslation` refuses, a retry billed
-  twice. It now says which arrays each job leaves empty, and names no source in the example when the model is to decide.
-  `PROMPT_VERSION` stays at 5: nothing for this prompt is recorded.
-- **The screen's locale decisions moved into `translate-view.ts`** with tests (`translatorFeedbackLang` over the oral
-  report's `feedbackLangFor`, `resourceTitle`, `resourceInOtherLanguage`), so `Translator.tsx` holds rendering only.
-- **A correction to the entry below**: `translate.spec.ts` has 3 tests, not 4; the run's fourth was the warmup.
-- **The translator is D250, not D248.** Main's #95 merged D248 (Today's tabs) and D249 (the warmup) while this branch
-  was open, so every D248 this branch wrote, in code, tests and documents, now reads D250 (D16's lesson: a number is
-  taken at merge).
-- **Two specs followed D248's tabs.** After the merge, `translate.spec.ts`'s first test and `key-leak.spec.ts`'s step 3g
-  still chose Today's writing plan by its old radio, so the first timed out and pushed E2E 2/2 past its budget. Both now
-  click the tab, as main's own specs do; locally both specs passed, 5 of 5 with the warmup, on two workers.
-
-**Verified:**
-- `pnpm verify` was green: 282 files, 4,545 tests passed (8 todo), with no dependency violations.
-- After `pnpm --filter @palier/web build`, the chromium project's `translate.spec.ts` (3 tests) and `key-leak.spec.ts`
-  passed with the warmup, 5 of 5, run with `--workers=1` on port 3050, since another project held 3000 here. In parallel,
-  `key-leak` and the first translator test failed in onboarding before reaching the translator; serially both passed.
-- Not run: `csp-production` and the live smoke.
 
 Older entries, newest first: [October 2026](progress-archive/sessions-2026-10.md) ·
 [September 2026](progress-archive/sessions-2026-09.md).
