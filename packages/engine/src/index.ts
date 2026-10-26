@@ -30,6 +30,7 @@ export { FOCUS_WEIGHT, RECENT_DAYS, WEAKEST_WEIGHT, selectItems, workingSet } fr
 
 export type { DayPlacement, DayPlan, DayPlanInput } from "./planner.js";
 export {
+  MAINTAIN_FACTOR,
   MAINTENANCE_SHARE,
   NEW_SHARE,
   REVIEW_SHARE,
@@ -37,6 +38,9 @@ export {
   TAPER_DAYS,
   planDay,
 } from "./planner.js";
+
+export type { SkillStanding, StandingInput } from "./standing.js";
+export { declaredStart, skillStanding } from "./standing.js";
 
 export {
   WEAKEST_COUNT,

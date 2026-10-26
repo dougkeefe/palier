@@ -173,7 +173,7 @@ test("today sends a first-time user straight to onboarding, rather than an empty
 }) => {
   await page.goto("/en/home");
   await expect(page).toHaveURL(/\/en\/start$/);
-  await expect(page.getByText("Step 1 of 5")).toBeVisible();
+  await expect(page.getByText("Step 1 of 6")).toBeVisible();
   await axeClean(page);
   // Replaced, not pushed: Back from the first step does not bounce through today again.
   await page.goBack();
@@ -183,7 +183,7 @@ test("today sends a first-time user straight to onboarding, rather than an empty
 test("a drill opened before onboarding sends the user straight to it too, never to a set-up card (D224)", async ({ page }) => {
   await page.goto("/en/practice/reading");
   await expect(page).toHaveURL(/\/en\/start$/);
-  await expect(page.getByText("Step 1 of 5")).toBeVisible();
+  await expect(page.getByText("Step 1 of 6")).toBeVisible();
 });
 
 test("onboarding and today render in French too, at parity", async ({ page }) => {

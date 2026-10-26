@@ -3,6 +3,7 @@
   "version": 1,
   "skills": ["reading", "writing", "oral"],
   "bands": ["X", "A", "B", "C", "E"],
+  "exemptBand": "E",
   "variants": {
     "reading-supervised": {
       "skill": "reading",

@@ -119,6 +119,22 @@ describe("variant arithmetic", () => {
   });
 });
 
+describe("the exempt band", () => {
+  it("rejects an exempt band the profile does not declare", () => {
+    const broken = withProfile((p) => {
+      p["bands"] = ["X", "A", "B", "C"];
+    });
+    expect(errorsFrom(broken)).toMatch(/exempt band E is not one of this profile's "bands"/);
+  });
+
+  it("rejects a profile with no exempt band", () => {
+    const broken = withProfile((p) => {
+      delete p["exemptBand"];
+    });
+    expect(errorsFrom(broken)).toMatch(/exemptBand/);
+  });
+});
+
 describe("band ordering", () => {
   it("rejects bands listed out of rank order, which invites an alphabetical sort", () => {
     const broken = withProfile((p) => {

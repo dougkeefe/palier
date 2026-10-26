@@ -52,20 +52,33 @@ export const waitForOfflineReady = async (page: Page) => {
   await page.waitForFunction(() => navigator.serviceWorker.controller !== null);
 };
 
+/** A skill's name on onboarding's results step, as its pill row's legend says it (D259). */
+export type ResultSkill = "Reading" | "Written expression" | "Oral expression";
+
 /**
- * §8.1 onboarding, placing as asked, in the owner's order (progress.md D224): direction, target, goal,
- * the key, then the placement. Leaves the page wherever onboarding lands. Given a `key`, it is pasted in
+ * §8.1 onboarding, placing as asked, in the owner's order (progress.md D224, D259): direction, target,
+ * the results held (each "not yet" unless `results` names one), goal, the key, then the placement. Leaves the page wherever onboarding lands. Given a `key`, it is pasted in
  * the key step, saved and checked at once (so OpenAI must be stubbed to accept it); otherwise the step
  * is passed over. Choosing the diagnostic lands on it either way; with no key, the diagnostic's own gate
  * asks for one (ADR 25): see {@link addKeyAtDiagnosticGate}.
  */
-export const onboard = async (page: Page, placement: "diagnostic" | "skip", { key }: { key?: string } = {}) => {
+export const onboard = async (
+  page: Page,
+  placement: "diagnostic" | "skip",
+  { key, results = {} }: { key?: string; results?: Partial<Record<ResultSkill, "X" | "A" | "B" | "C" | "E">> } = {},
+) => {
   await page.goto("/en/start");
   const next = page.getByRole("button", { name: "Continue" });
   await expect(next).toBeEnabled();
   await next.click();
 
   await page.getByRole("radio", { name: /Level C/ }).check();
+  await next.click();
+
+  await expect(page.getByRole("heading", { name: "Which SLE results do you hold now?" })).toBeFocused();
+  for (const [skill, band] of Object.entries(results)) {
+    await page.getByRole("group", { name: skill, exact: true }).getByRole("radio", { name: band, exact: true }).check();
+  }
   await next.click();
 
   await page.getByRole("radio", { name: "20 minutes a day" }).check();

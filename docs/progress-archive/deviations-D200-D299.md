@@ -1436,3 +1436,27 @@ control, as they had been on `/progress` (D247).
   session a report can still be asked of. **No criterion level is shown off the report** (R10).
 - **Nothing on Today spends or writes.** `loadOral` reads the key's status, `oralSessionChoices`, `oralHistory`,
   `oralProgress` and `featureCosts`. It leaves `closeAbandonedSessions`, which writes, to the oral screen.
+
+### D249 — the E2E warmup reads `routes.json`, articles included, and compiles the pages it cannot name
+**Date:** 23 October 2026 · **Status:** accepted (agent's diagnosis of a CI failure the human reported). Amends D67's
+warmup and D223's route list
+
+PR #95's first medium lane failed one test it does not touch: `content.spec.ts`'s library test clicked "Agreement" and
+the URL never left `/en/library`. It had failed the same way once locally, on the first parallel run.
+- **The cause is a cold route compiled by its own click.** The CI trace shows the click's RSC request
+  (`/en/library/agreement?_rsc=…`) never answered, while the page logged "[Fast Refresh] rebuilding", one rebuild taking
+  4.4 s. The warmup derived its list with `routesFrom(pageDirs)`, which drops dynamic segments, and never passed the
+  article expansion, so **`library/[subSkill]` was never warmed**. A probe on a fresh `next dev` showed a route's first
+  compile makes every open page rebuild, cold `/en/progress` included. Once the warmup covered the articles,
+  `/en/library/agreement` answered in 99 ms against about 450 ms cold, and nothing else rebuilt.
+- **The warmup now reads `src/lib/routes.json`**, the app's one route list (D199), which the discoverability spec
+  reads too and a test holds equal to the page files. That adds the ten articles: the warmup took 42 s locally, against
+  34–36 s before.
+- **It also visits the pages that list cannot name**, which `errors.spec.ts` visits (`UNLISTED`): an unknown path's 404
+  and the hermetic hook's `route` and `global` views, each waiting for its `h1`, since the thrown route reaches its error
+  screen after the network is idle. The 404's first visit had made every open page rebuild; after this it does not.
+- **One residual is not fixed.** The thrown route (`/en/hermetic/route`) still recompiles once, for about 300 ms, on its
+  first visit from a new browser after the warmup, even when the warmup visited it twice. The cause was not found. That
+  rebuild is short, and it comes from a test that only reloads and reads; it can still drop another test's click in the
+  same window.
+- **Not changed:** no test's assertions. The failing test was right; its route was cold.

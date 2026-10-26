@@ -1,7 +1,17 @@
 import type { PracticeActivity } from "@palier/engine";
 import { describe, expect, it } from "vitest";
 
-import { WEEK_OF_SUNDAY, calendarMarks, monthOf, skillCards, stepMonth, weekMinutes } from "./today-view";
+import {
+  type SkillStandings,
+  WEEK_OF_SUNDAY,
+  calendarMarks,
+  heldSkills,
+  monthOf,
+  planSkills,
+  skillCards,
+  stepMonth,
+  weekMinutes,
+} from "./today-view";
 
 const activity = (today: Partial<PracticeActivity["today"]> = {}): PracticeActivity => ({
   today: { reading: 0, writing: 0, oralSessions: 0, oralMs: 0, ...today },
@@ -40,6 +50,39 @@ describe("skillCards", () => {
     expect(skillCards(activity({ oralSessions: 1, oralMs: 0 }), 12)[2]).toMatchObject({ sessions: 1, minutes: 0 });
     expect(skillCards(activity({ oralSessions: 2, oralMs: 8 * 60_000 }), 12)[2]).toMatchObject({ minutes: 8 });
     expect(skillCards(activity(), 12)[2]).toEqual({ kind: "oral", sessions: 0, minutes: 0, rail: { current: 0, total: 1 } });
+  });
+});
+
+describe("skillCards, for a skill held at its target (D259)", () => {
+  it("measures a held skill's rail against the keep-sharp half of the day, and the others in full", () => {
+    const cards = skillCards(activity({ reading: 3 }), 13, ["reading"]);
+    expect(cards[0]).toEqual({ kind: "reading", done: 3, goal: 6, rail: { current: 3, total: 6 } });
+    expect(cards[1]).toMatchObject({ goal: 13 });
+  });
+});
+
+describe("planSkills and heldSkills (D259)", () => {
+  const standings = (over: Partial<SkillStandings> = {}): SkillStandings => ({
+    reading: "unknown",
+    writing: "unknown",
+    oral: "unknown",
+    ...over,
+  });
+
+  it("offers every skill with nothing declared", () => {
+    expect(planSkills(standings())).toEqual(["reading", "writing", "oral"]);
+  });
+
+  it("leaves an exempt skill out of the plan, keeping the app's order", () => {
+    expect(planSkills(standings({ reading: "exempt", oral: "held" }))).toEqual(["writing", "oral"]);
+  });
+
+  it("offers nothing when all three are exempt", () => {
+    expect(planSkills(standings({ reading: "exempt", writing: "exempt", oral: "exempt" }))).toEqual([]);
+  });
+
+  it("names the scored skills held at their target, never speaking", () => {
+    expect(heldSkills(standings({ reading: "held", writing: "working", oral: "held" }))).toEqual(["reading"]);
   });
 });
 

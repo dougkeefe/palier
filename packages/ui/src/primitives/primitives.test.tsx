@@ -16,6 +16,7 @@ import { OptionRow } from "./OptionRow.js";
 import { Passage } from "./Passage.js";
 import { ProgressRail } from "./ProgressRail.js";
 import { Sheet } from "./Sheet.js";
+import { LevelStair } from "./LevelStair.js";
 import { Mascot } from "./Mascot.js";
 import { StreakFlame } from "./StreakFlame.js";
 import { Toast } from "./Toast.js";
@@ -657,5 +658,44 @@ describe("VoiceForm (D184)", () => {
     expect(levels).not.toHaveBeenCalled();
     expect(container.firstElementChild?.className).toBe("pl-voice-form pl-voice-form--still");
     vi.unstubAllGlobals();
+  });
+});
+
+describe("LevelStair", () => {
+  const bands = ["X", "A", "B", "C", "E"] as const;
+
+  it("is one image named by its label, the drawing hidden", () => {
+    const { container } = render(<LevelStair bands={bands} current="B" target="C" label="Reading: you hold B" />);
+    expect(screen.getByRole("img", { name: "Reading: you hold B" })).toBeTruthy();
+    expect(container.querySelector("svg")?.getAttribute("aria-hidden")).toBe("true");
+  });
+
+  it("is hidden whole without a label, as decoration beside words that say it", () => {
+    const { container } = render(<LevelStair bands={bands} current="B" target="C" />);
+    expect(container.querySelector(".pl-level-stair")?.getAttribute("aria-hidden")).toBe("true");
+    expect(screen.queryByRole("img")).toBeNull();
+  });
+
+  it("draws every step and fills those up to the result", () => {
+    const { container } = render(<LevelStair bands={bands} current="B" target="C" label="l" />);
+    expect(container.querySelectorAll(".pl-level-stair__step")).toHaveLength(5);
+    expect(container.querySelectorAll(".pl-level-stair__step--reached")).toHaveLength(3);
+  });
+
+  it("draws no stamp without one", () => {
+    const { container } = render(<LevelStair bands={bands} current="C" target="C" label="l" />);
+    expect(container.querySelector(".pl-level-stair__stamp")).toBeNull();
+  });
+
+  it("presses the stamp at the exemption, hidden from assistive technology", () => {
+    const { container } = render(<LevelStair bands={bands} current="E" target="C" label="l" stamp="Exempt" />);
+    const stamp = container.querySelector(".pl-level-stair__stamp");
+    expect(stamp?.textContent).toBe("Exempt");
+    expect(stamp?.getAttribute("aria-hidden")).toBe("true");
+  });
+
+  it("takes the small size", () => {
+    const { container } = render(<LevelStair bands={bands} current={null} target="B" label="l" size="sm" />);
+    expect(container.querySelector(".pl-level-stair--sm")).not.toBeNull();
   });
 });

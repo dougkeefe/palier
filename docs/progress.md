@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 25 October 2026 (the translator's no-key card above the editor, its French language labels capitalised, D258; next, D206's bank budget)
+**Last updated:** 25 October 2026 (the SLE results a user holds, declared in onboarding and at `/settings/study`, shape the plan, D259; next, D206's bank budget)
 **Current phase:** **1.0 is reached** (24 October 2026, D253): the human passed Gate O and Gate M and read bank v4 with no
 disagreement, so Phases 6 and 7 are complete. After 1.0, reading's library articles are built (D254), and D206's bank
 budget is next. Phase 3's product pilot still runs (Gate E, D97), and Phase 8, the English mirror, is the plan's next
@@ -98,11 +98,11 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/french-capitalization-api-warning` | **The translator's no-key card above the editor, and its French language labels capitalised** (D258). | 25 October 2026 |
+| `dougkeefe/current-levels-input` | **The SLE results a user holds shape the plan**: declared in onboarding and at `/settings/study`, an E leaves the plan, a result at the target keeps it sharp, with a staircase for each skill (D259). | 25 October 2026 |
 
 *(Merged rows are removed: this table tracks current work, and the session log is the permanent record. The rows
 removed up to 24 October 2026, the last of them the reading articles (#100), are listed in
-[`progress-archive/history.md`](progress-archive/history.md); the library's redesign (#102) was removed with D257's claim, and the library's grid (#103) with D258's.)*
+[`progress-archive/history.md`](progress-archive/history.md); the library's redesign (#102) was removed with D257's claim, and the library's grid (#103) with D258's, and the translator's no-key card (#104) with D259's.)*
 
 ---
 
@@ -129,6 +129,12 @@ and it costs a first visit on a phone the most.
 
 *Done:* a first visit's bank bytes under 400 KB gzipped, enforced by a test that fails on a deliberate breach, the
 offline journeys green, and R4's reach stated in the deviation.
+
+**For the human, from D259:** go through onboarding declaring a result in each skill (`/en/start`, then `/fr/start`), then
+open Today and `/settings/study`, on a phone too. Read the new French (`start.targetPerSkill` to `start.placementNothing`,
+the `levels` and `studySettings` namespaces, `today.skillExempt` to `today.allExemptWriting`, `privacy.held`), the stamp's
+"Exemption" especially, and say whether the staircase and the stamp read as fun or as noise. Two choices are the agent's
+and are easy to change: a skill held at its target keeps half a session, and the targets offered are B and C only.
 
 **For the human, from D254:** read the eight reading articles' French and English (`/fr/library` and `/en/library`,
 the reading section), as Gate L read writing's. In particular, say whether each excerpt reads as federal administrative
@@ -586,30 +592,7 @@ full.
 - **D246** — `vite` is a pinned root devDependency, not an auto-installed peer; Dependabot's group is rebuilt locally · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d246--vite-is-a-pinned-root-devdependency-not-an-auto-installed-peer-dependabots-group-is-rebuilt-locally)
 - **D247** — `/progress`'s detail is three equal tabs, speaking included; never a radio switch · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d247--progresss-detail-is-three-equal-tabs-speaking-included-never-a-radio-switch)
 - **D248** — Today's plan is three equal tabs, speaking included; its plan is one suggested session · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d248--todays-plan-is-three-equal-tabs-speaking-included-its-plan-is-one-suggested-session)
-
-### D249 — the E2E warmup reads `routes.json`, articles included, and compiles the pages it cannot name
-**Date:** 23 October 2026 · **Status:** accepted (agent's diagnosis of a CI failure the human reported). Amends D67's
-warmup and D223's route list
-
-PR #95's first medium lane failed one test it does not touch: `content.spec.ts`'s library test clicked "Agreement" and
-the URL never left `/en/library`. It had failed the same way once locally, on the first parallel run.
-- **The cause is a cold route compiled by its own click.** The CI trace shows the click's RSC request
-  (`/en/library/agreement?_rsc=…`) never answered, while the page logged "[Fast Refresh] rebuilding", one rebuild taking
-  4.4 s. The warmup derived its list with `routesFrom(pageDirs)`, which drops dynamic segments, and never passed the
-  article expansion, so **`library/[subSkill]` was never warmed**. A probe on a fresh `next dev` showed a route's first
-  compile makes every open page rebuild, cold `/en/progress` included. Once the warmup covered the articles,
-  `/en/library/agreement` answered in 99 ms against about 450 ms cold, and nothing else rebuilt.
-- **The warmup now reads `src/lib/routes.json`**, the app's one route list (D199), which the discoverability spec
-  reads too and a test holds equal to the page files. That adds the ten articles: the warmup took 42 s locally, against
-  34–36 s before.
-- **It also visits the pages that list cannot name**, which `errors.spec.ts` visits (`UNLISTED`): an unknown path's 404
-  and the hermetic hook's `route` and `global` views, each waiting for its `h1`, since the thrown route reaches its error
-  screen after the network is idle. The 404's first visit had made every open page rebuild; after this it does not.
-- **One residual is not fixed.** The thrown route (`/en/hermetic/route`) still recompiles once, for about 300 ms, on its
-  first visit from a new browser after the warmup, even when the warmup visited it twice. The cause was not found. That
-  rebuild is short, and it comes from a test that only reloads and reads; it can still drop another test's click in the
-  same window.
-- **Not changed:** no test's assertions. The failing test was right; its route was cold.
+- **D249** — the E2E warmup reads `routes.json`, articles included, and compiles the pages it cannot name · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d249--the-e2e-warmup-reads-routesjson-articles-included-and-compiles-the-pages-it-cannot-name)
 
 ### D250 — The translator: one call, two jobs, and study links that are data, never a model's
 **Date:** 23 October 2026 · **Status:** accepted (human's request; agent's design and copy)
@@ -951,9 +934,81 @@ The human found two things on the translator.
 - **Tests:** `translate.spec.ts`'s no-key test asserts the card's heading sits above the editor; its French test
   asserts the two radios by their capitalised names.
 
+### D259 — the SLE results a user holds are declared in onboarding and at `/settings/study`, and shape the plan: E leaves it, a result at the target keeps it sharp
+**Date:** 25 October 2026 · **Status:** accepted (human's request and three answers; agent's design). Builds PRD §8.1
+step 3's "self-declare a current profile", which D224 left unbuilt; amends D224's five steps and D248's three tabs
+
+The human: nothing let a user say what they already hold, so someone with an E in reading still got a reading plan every
+day. Asked, the human chose a target per skill, with one answer still asked first; a skill held at its target, below E,
+kept sharp rather than dropped; and a staircase with a stamp as the mastery indicator.
+- **What is stored.** The `studyProfile` setting gains `targets` and `current`, a target and a declared result (`Band`
+  or null) per skill. It still writes `targetBand`, the highest target, so a tab or worker on the old code still reads
+  the synced setting and does not send its user to `/start`. `parseStudyProfile` reads the old shape as its one target
+  everywhere with nothing declared, and a result that is not a band as none. It syncs, exports and wipes as before;
+  `/privacy`'s list of what the server holds now names the results.
+- **E is data.** The profile gains `exemptBand: "E"`, refined to be one of its `bands` (ADR 9). The engine's
+  `skillStanding` reads it: `unknown`, `exempt`, `held` (at or above the target) or `working`.
+- **The plan.** An exempt skill leaves Today's tabs, and its hero card is stamped "Exempt: nothing to practise". With all
+  three exempt, a cheering Coco replaces the plan. A held scored skill plans with the planner's new `maintaining`: half
+  the budget (`MAINTAIN_FACTOR`, a study heuristic like `SHORTEN_FACTOR`), reviews and maintenance, no new items, and no
+  diagnostic or mock-exam step (`nextStep`'s `held`). A working skill with no diagnostic is placed at its declared result
+  through `studyFocus`'s `declared` and the engine's `declaredStart` (X starts at A); a diagnostic run, measured, wins
+  over a declaration. Speaking's plan is still one session, worded as keeping sharp when held. `dayRequestFor` gives
+  Today's preview and the drill the same request, so the plan shown is the plan opened. Every goldens test passed unmoved.
+- **Onboarding has six steps**: direction, target, *now* (one row of pill radios per skill, "Not yet" to E, each with its
+  staircase; skippable), goal, the key, the placement. The target step's B or C sets all three; "My position needs a
+  different level in each skill" is folded under it. With reading and writing each held or exempt, the placement offers
+  only to start practising (`placementsFor`, `settle`).
+- **`/settings/study`, "Your levels and goals"**, is the first screen to edit the study profile after onboarding: the
+  results, the targets, the daily goal and the test date, saved whole. It carries `NonAffiliation`, since it shows bands.
+  The footer links it as "Your levels", and Today's "Where you stand" links it under the declared result.
+- **The staircase** is `@palier/ui`'s `LevelStair`: a step per band, solid up to the result, Coco on it, a flag on the
+  target, and at the exempt band a stamp pressed on with the celebration spring (still under reduced motion and in exam
+  mode). With a label it is one image named by the sentence ("Reading: you hold C. Your target is C."); without one,
+  inside a hero card, it is hidden whole. Every sentence says "you hold", and Where you stand adds "The result you told
+  us, not a measure of your practice" (R10, ADR 7).
+- **`/progress`** reads each skill's history at that skill's target; its overview reads both at the higher of the two.
+- **Tests whose premise changed**, said here as D225 did: `onboarding.test.ts`'s step list, `profileFrom` and defaults;
+  `study.test.ts`'s fixture, from one `targetBand` to `targets` and `current`, and its refusal list (an old-shape profile
+  with a bad target is still refused); the stepper's six segments; `key.spec.ts`'s and `journeys.spec.ts`'s step counts
+  ("Step 1 of 6", the key at 5 of 6) and `toKeyStep`'s four clicks; `helpers.ts`'s `onboard`, which passes the new step and
+  takes optional `results`. No assertion about behaviour that this change did not alter was touched.
+- **Not an ADR.** Product scope and flow on an existing requirement, recorded here and in the PRD, as D220 and D224 were.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 25 October 2026 — `dougkeefe/current-levels-input` (the SLE results a user holds shape the plan, with a staircase for each skill; D259)
+
+Not *Next, decided*, which is unchanged (D206). The human asked for current levels in onboarding and at any time after,
+an E taking its skill out of the plan, and a fun indicator of mastery.
+- **Domain:** `ExamProfile.exemptBand`, its schema and refinement; `content/profiles/psc-sle.json`; the regenerated
+  `docs/schemas/exam-profile.schema.json`.
+- **Engine:** `standing.ts` (`skillStanding`, `declaredStart`); the planner's `maintaining` and `MAINTAIN_FACTOR`.
+- **App:** `studyFocus`'s `declared`; `planDailySession`'s `maintaining`; `startSession`'s `declared`.
+- **UI:** `LevelStair` and `levelStairGeometry`, with its stylesheet.
+- **Web:** `lib/study.ts`'s new profile shape and helpers; onboarding's *now* step and per-skill targets
+  (`components/study/LevelPickers.tsx`, `features/study/levels.ts`); `/settings/study`; Today's tabs, cards, plan lines,
+  Where you stand and the all-exempt card; each skill's own target in the drill, the diagnostic result, oral practice,
+  the workshop, fresh sets and `/progress`; the footer link; messages in both languages, `privacy.held` included.
+- **Tests:** `standing.test.ts`, the planner's, `studyFocus`'s, `startSession`'s and `planDailySession`'s new cases,
+  `LevelStair`'s, `study.test.ts`, `onboarding.test.ts`, `today-view.test.ts`, `next-step.test.ts`, `levels.test.ts`,
+  `study-view.test.ts`, the schema's two refusals, and `e2e/levels.spec.ts`; the changed premises as D259 lists.
+- **Docs:** D259; D249 and the 23 October entry for the translator are archived (rule 8); the PRD's §8.1, §8.2 and §7;
+  `apps/web/CLAUDE.md`, and the engine's, app's, ui's and domain's.
+
+**Verified:**
+- `pnpm verify` exit 0: check-types, lint and boundaries clean; `pnpm test` passed 291 files, 4,683 tests (8 todo).
+  The engine's goldens are unmoved.
+- After `pnpm --filter @palier/web build`, the whole hermetic `chromium` project with the warmup: 94 of 94, the new
+  `levels.spec.ts` (4 tests, axe clean on the results step, Today with an exempt and a held skill, the study settings,
+  the all-exempt card and French) and every onboarding journey with its new step counts included. It ran on a hermetic
+  `next dev` at port 3010 from a throwaway config, since another app held 3000. The `offline` project's
+  `csp-production.spec.ts` and `offline.spec.ts`: 17 of 17, `/settings/study` in both locales included.
+- Screenshots on the production build: the results step at 1280px, and in French at 390px; Today with reading exempt,
+  writing held and oral working; the study settings; and Today with all three exempt.
+- Not run: the rest of the `offline` project, and Lighthouse. CI runs the lane on the pull request.
 
 ### 25 October 2026 — `dougkeefe/french-capitalization-api-warning` (the translator's no-key card above the editor, its French language labels capitalised; D258)
 
@@ -1177,25 +1232,6 @@ contradicted itself.
   passed with the warmup, 5 of 5, run with `--workers=1` on port 3050, since another project held 3000 here. In parallel,
   `key-leak` and the first translator test failed in onboarding before reaching the translator; serially both passed.
 - Not run: `csp-production` and the live smoke.
-
-### 23 October 2026 — `dougkeefe/translate-to-french` (the translator; D250)
-
-Not *Next, decided*, which is unchanged (Gate O), except that the live smoke's next funded `--record` now also writes
-`translate.json`. The human asked for a translator: English or French on the left, always French on the right, the
-user's own French corrected and explained, with links to study each error.
-- **`AiProvider.translate`**, its DTOs, schemas and `assembleTranslation`/`checkTranslation` in `@palier/domain`; the
-  `translateText` use case, metered as `translation`; the OpenAI adapter's prompt and method on the `assess` model; every
-  provider and fake given the method, the factory's included; the contract suite holds both jobs.
-- **`content/resources/resources.json`**, 21 checked government references, parsed by `parseStudyResources`.
-- **`/practice/writing/translate`**, linked from the writing drill, in both languages; in the route list, the CSP page
-  list, the page-title journey and the key-leak journey (step 3g, `TRANSLATION_SENTINEL`).
-
-**Verified:**
-- `pnpm verify` was green: 282 files, 4,541 tests passed (8 todo), with no dependency violations.
-- After `pnpm --filter @palier/web build`, the chromium project's new `translate.spec.ts` (4 tests, axe on every state,
-  English and French) and `key-leak.spec.ts` passed, and the offline project's `csp-production` passed (7 tests).
-- `scripts/check-bundle-size.mjs`: 167.2 KB of 180 KB shared first-load JS.
-- Not run: the live smoke (it needs `OPENAI_SMOKE_KEY`), so no recorded translator completion exists yet.
 
 Older entries, newest first: [October 2026](progress-archive/sessions-2026-10.md) ·
 [September 2026](progress-archive/sessions-2026-09.md).

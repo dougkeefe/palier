@@ -15,7 +15,7 @@ import {
   resumedGenerator,
 } from "../../features/generate/generate-view";
 import type { Container } from "../../lib/container";
-import { readStudyProfile } from "../../lib/study";
+import { readStudyProfile, targetFor } from "../../lib/study";
 import { deviceTimeZone } from "../../lib/time-zone";
 import { useContainer } from "../ContainerProvider";
 import { NoKeyCard } from "../key/NoKeyCard";
@@ -47,7 +47,7 @@ const loadSetup = async (container: Container): Promise<Setup> => {
   const held = container.useCases.generationInFlight();
   return {
     keyHeld: status !== null,
-    targetBand: profile?.targetBand ?? DEFAULT_TARGET,
+    targetBand: profile === null ? DEFAULT_TARGET : targetFor(profile, "writing"),
     latest,
     inFlight: held === null ? null : { subSkill: held.request.subSkill, result: held.result },
   };

@@ -1,20 +1,21 @@
-import type { TargetBand } from "@palier/domain";
+import { SCORED_SKILLS, type Band } from "@palier/domain";
+import { skillStanding } from "@palier/engine";
 
-import type { DailyGoal, StudyProfile } from "../../lib/study";
+import { type DailyGoal, NO_RESULTS, type StudyProfile, targetsOf } from "../../lib/study";
 
 /**
  * Onboarding's shape (product-requirements.md §8.1, in the owner's order of 10 October 2026, progress.md
- * D224): direction, target, daily goal, the key, and last the placement, whose choice is where the
- * wizard lands.
+ * D224): direction, target, the results already held (D259, §8.1's "self-declare a current profile"),
+ * daily goal, the key, and last the placement, whose choice is where the wizard lands.
  *
  * The key step explains why Palier runs on the user's own key, what it costs and how to get one, and
  * takes the key in place (D220). It is left out only when this browser already holds a key, and stays
  * skippable: drills, review and mock exams need none.
  */
-export const ONBOARDING_STEPS = ["direction", "target", "goal", "key", "placement"] as const;
+export const ONBOARDING_STEPS = ["direction", "target", "now", "goal", "key", "placement"] as const;
 export type OnboardingStep = (typeof ONBOARDING_STEPS)[number];
 
-/** §8.1's five, when the key step is shown. */
+/** Six, when the key step is shown: §8.1's five and the results held (D259). */
 export const ONBOARDING_TOTAL = ONBOARDING_STEPS.length;
 
 /**
@@ -31,19 +32,42 @@ export const stepsFor = (hasKey: boolean): readonly OnboardingStep[] =>
   hasKey ? ONBOARDING_STEPS.filter((step) => step !== "key") : ONBOARDING_STEPS;
 
 export type OnboardingChoices = {
-  readonly targetBand: TargetBand;
+  /** One answer sets all three; "different per skill", folded under it, sets each (D259). */
+  readonly targets: StudyProfile["targets"];
+  /** The results the user holds now, each "not yet" by default (D259). */
+  readonly current: StudyProfile["current"];
   readonly testDate: string | null;
   readonly placement: Placement;
   readonly dailyGoalMinutes: DailyGoal;
 };
 
-/** The defaults a user who skips is left with: C, no date, no diagnostic, 20 minutes. */
+/** The defaults a user who skips is left with: C everywhere, no results, no date, no diagnostic, 20 minutes. */
 export const DEFAULT_CHOICES: OnboardingChoices = {
-  targetBand: "C",
+  targets: targetsOf("C"),
+  current: NO_RESULTS,
   testDate: null,
   placement: "skip",
   dailyGoalMinutes: 20,
 };
+
+/**
+ * Whether the diagnostic has anything to place (D259): a scored skill with no result declared, or
+ * one below its target. A skill held at its target or exempt has nothing to place, so with both
+ * reading and writing that way the placement step offers only to start practising.
+ */
+export const offersDiagnostic = (choices: Pick<OnboardingChoices, "targets" | "current">, exemptBand: Band): boolean =>
+  SCORED_SKILLS.some((skill) => {
+    const standing = skillStanding({ current: choices.current[skill], target: choices.targets[skill], exemptBand });
+    return standing === "unknown" || standing === "working";
+  });
+
+/** The placements the last step offers: the diagnostic only when it has something to place. */
+export const placementsFor = (choices: OnboardingChoices, exemptBand: Band): readonly Placement[] =>
+  offersDiagnostic(choices, exemptBand) ? ["diagnostic", "skip"] : ["skip"];
+
+/** The choices as they finish: a diagnostic chosen and then made pointless by a result reads as a skip. */
+export const settle = (choices: OnboardingChoices, exemptBand: Band): OnboardingChoices =>
+  placementsFor(choices, exemptBand).includes(choices.placement) ? choices : { ...choices, placement: "skip" };
 
 export const stepAfter = (step: OnboardingStep, hasKey: boolean): OnboardingStep | null => {
   const steps = stepsFor(hasKey);
@@ -62,7 +86,8 @@ export const finishLabel = (placement: Placement): "finish" | "finishDiagnostic"
 
 /** What onboarding stores. The placement choice is a destination, not a setting. */
 export const profileFrom = (choices: OnboardingChoices): StudyProfile => ({
-  targetBand: choices.targetBand,
+  targets: choices.targets,
+  current: choices.current,
   dailyGoalMinutes: choices.dailyGoalMinutes,
   testDate: choices.testDate === "" ? null : choices.testDate,
 });

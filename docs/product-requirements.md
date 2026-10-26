@@ -236,6 +236,7 @@ Every item answered incorrectly, and every item answered correctly but slowly or
   /key                  API key management and spend meter
   /sync                 Sync switch, paired devices, and pairing by code (ADR 5)
   /data                 Export, import, delete everything
+  /study                Your levels and goals: the SLE results held, the targets, the daily goal, the test date (D259)
 /about                  What this is, what it is not, who made it, licence
 ```
 
@@ -256,6 +257,16 @@ study profile goes straight to step 1.
 1. **Which direction.** French as a second language, or English. Large bilingual cards.
 2. **What you are aiming for.** B or C, with a plain-language description of what each means at work. Optional: "I have a test booked on [date]", which turns the dashboard into a countdown and back-plans the study schedule.
 3. **Where you are now.** Offer the diagnostic (30 items, about 15 minutes per skill, per section 6.2), or self-declare a current profile (for example ECB), or skip. The diagnostic runs on the user's key (ADR 25), so choosing it without a key leads to the key first, and back.
+
+   As built (owner's request, 25 October 2026; `progress.md` D259): the self-declared profile is **its own step, after
+   the target**, so onboarding has six steps: direction, target, the results held, goal, the key, the placement. Each
+   skill has a row of choices, "Not yet" and X to E, with a small staircase that shows the result against the target,
+   and every row defaults to "Not yet", so the step is skippable. The target step still asks one question, B or C, with
+   "My position needs a different level in each skill" folded under it, so a CBC profile can be set. **A skill held at the
+   profile's exempt band (E) leaves the plan; a skill held at its target only keeps sharp**; a skill below its target and
+   never diagnosed starts at the result declared. With reading and writing each held or exempt, the placement offers only
+   to start practising. Everything here is editable any time at `/settings/study`, which is also where the daily goal
+   changes (step 4's "changeable any time").
 4. **How you want to be pushed.** Daily goal: 10, 20 or 30 minutes. This is the only place a goal is set and it is changeable any time.
 5. **The key.** ~~Explain in three lines what the key unlocks, what it costs, that it never leaves the browser, and that everything else works without it. Link to a one-page guide with screenshots of creating a key and setting a spend cap on the OpenAI dashboard.~~ Amended by the owner on 9 October 2026 (`progress.md` D220): the AI features are what most people come for, so step 5 explains, in order, **why** Palier runs on the user's own key (it keeps Palier free, and it is safer), **what it costs** (OpenAI bills the user directly; a typical use of each feature, priced from `pricing.json`), and **how** to get one, with the owner's explainer video and the same steps written out. The key is pasted and checked in the step itself. The step is shown on both paths unless a key is already held, and stays skippable: everything but the AI features works without a key. The one-page guide carries the same video and steps. Since D222, at the owner's request, *why* and *what it costs* are offered closed, to be opened on demand, and the video is in view when the step opens.
 
@@ -284,6 +295,12 @@ If a test date is set, a countdown sits above both, and the advice line is about
 As built (owner's request, 6 and 7 October 2026; progress.md D214–D218): Today is built around the next step. **The plan leads**, two-thirds of the width from 900px, and opens with that step when it is not the plan itself: the diagnostic first, a retake when it is due, then a mock exam once practice at the target is measurable (the trend has an estimate at the target band) or the test is a few days away. Zone C's quick actions moved inside the plan card as "More ways to practise", and the separate review card is gone, since the plan's first row draws on the same due items. Beside the plan, a **grammar pointer**: one grammar point a day, written in the language practised whatever the interface's, from `@palier/content/pointers`, on what the writing plan favours (D218). Zone A, **where you stand**, sits below the pointer: the diagnostic first, then the practice trend, then the last mock exam once there is one, each saying in a line what it is.
 
 Then laid out as a dashboard (owner's request, 7 October 2026; progress.md D219), in the app's palette and serif. A deep **hero** heads the page: the week's answers, with the test countdown above them when a date is set, beside **the three skills as cards**. Reading, written expression and oral expression each link to their practice and show how much of today's plan is done. Below, the left column holds **statistics** (the streak, the reviews due, the week's minutes of practice with a seven-day line), then the plan, then where you stand. The right column holds a **practice calendar**, marking the streak's days, the days its freeze kept, the test date and today, above the grammar pointer. On mobile the plan still comes first after the hero.
+
+With results declared (owner's request, 25 October 2026; progress.md D259): a skill held at E leaves the plan's tabs, and
+its card in the hero is stamped exempt; with all three exempt, the plan gives way to a celebration and the ways to practise
+anyway. A skill held at its target plans half a session of reviews and familiar items, with no diagnostic or mock-exam
+step. "Where you stand" opens with the result declared, as its staircase, marked as the user's word rather than a
+measure, and the way to change it.
 
 ### 8.3 Reading and writing drill session
 

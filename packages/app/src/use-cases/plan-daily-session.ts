@@ -59,6 +59,11 @@ export type PlanDailySessionRequest = {
    * its starting band first. `studyFocus` derives it, with `focusSubSkills`.
    */
   readonly placement?: DayPlacement;
+  /**
+   * The user holds this skill at its target already (progress.md D259): the planner keeps it
+   * sharp on half the budget, with no new items. The caller derives it from the declared result.
+   */
+  readonly maintaining?: boolean;
 };
 
 export type PlanDailySessionDeps = {
@@ -102,6 +107,7 @@ export const planDailySession = async (
         : {}),
       ...(request.focusSubSkills !== undefined ? { focusSubSkills: request.focusSubSkills } : {}),
       ...(request.placement !== undefined ? { placement: request.placement } : {}),
+      ...(request.maintaining !== undefined ? { maintaining: request.maintaining } : {}),
     },
     () => deps.random.next(),
     now,

@@ -309,10 +309,22 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     **name**, never the raw error. The form itself is `components/key/KeyEntry.tsx` (`useKeyEntry` holds the state, so
     the key screen keeps its own loading gate), shared with onboarding. **It is a `<form>` of its own, so never put it
     inside another.** `/settings/key/guide` is static: the owner's explainer video and `KeyGuideSteps`.
-  - **Onboarding's order** (D224): direction, target, goal, the key, then the placement last, whose choice is where it lands
-    (`destinationFor`: the diagnostic when chosen, key or not, else Today). There is no "Skip for now" button; each step
-    after the target has its own way past. **Today and a drill send a user with no study profile to `/start`** with
-    `router.replace`; there is no set-up card.
+  - **Onboarding's order** (D224, D259): direction, target, the results held (*now*), goal, the key, then the placement
+    last, whose choice is where it lands (`destinationFor`: the diagnostic when chosen, key or not, else Today). There is
+    no "Skip for now" button; each step after the target has its own way past. **Today and a drill send a user with no
+    study profile to `/start`** with `router.replace`; there is no set-up card.
+  - **The study profile is per skill** (D259, `lib/study.ts`): `targets` and `current`, a target and a declared result
+    (or null) for each of reading, writing and oral. **Read a target through `targetFor(profile, skill)`, never one band
+    for all**; `writeStudyProfile` still stores `targetBand`, the highest, for a tab on the old shape, and
+    `parseStudyProfile` reads that old shape. **A skill's standing** (`standingFor`, over the engine's `skillStanding` and
+    the profile's `exemptBand`) decides Today: `exempt` leaves the tabs (`features/home/today-view.ts`'s `planSkills`;
+    all three exempt shows `AllExempt`), `held` plans with `maintaining` and no next step (`nextStep`'s `held`), and
+    `working` with no diagnostic is placed at the declared result (`studyFocus`'s `declared`). **`dayRequestFor` is the
+    one request a scored day is planned with**, by Today's preview and the drill alike. The level pickers are
+    `components/study/LevelPickers.tsx` (decisions in `features/study/levels.ts`), shared by onboarding and
+    **`/settings/study`** (`components/settings/StudySettings.tsx`, `features/settings/study-view.ts`), the one screen that
+    edits the profile after onboarding; it carries `NonAffiliation`. A declared result is the user's word, never an
+    estimate: every sentence says "you hold".
   - **Onboarding's step 4 is the key** (D220, the owner's request, amending PRD §8.1): `components/onboarding/KeyStep.tsx`,
     with its decisions in `features/onboarding/key-step.ts`. It says why a key (free, safer, then `key.offerStays`, the one
     sentence carrying studio mode's exception), what it costs (`keyStepCosts` over `featureCosts`, never a typed figure),

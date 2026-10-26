@@ -12,7 +12,7 @@ import { Link, useRouter } from "../../i18n/navigation";
 import { ArticleLink } from "../library/ArticleLink";
 import type { Container } from "../../lib/container";
 import { isPageKey } from "../../lib/keyboard";
-import { REVIEW_SET_LIMIT, readStudyProfile, sessionSizeFor } from "../../lib/study";
+import { REVIEW_SET_LIMIT, currentFor, dayRequestFor, readStudyProfile, targetFor } from "../../lib/study";
 import { useContainer } from "../ContainerProvider";
 import { DiagnosticResult } from "../diagnostic/DiagnosticResult";
 import { isShortRun } from "../../features/diagnostic/result-view";
@@ -133,13 +133,8 @@ const load = async (
     const started = await container.useCases.startSession({
       sessionId: sessionId(container.ids.ulid()),
       mode: "drill",
-      plan: {
-        skill,
-        lang: TARGET_LANG,
-        targetBand: profile.targetBand,
-        sessionSize: sessionSizeFor(profile.dailyGoalMinutes),
-        ...(profile.testDate === null ? {} : { testDate: `${profile.testDate}T00:00:00.000Z` }),
-      },
+      plan: { skill, lang: TARGET_LANG, ...dayRequestFor(profile, skill, container.profile.exemptBand) },
+      declared: currentFor(profile, skill),
     });
     return { status: "ready", items: started.plan.items, sessionId: started.session.id };
   }
@@ -149,7 +144,7 @@ const load = async (
   const { items } = await container.useCases.runDiagnostic({
     skill,
     lang: TARGET_LANG,
-    targetBand: profile?.targetBand ?? "C",
+    targetBand: profile === null ? "C" : targetFor(profile, skill),
     count: container.profile.diagnostic.size,
     bandQuota: container.profile.diagnostic.bandQuota,
   });

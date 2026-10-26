@@ -31,7 +31,8 @@
     "key": "Your API key",
     "library": "Library",
     "about": "About",
-    "privacy": "Privacy"
+    "privacy": "Privacy",
+    "levels": "Your levels"
   },
   "landing": {
     "navLabel": "On this page",
@@ -206,7 +207,7 @@
     "title": "Privacy",
     "intro": "Palier keeps your practice in your browser. When sync is on, which it is unless you turn it off, a copy of your progress is also kept on Palier’s server, so your other devices can have it. This page says exactly what that copy holds, and what never leaves your device.",
     "heldTitle": "What the server holds, when sync is on",
-    "held": "A random account id, a scrambled (hashed) secret for each device, your language and target settings, which milestones and streak notes you have already been shown, and a copy of your progress: your answers, your review schedule and your exam results. No name, no email, no department, no free text, and nothing that identifies you.",
+    "held": "A random account id, a scrambled (hashed) secret for each device, your language, your targets and daily goal, the SLE results you told us you hold, which milestones and streak notes you have already been shown, and a copy of your progress: your answers, your review schedule and your exam results. No name, no email, no department, no free text, and nothing that identifies you.",
     "neverTitle": "What Palier never holds",
     "neverIntro": "These stay on your device, under every setting:",
     "neverServer": "Nor does the server keep your IP address, beyond using it for a moment to limit abuse, and nothing links an anonymous item statistic to your account.",
@@ -304,7 +305,13 @@
     "targetC": "Level C",
     "targetCHint": "You handle complex, abstract and sensitive matters: nuance, register and implication included.",
     "testDateLabel": "I have a test booked on (optional)",
+    "targetPerSkill": "My position needs a different level in each skill",
+    "targetPerSkillHint": "A position’s profile, such as CBC, sets one level for reading, one for written expression and one for oral. Pick each.",
+    "nowHeading": "Which SLE results do you hold now?",
+    "nowIntro": "If you have passed the Second Language Evaluation before, tell us what you got. A skill where you hold E leaves your plan, and a skill already at your target only keeps sharp.",
+    "nowHint": "Leave “Not yet” where you have no result. You can change these any time under Your levels.",
     "placementHeading": "Where are you now?",
+    "placementNothing": "Your results already meet your targets in reading and written expression, so there is nothing for the diagnostic to place.",
     "placementDiagnostic": "Take the diagnostic",
     "placementDiagnosticHint": "About 15 minutes per skill, on your OpenAI key. It ends with your score, the level your plan starts at, and what to work on first.",
     "placementSkip": "Skip for now",
@@ -327,6 +334,29 @@
     "keyHowRead": "Read the steps instead",
     "keyHowGuide": "Open the guide on a page of its own",
     "keySkip": "Not now, continue without a key"
+  },
+  "levels": {
+    "notYet": "Not yet",
+    "stamp": "Exempt",
+    "targetOption": "Level {band}",
+    "stairNone": "{skill}: no result yet. Your target is {target}.",
+    "stairHeld": "{skill}: you hold {current}. Your target is {target}.",
+    "stairExempt": "{skill}: you hold {current}, the exemption. Nothing left to study here."
+  },
+  "studySettings": {
+    "title": "Your levels and goals",
+    "intro": "What you hold and what you are aiming for shape today’s plan. A skill where you hold E leaves the plan; a skill already at its target only keeps sharp.",
+    "none": "You have not set up your practice yet.",
+    "setUp": "Set up your practice",
+    "resultsTitle": "Your current SLE results",
+    "resultsHint": "The results you hold now, as you would write your profile, such as ECB. Leave “Not yet” where you have none.",
+    "targetsTitle": "Your targets",
+    "targetsHint": "The level each skill needs for the position you want.",
+    "goalTitle": "Your daily goal",
+    "save": "Save changes",
+    "saved": "Saved. Today’s plan follows your new levels.",
+    "saveFailed": "Your changes could not be saved. Try again.",
+    "toToday": "Back to today"
   },
   "today": {
     "title": "Today",
@@ -404,7 +434,20 @@
     "oralStart": "Start speaking, {minutes} min",
     "oralAgain": "Practise again",
     "oralNoSession": "No spoken session is available right now.",
-    "oralNoKey": "Spoken practice runs on your OpenAI key."
+    "oralNoKey": "Spoken practice runs on your OpenAI key.",
+    "skillExempt": "Exempt: nothing to practise",
+    "planKeepSharp": "You hold {band}, your target, so today only keeps it sharp: reviews and familiar items, half a session.",
+    "planPlacedDeclared": "Built from the result you hold, {held}: starting at level {start}, working up to {target}.",
+    "oralKeepSharp": "You hold {band} in oral, your target, so one session keeps it sharp. Today’s is the kind you have practised least lately.",
+    "declaredTitle": "Your SLE result",
+    "declaredNone": "Tell us the results you already hold, and your plan will skip what you have already passed.",
+    "declaredNote": "The result you told us, not a measure of your practice.",
+    "declaredAdd": "Add your results",
+    "declaredChange": "Change your levels",
+    "allExemptTitle": "You hold E in all three",
+    "allExemptBody": "There is nothing left for a plan to teach you. Coco is applauding. Practise whenever you like, just to keep your hand in.",
+    "allExemptReading": "Practise reading anyway",
+    "allExemptWriting": "Practise written expression anyway"
   },
   "drill": {
     "progress": "Item {current} of {total}",

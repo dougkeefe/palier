@@ -1,4 +1,5 @@
 import type {
+  Band,
   DiagnosticInterpretation,
   DiagnosticInterpretationRequest,
   DiagnosticMiss,
@@ -15,6 +16,7 @@ import {
   type DayPlacement,
   type DiagnosticRun,
   type DiagnosticSummary,
+  declaredStart,
   latestCompleteRun,
   summariseDiagnostic,
 } from "@palier/engine";
@@ -194,6 +196,12 @@ export const requestDiagnosticInterpretation = async (
 export type StudyFocusRequest = DiagnosticResultRequest & {
   /** The language the day practises, which an oral report's fixes must match (D127). */
   readonly lang: Lang;
+  /**
+   * The result the user declared for the skill (progress.md D259). With no complete diagnostic
+   * run, a declaration below the target places the plan at it (the engine's `declaredStart`). A
+   * run, when there is one, wins: it is measured, and a declaration is the user's word.
+   */
+  readonly declared?: Band | null;
 };
 
 export type StudyFocusDeps = Pick<DiagnosticResultDeps, "items" | "attempts" | "rules"> & {
@@ -215,10 +223,9 @@ export const studyFocus = async (request: StudyFocusRequest, deps: StudyFocusDep
   const oral = oralFocusSubSkills(await deps.oral.all(), request.lang, (id) => scenarioLang.get(id) ?? null);
   const read = await readLatestRun(request.skill, request.targetBand, deps);
   const focus = [...new Set<SubSkill>([...oral, ...(read?.summary.focusSubSkills ?? [])])];
+  const startBand = read?.summary.startBand ?? declaredStart(request.declared ?? null, request.targetBand);
   return {
     ...(focus.length > 0 ? { focusSubSkills: focus } : {}),
-    ...(read === null
-      ? {}
-      : { placement: { startBand: read.summary.startBand, startShare: deps.rules.startShare } }),
+    ...(startBand === null ? {} : { placement: { startBand, startShare: deps.rules.startShare } }),
   };
 };

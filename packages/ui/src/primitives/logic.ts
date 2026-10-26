@@ -7,6 +7,8 @@
  * (product-requirements.md §10.2).
  */
 
+import type { Band } from "@palier/domain";
+
 /**
  * `light` is the white pill a deep panel carries (progress.md D202); the other four are §10.4's.
  */
@@ -474,3 +476,71 @@ export const tabIds = (prefix: string, id: string): { readonly tab: string; read
 
 /** The selected tab carries the underline; the others are muted until hovered. */
 export const tabClass = (selected: boolean): string => (selected ? "pl-tabs__tab pl-tabs__tab--selected" : "pl-tabs__tab");
+
+// ---- Level stair (a skill's declared result against its target, progress.md D259) ----
+
+/** The stair's drawing box, in SVG user units; the SVG scales to its container's width. */
+export const LEVEL_STAIR_HEIGHT = 100;
+/** The ground before the first step, where Coco waits with no result declared. */
+const STAIR_GROUND = 28;
+const STEP_WIDTH = 36;
+const STEP_GAP = 4;
+const STEP_BASE = 14;
+const STEP_RISE = 12;
+
+export type LevelStairInput = {
+  /** The profile's bands, lowest first, as the stair's steps. */
+  readonly bands: readonly Band[];
+  /** The declared result, or null with none: Coco waits on the ground. */
+  readonly current: Band | null;
+  readonly target: Band;
+};
+
+export type LevelStairStep = {
+  readonly band: Band;
+  readonly x: number;
+  readonly y: number;
+  readonly height: number;
+  /** At or below the declared result, so drawn solid. */
+  readonly reached: boolean;
+};
+
+export type LevelStairGeometry = {
+  readonly width: number;
+  readonly steps: readonly LevelStairStep[];
+  /** Where Coco stands: the centre of its feet. */
+  readonly coco: { readonly x: number; readonly y: number };
+  /** The foot of the target's flagpole, or null when the target is not a step. */
+  readonly flag: { readonly x: number; readonly y: number } | null;
+};
+
+/**
+ * The stair's shapes ("palier" is a landing on a staircase): one step per band, each higher than
+ * the last, solid up to the declared result. Coco stands on the declared step, or on the ground
+ * before the first with nothing declared, and a flag marks the target's step. Order comes from the
+ * profile's `bands`, never from the letters.
+ */
+export const levelStairGeometry = ({ bands, current, target }: LevelStairInput): LevelStairGeometry => {
+  const reachedUpTo = current === null ? -1 : bands.indexOf(current);
+  const steps = bands.map((band, i) => {
+    const height = STEP_BASE + i * STEP_RISE;
+    return {
+      band,
+      x: STAIR_GROUND + i * (STEP_WIDTH + STEP_GAP),
+      y: LEVEL_STAIR_HEIGHT - height,
+      height,
+      reached: i <= reachedUpTo,
+    };
+  });
+  const on = steps[reachedUpTo];
+  const flagged = steps[bands.indexOf(target)];
+  return {
+    width: STAIR_GROUND + bands.length * (STEP_WIDTH + STEP_GAP) - STEP_GAP,
+    steps,
+    coco: on === undefined ? { x: STAIR_GROUND / 2, y: LEVEL_STAIR_HEIGHT } : { x: on.x + STEP_WIDTH / 2, y: on.y },
+    flag: flagged === undefined ? null : { x: flagged.x + STEP_WIDTH - 5, y: flagged.y },
+  };
+};
+
+/** The width of one step, for the renderer. */
+export const LEVEL_STAIR_STEP_WIDTH = STEP_WIDTH;

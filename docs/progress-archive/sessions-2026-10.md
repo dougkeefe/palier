@@ -3,6 +3,25 @@
 Newest first. Moved verbatim from `docs/progress.md` on 24 October 2026 (D255). Its index there points here. The rules are
 `progress.md`'s: never edit a session entry, and mark a deviation resolved in place, updating its index line too.
 
+### 23 October 2026 — `dougkeefe/translate-to-french` (the translator; D250)
+
+Not *Next, decided*, which is unchanged (Gate O), except that the live smoke's next funded `--record` now also writes
+`translate.json`. The human asked for a translator: English or French on the left, always French on the right, the
+user's own French corrected and explained, with links to study each error.
+- **`AiProvider.translate`**, its DTOs, schemas and `assembleTranslation`/`checkTranslation` in `@palier/domain`; the
+  `translateText` use case, metered as `translation`; the OpenAI adapter's prompt and method on the `assess` model; every
+  provider and fake given the method, the factory's included; the contract suite holds both jobs.
+- **`content/resources/resources.json`**, 21 checked government references, parsed by `parseStudyResources`.
+- **`/practice/writing/translate`**, linked from the writing drill, in both languages; in the route list, the CSP page
+  list, the page-title journey and the key-leak journey (step 3g, `TRANSLATION_SENTINEL`).
+
+**Verified:**
+- `pnpm verify` was green: 282 files, 4,541 tests passed (8 todo), with no dependency violations.
+- After `pnpm --filter @palier/web build`, the chromium project's new `translate.spec.ts` (4 tests, axe on every state,
+  English and French) and `key-leak.spec.ts` passed, and the offline project's `csp-production` passed (7 tests).
+- `scripts/check-bundle-size.mjs`: 167.2 KB of 180 KB shared first-load JS.
+- Not run: the live smoke (it needs `OPENAI_SMOKE_KEY`), so no recorded translator completion exists yet.
+
 ### 23 October 2026 — `dougkeefe/today-s-plan-oral-ux` (the medium lane's library failure: the warmup's cold article route; D249)
 
 The human reported #95's red medium lane: `content.spec.ts`'s library test, which this branch does not touch.

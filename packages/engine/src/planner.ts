@@ -42,6 +42,12 @@ export const MAINTENANCE_SHARE = 0.2;
 export const TAPER_DAYS = 3;
 /** After an incomplete day the budget shortens by this factor — never lengthens (§7.4). */
 export const SHORTEN_FACTOR = 0.5;
+/**
+ * A skill the user already holds at its target keeps sharp on this share of the day's budget,
+ * with no new items (progress.md D259). A study heuristic, like {@link SHORTEN_FACTOR}, not an
+ * exam rule.
+ */
+export const MAINTAIN_FACTOR = 0.5;
 
 const DAY_MS = 86_400_000;
 const HOUR_MS = 3_600_000;
@@ -73,6 +79,12 @@ export type DayPlanInput = {
    * changes nothing.
    */
   readonly placement?: DayPlacement;
+  /**
+   * The user holds this skill at its target already (progress.md D259): the budget is
+   * {@link MAINTAIN_FACTOR} of the day's, and it is reviews and maintenance only, never new items,
+   * so `placement` has nothing to split. Absent or `false` changes nothing.
+   */
+  readonly maintaining?: boolean;
 };
 
 /** A diagnostic's placement, as the planner reads it (ADR 25). */
@@ -98,10 +110,9 @@ export const planDay = (input: DayPlanInput, random: () => number, now: string):
   const { skill, lang, targetBand, dueReviews, pool, attempts } = input;
 
   // Yesterday's completion shortens the day, never lengthens it (§7.4).
-  const size =
-    input.lastDayCompleted === false
-      ? Math.floor(input.sessionSize * SHORTEN_FACTOR)
-      : input.sessionSize;
+  const maintaining = input.maintaining === true;
+  const asked = maintaining ? Math.floor(input.sessionSize * MAINTAIN_FACTOR) : input.sessionSize;
+  const size = input.lastDayCompleted === false ? Math.floor(asked * SHORTEN_FACTOR) : asked;
 
   // Test-date proximity: the final three days taper to review-only, and no mock
   // exam is advised inside the last 24 hours (§7.4).
@@ -126,9 +137,8 @@ export const planDay = (input: DayPlanInput, random: () => number, now: string):
   const reviewIds = new Set<ItemId>(reviews.map((item) => item.id));
 
   const remaining = Math.max(0, size - reviews.length);
-  const newCount = tapering
-    ? 0
-    : Math.round((remaining * NEW_SHARE) / (NEW_SHARE + MAINTENANCE_SHARE));
+  const newCount =
+    tapering || maintaining ? 0 : Math.round((remaining * NEW_SHARE) / (NEW_SHARE + MAINTENANCE_SHARE));
   const maintCount = tapering ? maintBudget : remaining - newCount;
 
   // New items: practice mode already weights the three weakest sub-skills (§7.2), and

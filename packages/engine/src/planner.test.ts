@@ -147,6 +147,60 @@ describe("planDay, yesterday's completion", () => {
   });
 });
 
+describe("planDay, a skill held at its target keeps sharp (D259)", () => {
+  const dueReviews = ["r0", "r1", "r2", "r3", "r4", "r5"].map(review);
+
+  it("halves the budget and draws no new items, so the rest is maintenance", () => {
+    const plan = planDay({ ...base, sessionSize: 10, dueReviews, maintaining: true }, seq([0.3]), NOW);
+
+    expect(plan.reviews).toHaveLength(2); // floor(5 * 0.4)
+    expect(plan.newItems).toHaveLength(0);
+    expect(plan.maintenance).toHaveLength(3);
+    expect(plan.items).toHaveLength(5); // floor(10 * 0.5)
+  });
+
+  it("ignores a placement, since there are no new items to split", () => {
+    const plan = planDay(
+      { ...base, sessionSize: 10, dueReviews: [], maintaining: true, placement: { startBand: "B", startShare: 0.7 } },
+      seq([0.3]),
+      NOW,
+    );
+
+    expect(plan.newItems).toHaveLength(0);
+    expect(plan.maintenance).toHaveLength(5);
+  });
+
+  it("shortens on top of the halving after an incomplete day", () => {
+    const plan = planDay(
+      { ...base, sessionSize: 12, dueReviews, maintaining: true, lastDayCompleted: false },
+      seq([0.3]),
+      NOW,
+    );
+
+    expect(plan.items.length).toBeLessThanOrEqual(3); // floor(floor(12 * 0.5) * 0.5)
+    expect(plan.newItems).toHaveLength(0);
+  });
+
+  it("still tapers near the test date", () => {
+    const plan = planDay(
+      { ...base, sessionSize: 10, dueReviews, maintaining: true, testDate: ahead(2 * DAY) },
+      seq([0.3]),
+      NOW,
+    );
+
+    expect(plan.tapering).toBe(true);
+    expect(plan.newItems).toHaveLength(0);
+    expect(plan.reviews).toHaveLength(4); // 5 - floor(5 * 0.2)
+  });
+
+  it("changes nothing when false", () => {
+    const held = planDay({ ...base, sessionSize: 10, dueReviews, maintaining: false }, seq([0.3]), NOW);
+    const absent = planDay({ ...base, sessionSize: 10, dueReviews }, seq([0.3]), NOW);
+
+    expect(held).toEqual(absent);
+  });
+});
+
 describe("planDay, test-date proximity", () => {
   const dueReviews = Array.from({ length: 8 }, (_, i) => review(`r${i}`));
 

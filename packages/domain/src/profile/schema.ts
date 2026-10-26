@@ -179,6 +179,7 @@ export const examProfileShape = z
     version: z.number().int().positive(),
     skills: z.array(skillSchema).min(1),
     bands: z.array(bandSchema).min(1),
+    exemptBand: bandSchema,
     variants: z.record(z.string().min(1), examVariantShape),
     subSkills: z.strictObject({
       reading: z.array(subSkillSchema).min(1),
@@ -211,6 +212,13 @@ export const examProfileShape = z
           );
         }
       }
+    }
+
+    if (!profile.bands.includes(profile.exemptBand)) {
+      push(
+        ["exemptBand"],
+        `The exempt band ${profile.exemptBand} is not one of this profile's "bands".`,
+      );
     }
 
     const byRank = [...profile.bands].sort((a, b) => bandRank(a) - bandRank(b));

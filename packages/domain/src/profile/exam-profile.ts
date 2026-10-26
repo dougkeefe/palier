@@ -57,6 +57,11 @@ export type ExamProfile = {
   readonly version: number;
   readonly skills: readonly Skill[];
   readonly bands: readonly Band[];
+  /**
+   * The band that exempts its holder from further testing in a skill (E on the SLE). A skill
+   * the user declares held at it leaves the study plan (progress.md D259). It is one of `bands`.
+   */
+  readonly exemptBand: Band;
   readonly variants: Readonly<Record<string, ExamVariant>>;
   readonly subSkills: Readonly<Record<Skill, readonly SubSkill[]>>;
   readonly topics: readonly Topic[];
