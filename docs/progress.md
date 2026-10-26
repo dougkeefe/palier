@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 25 October 2026 (the library's index as one filterable grid, D257; next, D206's bank budget)
+**Last updated:** 25 October 2026 (the translator's no-key card above the editor, its French language labels capitalised, D258; next, D206's bank budget)
 **Current phase:** **1.0 is reached** (24 October 2026, D253): the human passed Gate O and Gate M and read bank v4 with no
 disagreement, so Phases 6 and 7 are complete. After 1.0, reading's library articles are built (D254), and D206's bank
 budget is next. Phase 3's product pilot still runs (Gate E, D97), and Phase 8, the English mirror, is the plan's next
@@ -98,11 +98,11 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/screenshot-layout-update` | **The library as a filterable grid** (D257): the index's sections become one grid of cards under pills that filter by skill or topic, and every article has its own photograph. | 25 October 2026 |
+| `dougkeefe/french-capitalization-api-warning` | **The translator's no-key card above the editor, and its French language labels capitalised** (D258). | 25 October 2026 |
 
 *(Merged rows are removed: this table tracks current work, and the session log is the permanent record. The rows
 removed up to 24 October 2026, the last of them the reading articles (#100), are listed in
-[`progress-archive/history.md`](progress-archive/history.md); the library's redesign (#102) was removed with D257's claim.)*
+[`progress-archive/history.md`](progress-archive/history.md); the library's redesign (#102) was removed with D257's claim, and the library's grid (#103) with D258's.)*
 
 ---
 
@@ -585,40 +585,7 @@ full.
 - **D245** — `/progress` is a dashboard: the three domains at a glance, then the chosen skill in detail · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d245--progress-is-a-dashboard-the-three-domains-at-a-glance-then-the-chosen-skill-in-detail)
 - **D246** — `vite` is a pinned root devDependency, not an auto-installed peer; Dependabot's group is rebuilt locally · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d246--vite-is-a-pinned-root-devdependency-not-an-auto-installed-peer-dependabots-group-is-rebuilt-locally)
 - **D247** — `/progress`'s detail is three equal tabs, speaking included; never a radio switch · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d247--progresss-detail-is-three-equal-tabs-speaking-included-never-a-radio-switch)
-
-### D248 — Today's plan is three equal tabs, speaking included; its plan is one suggested session
-**Date:** 22 October 2026 · **Status:** accepted (human's request; agent's design and copy). Amends D219's plan switch, and
-closes D247's "Not changed" note on Today
-
-The human pointed out that Today's plan offered only Reading and Writing, and that its radio buttons were the wrong
-control, as they had been on `/progress` (D247).
-
-- **Tabs, not radios**, for D247's reason: the switch shows another view of the same card. The plan card uses
-  `@palier/ui`'s `Tabs` and `TabPanel` unchanged (`idPrefix` `today-plan`), each tab in its `SKILL_LOOK` glyph and fill.
-  `features/skills/skill-look.ts`'s new `SKILL_KINDS` is the one order, and `/progress`'s `DETAIL_TABS` is it.
-  - The card is half the page, so here the three tabs **share its width at every size** and a long name wraps beside
-    its mark: "Compréhension de l'écrit" scrolled the list by 107px at 1280px before that. Below 600px the primitive's
-    own layout applies (mark over a centred name).
-  - `.app-segmented`'s home-only rules are gone; the class stays for `ExamPicker`'s real form choice.
-- **Speaking's plan is one session.** No planner holds oral practice, and the hero's oral rail already counts one ended
-  session as the day's goal (D219), so the plan matches it (`features/home/oral-plan.ts`, pure and tested):
-  - **The suggestion is the kind practised least lately** on this device (`oralHistory`, newest first). A kind never
-    practised comes first and a tie keeps the picker's order, so a new device is offered the warm-up. A session whose
-    scenario has left the bank names no kind and is passed over.
-  - The row is the kind with the picker's own `sessionMeta` (its minutes and **practice mode's** estimate, the picker's
-    default and the cheaper mode), then the kind's purpose and "Start speaking, {minutes} min".
-  - **The start links to `/practice/oral`, not to the session.** Choosing a session there opens the microphone check, which
-    must never happen on a page load, and the mode is chosen there, where the session is priced before it starts (D237).
-  - Once a session has ended today the plan says "Done for today" with today's sessions and minutes, and "Practise again".
-  - With no key it says spoken practice runs on the key and links the key screen. `NoKeyCard` is a card with its own
-    `h2`, which would have nested a card and a heading inside the plan.
-  - "More ways to practise" drops its speaking link on this tab. There is no next-step banner: speaking has no
-    diagnostic and no mock exam.
-- **Speaking's "Where you stand"** is `/progress`'s "From your latest report" through the same `oralDetail`: the
-  newest report's fixes, each a way into its drill (`OralCards.tsx`'s `OralFixes`, now exported), or the way to a
-  session a report can still be asked of. **No criterion level is shown off the report** (R10).
-- **Nothing on Today spends or writes.** `loadOral` reads the key's status, `oralSessionChoices`, `oralHistory`,
-  `oralProgress` and `featureCosts`. It leaves `closeAbandonedSessions`, which writes, to the oral screen.
+- **D248** — Today's plan is three equal tabs, speaking included; its plan is one suggested session · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d248--todays-plan-is-three-equal-tabs-speaking-included-its-plan-is-one-suggested-session)
 
 ### D249 — the E2E warmup reads `routes.json`, articles included, and compiles the pages it cannot name
 **Date:** 23 October 2026 · **Status:** accepted (agent's diagnosis of a CI failure the human reported). Amends D67's
@@ -970,9 +937,42 @@ on its page too, and the index's photograph kept beside its title.
   Grammar pill pressing, the hash, six cards shown and the status, All restoring eighteen, `#reading` opening on eight,
   and the breadcrumb opening the index on writing's ten, with an axe check on the filtered index too.
 
+### D258 — The translator's no-key card sits above the editor, and its French language labels are capitalised
+**Date:** 25 October 2026 · **Status:** accepted (human's request). Amends D252's layout only
+
+The human found two things on the translator.
+- **Without a key, the warning came too late.** D252 put PRD §14's no-key card below the translator's card, so a user
+  could type into the editor, see nothing happen, and find the reason only by scrolling past the panes. The card now
+  sits first, above the language choice and the panes. It is the same `NoKeyCard`, same copy, still inline and never a
+  modal or a blocked page (D108); the editor below it still works. With a key nothing moved.
+- **"anglais" and "français" read as a mistake on the radio control.** Lower case is right in running French, but as
+  labels on a segmented control beside "Détecter" they looked wrong. `translate.source_en` and `translate.source_fr`
+  are now "Anglais" and "Français". Only the radios read these two keys.
+- **Tests:** `translate.spec.ts`'s no-key test asserts the card's heading sits above the editor; its French test
+  asserts the two radios by their capitalised names.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 25 October 2026 — `dougkeefe/french-capitalization-api-warning` (the translator's no-key card above the editor, its French language labels capitalised; D258)
+
+Not *Next, decided*, which is unchanged (D206). The human asked for a clearer warning before the text areas when no
+key is held, and for the French language radios to be capitalised.
+- **Web:** `Translator.tsx` renders `NoKeyCard` first, above the translator's card; `fr.json`'s `translate.source_en`
+  and `translate.source_fr` are "Anglais" and "Français".
+- **Tests:** `translate.spec.ts` as D258 lists.
+- **Docs:** D258; D248 and the 23 October entry for the warmup's cold article route are archived (rule 8);
+  `apps/web/CLAUDE.md`'s translator invariant; *In flight*.
+
+**Verified:**
+- `pnpm verify`: check-types, lint and boundaries clean; `pnpm test` passed 288 files, 4,615 tests (8 todo).
+- `translate.spec.ts` on the `chromium` project with the warmup, on a hermetic `next dev` at port 3400 (a throwaway
+  config, since another app held 3000): 6 of 6, axe clean on every state, the new placement and French assertions
+  included.
+- A screenshot of `/fr/practice/writing/translate` with no key at 1280px: the card above the radios, which read
+  "Détecter", "Anglais", "Français".
+- Not run: the rest of the medium lane, and Lighthouse. CI runs the lane on the pull request.
 
 ### 25 October 2026 — `dougkeefe/screenshot-layout-update` (the library's index as one filterable grid, a photograph per article; D257)
 
@@ -1196,20 +1196,6 @@ user's own French corrected and explained, with links to study each error.
   English and French) and `key-leak.spec.ts` passed, and the offline project's `csp-production` passed (7 tests).
 - `scripts/check-bundle-size.mjs`: 167.2 KB of 180 KB shared first-load JS.
 - Not run: the live smoke (it needs `OPENAI_SMOKE_KEY`), so no recorded translator completion exists yet.
-
-### 23 October 2026 — `dougkeefe/today-s-plan-oral-ux` (the medium lane's library failure: the warmup's cold article route; D249)
-
-The human reported #95's red medium lane: `content.spec.ts`'s library test, which this branch does not touch.
-- **Diagnosed from the CI trace and a probe**: the article route was never warmed, so the test's click compiled it, and
-  the dev server's rebuild dropped the click's own request.
-- **The warmup reads `routes.json`**, the articles included, and visits the 404 and the hermetic error views (D249).
-
-**Verified:**
-- On a fresh hermetic `next dev` after the new warmup: first visits to an article, the 404 and the hermetic `global` view
-  rebuilt no other open page. The thrown `route` view still rebuilt once, about 300 ms (D249's residual).
-- `pnpm verify` exit 0: 277 files, 4,473 tests passed (8 todo), no dependency violations.
-- The whole hermetic `chromium` project from a cold dev server (port 3400, a throwaway config, since another app held
-  3000): 85 passed in 3.6 min, the warmup and the library test included.
 
 Older entries, newest first: [October 2026](progress-archive/sessions-2026-10.md) ·
 [September 2026](progress-archive/sessions-2026-09.md).

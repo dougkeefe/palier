@@ -111,7 +111,10 @@ test("the header and the writing drill lead to the translator, and without a key
   await editor.fill(MINE);
   await expect(page.getByText(/^\d[\d,]* characters left$/)).toBeVisible();
 
-  await expect(page.getByRole("heading", { name: "The translator needs an OpenAI key" })).toBeVisible();
+  const noKey = page.getByRole("heading", { name: "The translator needs an OpenAI key" });
+  await expect(noKey).toBeVisible();
+  // Above the editor, so it is read before anything is typed (D258).
+  expect((await noKey.boundingBox())!.y).toBeLessThan((await editor.boundingBox())!.y);
   await expect(page.getByText(/^About US\$\d+\.\d+ a text/)).toBeVisible();
   await page.waitForTimeout(PAST_THE_PAUSE_MS);
   expect(sent).toHaveLength(0);
@@ -252,6 +255,9 @@ test("in French, a failure keeps the text, says why, and is never retried on its
     return { status: 429, body: { error: { message: "slow", code: "insufficient_quota" } } };
   });
   await openTranslator(page, "/fr/practice/writing/translate");
+  // Capitalised as labels on the radio control, though lower case in running French (D258).
+  await expect(page.getByRole("radio", { name: "Anglais", exact: true })).toBeVisible();
+  await expect(page.getByRole("radio", { name: "Français", exact: true })).toBeVisible();
   await page.getByRole("link", { name: "Ajouter une clé" }).click();
   await page.getByLabel("Clé d’API OpenAI").fill(SENTINEL);
   await page.getByRole("button", { name: "Enregistrer la clé" }).click();
