@@ -8,6 +8,7 @@ import {
   destinationFor,
   finishLabel,
   offersDiagnostic,
+  perSkillTargetsOpen,
   placementsFor,
   profileFrom,
   settle,
@@ -83,6 +84,20 @@ describe("what onboarding produces", () => {
       placement: "skip",
       dailyGoalMinutes: 20,
     });
+  });
+});
+
+describe("the per-skill targets' disclosure (D259)", () => {
+  it("starts closed while one target describes every skill", () => {
+    expect(perSkillTargetsOpen(false, targetsOf("C"))).toBe(false);
+  });
+
+  it("opens when the targets differ, so coming back to the step shows them", () => {
+    expect(perSkillTargetsOpen(false, { reading: "C", writing: "B", oral: "C" })).toBe(true);
+  });
+
+  it("stays open once opened, even when the targets agree again", () => {
+    expect(perSkillTargetsOpen(true, targetsOf("C"))).toBe(true);
   });
 });
 

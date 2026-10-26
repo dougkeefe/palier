@@ -1008,6 +1008,9 @@ an E taking its skill out of the plan, and a fun indicator of mastery.
   `csp-production.spec.ts` and `offline.spec.ts`: 17 of 17, `/settings/study` in both locales included.
 - Screenshots on the production build: the results step at 1280px, and in French at 390px; Today with reading exempt,
   writing held and oral working; the study settings; and Today with all three exempt.
+- A candid review loop of the branch found two issues, both fixed: the target step's per-skill disclosure closed under
+  the user when their targets agreed again (now `perSkillTargetsOpen`, tested), and `heldSkills` restated
+  `SCORED_SKILLS`. A second pass found none; `pnpm verify` then passed 291 files, 4,686 tests (8 todo).
 - Not run: the rest of the `offline` project, and Lighthouse. CI runs the lane on the pull request.
 
 ### 25 October 2026 — `dougkeefe/french-capitalization-api-warning` (the translator's no-key card above the editor, its French language labels capitalised; D258)

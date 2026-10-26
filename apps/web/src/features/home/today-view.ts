@@ -1,4 +1,4 @@
-import type { ScoredSkill } from "@palier/domain";
+import { SCORED_SKILLS, type ScoredSkill } from "@palier/domain";
 import { MAINTAIN_FACTOR, type PracticeActivity, type SkillStanding } from "@palier/engine";
 import type { CalendarMark } from "@palier/ui";
 
@@ -72,7 +72,7 @@ export const planSkills = (standings: SkillStandings): readonly SkillKind[] =>
 
 /** The scored skills the user holds at their target, which the plan only keeps sharp (D259). */
 export const heldSkills = (standings: SkillStandings): readonly ScoredSkill[] =>
-  (["reading", "writing"] as const).filter((kind) => standings[kind] === "held");
+  SCORED_SKILLS.filter((kind) => standings[kind] === "held");
 
 /** The statistics tile's figure and its line: the week's practice minutes, and each day's. */
 export const weekMinutes = (msByDay: readonly number[]): { readonly total: number; readonly byDay: readonly number[] } => ({

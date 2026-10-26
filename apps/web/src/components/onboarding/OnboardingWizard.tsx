@@ -11,6 +11,7 @@ import {
   type OnboardingStep,
   destinationFor,
   finishLabel,
+  perSkillTargetsOpen,
   placementsFor,
   profileFrom,
   settle,
@@ -49,6 +50,9 @@ export function OnboardingWizard() {
   const [choices, setChoices] = useState<OnboardingChoices>(DEFAULT_CHOICES);
   const [saving, setSaving] = useState(false);
   const [failed, setFailed] = useState(false);
+  // Once opened, the per-skill targets stay open: deriving it from the targets alone would close the
+  // disclosure under the user as soon as their choices happened to agree again (D259).
+  const [perSkillOpen, setPerSkillOpen] = useState(false);
   // Read once: a key saved in the key step itself keeps the step, so Back and forth never loses it.
   const [hasKey, setHasKey] = useState(false);
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -184,7 +188,11 @@ export function OnboardingWizard() {
               <span className="app-choice__hint">{t(band === "B" ? "targetBHint" : "targetCHint")}</span>
             </label>
           ))}
-          <details className="app-key-step__more" open={sharedTarget === null}>
+          <details
+            className="app-key-step__more"
+            open={perSkillTargetsOpen(perSkillOpen, choices.targets)}
+            onToggle={(event) => setPerSkillOpen(event.currentTarget.open)}
+          >
             <summary>{t("targetPerSkill")}</summary>
             <div className="app-stack">
               <p className="app-muted">{t("targetPerSkillHint")}</p>

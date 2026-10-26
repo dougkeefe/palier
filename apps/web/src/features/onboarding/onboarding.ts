@@ -1,7 +1,7 @@
 import { SCORED_SKILLS, type Band } from "@palier/domain";
 import { skillStanding } from "@palier/engine";
 
-import { type DailyGoal, NO_RESULTS, type StudyProfile, targetsOf } from "../../lib/study";
+import { type DailyGoal, NO_RESULTS, type StudyProfile, oneTarget, targetsOf } from "../../lib/study";
 
 /**
  * Onboarding's shape (product-requirements.md §8.1, in the owner's order of 10 October 2026, progress.md
@@ -60,6 +60,14 @@ export const offersDiagnostic = (choices: Pick<OnboardingChoices, "targets" | "c
     const standing = skillStanding({ current: choices.current[skill], target: choices.targets[skill], exemptBand });
     return standing === "unknown" || standing === "working";
   });
+
+/**
+ * Whether the target step's per-skill disclosure is open (D259): once the user has opened it, or
+ * whenever the targets differ, so arriving back at the step shows them. Never closed by the targets
+ * agreeing again, which would shut it under the user mid-choice.
+ */
+export const perSkillTargetsOpen = (opened: boolean, targets: StudyProfile["targets"]): boolean =>
+  opened || oneTarget(targets) === null;
 
 /** The placements the last step offers: the diagnostic only when it has something to place. */
 export const placementsFor = (choices: OnboardingChoices, exemptBand: Band): readonly Placement[] =>
