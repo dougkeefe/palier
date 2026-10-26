@@ -942,8 +942,13 @@ passed, on a change that touched no app code. The same commit's other run passed
 
   At two workers that puts the slowest shard at about 101 s, against 137 s before. The cost is a fourth medium-lane job
   and one more warmup, on a public repository's free runners.
+- **Measured on CI, both runs of `bc7ac21`, all green:** shard 1 took 191 s and 191 s, shard 2 148 s and 223 s, and shard 3
+  214 s and 209 s, against 226–300 s for the old shard 2. The gain is smaller than the local split promised, because each
+  shard still pays CI's server start and a warmup of about a minute, and the runners vary by about 70 s. That leaves
+  about 75 s of headroom, not 150. If the suite keeps growing, the next lever is the warmup, which every hermetic shard
+  repeats.
 - **The required checks change with it** (`docs/deploy.md`): `Medium lane: E2E 1/2` and `2/2` become `1/3`, `2/3` and
-  `3/3`, in the branch protection and in `deploy.md`'s table. `verify.yml`'s comment now counts four jobs.
+  `3/3`, in `deploy.md`'s table and, with the human's approval once CI was green, in `main`'s branch protection. `verify.yml`'s comment now counts four jobs.
 - **Not changed:** the 300 s budget, two workers, `retries: 0`, and the warmup.
 
 ## Session log
@@ -973,7 +978,9 @@ resolved.
 - Not run: the medium lane's Lighthouse step locally; CI runs it.
 - For D262: the hermetic projects at two, three and four workers locally (158 s, 127 s, 117 s; 93 passed each time,
   through a throwaway config on port 3010, since another app held 3000), and `playwright test --list --shard=n/3` for
-  the split. Three workers on CI: E2E 2/2 260 s, then 289 s with one timeout.
+  the split. Three workers on CI: E2E 2/2 260 s, then 289 s with one timeout. Three shards on CI: green on both runs, the
+  slowest at 223 s (D262). `main`'s required checks were then swapped to the three shards through `gh api`, and #106
+  read as mergeable.
 
 ### 25 October 2026 — `dougkeefe/current-levels-input` (the SLE results a user holds shape the plan, with a staircase for each skill; D259)
 
