@@ -56,7 +56,8 @@ export default defineConfig({
     {
       // Listed before `chromium` on purpose (progress.md D223). `--shard` splits the tests by count in project order, so
       // this puts the heavy production specs in shard 1, where they run beside the warmup rather than after it, and
-      // leaves shard 2 hermetic. Listed last, they all fell in shard 2, which then took a warmup for 21 tests.
+      // leaves the later shards hermetic (three since D262). Listed last, they all fell in the last shard, which then
+      // took a warmup for 21 tests.
       name: "offline",
       testMatch: /(offline|production)\.spec\.ts/,
       use: { ...devices["Desktop Chrome"], baseURL: `http://localhost:${PRODUCTION_PORT}` },

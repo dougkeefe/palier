@@ -497,7 +497,7 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   route by its first expansion (one library article for all eighteen, D260), in English, and `/fr` once (D223), then the pages that list does not name: an unknown path's 404 and the
   hermetic error hook's two views (`UNLISTED`, D249). A first compile mid-run makes the dev server rebuild every open
   page, and a rebuild drops a link click in flight; a page a spec visits that `routes.json` cannot name joins `UNLISTED`. **`offline` is listed before `chromium`**
-  so `--shard` puts the production specs in shard 1 beside the warmup; listed last, they pushed shard 2 past its budget (D223). **`chromium`** (hermetic, `next dev`) runs the
+  so `--shard` puts the production specs in shard 1 beside the warmup; listed last, they pushed the last shard past its budget (D223). The lane runs **three shards** (D262): the hermetic specs' heaviest files sort last, so two shards left the second near its budget. **`chromium`** (hermetic, `next dev`) runs the
   smoke tests and journeys 1, 2, 6, the review empty state, the report control and per-page
   titles, **journey 5 and onboarding's key step** (`key.spec.ts`), **the hermetic key-leak test** (`key-leak.spec.ts`),
   `errors.spec.ts` (the 404, a thrown route with its bundle and the key-leak sentinel, and the global view, D141–D142),

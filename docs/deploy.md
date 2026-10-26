@@ -297,15 +297,16 @@ offline-first, and sync answers 503.
 
 ## Required checks on `main`
 
-`main` is protected (`progress.md` D177), so a pull request merges only when these four checks from
+`main` is protected (`progress.md` D177), so a pull request merges only when these five checks from
 `.github/workflows/verify.yml` pass. Branches need not be up to date first, and no review is required.
 
 | Check | What it runs | Budget |
 | --- | --- | --- |
 | `Fast lane (budget 120s)` | `pnpm verify` | 120 s |
 | `Medium lane: integration (budget 5m)` | `pnpm run test:integration`, then bundle size and Lighthouse | 5 min, integration only |
-| `Medium lane: E2E 1/2 (budget 5m)` | `pnpm run test:e2e --shard=1/2` | 5 min |
-| `Medium lane: E2E 2/2 (budget 5m)` | `pnpm run test:e2e --shard=2/2` | 5 min |
+| `Medium lane: E2E 1/3 (budget 5m)` | `pnpm run test:e2e --shard=1/3` | 5 min |
+| `Medium lane: E2E 2/3 (budget 5m)` | `pnpm run test:e2e --shard=2/3` | 5 min |
+| `Medium lane: E2E 3/3 (budget 5m)` | `pnpm run test:e2e --shard=3/3` | 5 min |
 
 The protection matches checks **by name**. Renaming a job, or changing the shard count, leaves a required check
 that never reports, and every pull request waits on it forever. Change the protection in the same PR:

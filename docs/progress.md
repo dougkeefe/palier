@@ -98,7 +98,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/dependabot-alerts-resolve-v2` | **The open Dependabot alerts**: three dev-only transitive packages refreshed within their parents' ranges, and Lighthouse's `zod` 3 dismissed as unreachable (D261). | 26 October 2026 |
+| `dougkeefe/dependabot-alerts-resolve-v2` | **The open Dependabot alerts**: three dev-only transitive packages refreshed within their parents' ranges, and Lighthouse's `zod` 3 dismissed as unreachable (D261). **E2E in three shards** (D262). | 26 October 2026 |
 
 *(Merged rows are removed: this table tracks current work, and the session log is the permanent record. The rows
 removed up to 24 October 2026, the last of them the reading articles (#100), are listed in
@@ -595,21 +595,7 @@ full.
 - **D249** — the E2E warmup reads `routes.json`, articles included, and compiles the pages it cannot name · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d249--the-e2e-warmup-reads-routesjson-articles-included-and-compiles-the-pages-it-cannot-name)
 - **D250** — The translator: one call, two jobs, and study links that are data, never a model's · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d250--the-translator-one-call-two-jobs-and-study-links-that-are-data-never-a-models)
 - **D251** — The translator translates on a pause, Google Translate's way, on a page wide enough for two panes · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d251--the-translator-translates-on-a-pause-google-translates-way-on-a-page-wide-enough-for-two-panes)
-
-### D252 — The translator's explanation sits in the card, under the panes; the running total and the privacy line below it
-**Date:** 24 October 2026 · **Status:** accepted (human's request). Amends D251's layout only
-
-The human looked at D251's screen and asked to swap two things. The card held the panes, then the visit's running total
-and "Your text goes only to OpenAI…", and the explanation (a translation's "Choices worth knowing", or a correction's
-strengths, corrections and "What to study next") came after the card, furthest from the text it explains. The
-explanation is what the user values most, so it should sit closest to the text areas.
-
-- **In the card, in order:** the language choice, the two panes, then what bears on the next send (a failure, the cap's
-  pause, the over-cap press with its estimate, the cap reminder; absent in the usual case, when a pause translates), then
-  the explanation. The press stays next to the text it sends, rather than under a long explanation.
-- **Below the card:** the visit's total and "Your text goes only to OpenAI", still shown only with a key held, where the
-  no-key card is shown without one.
-- The explanation keeps its 760px reading measure inside the 1160px card. No message, decision or style changed.
+- **D252** — The translator's explanation sits in the card, under the panes; the running total and the privacy line below it · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d252--the-translators-explanation-sits-in-the-card-under-the-panes-the-running-total-and-the-privacy-line-below-it)
 
 ### D253 — Gates O and M passed and bank v4 read: 1.0
 **Date:** 24 October 2026 · **Status:** accepted (human decision); resolves Gate O and Gate M, completes Phases 6 and 7, and
@@ -933,11 +919,38 @@ dev-only.
   `braces` entry no longer appears. CI's `--prod --audit-level=high` gate is unchanged and exits 0, showing only D135's
   two ignored `content` entries.
 
+### D262 — the E2E lane runs three shards: the hermetic specs' heaviest files sort last, so two left shard 2 at its budget
+**Date:** 26 October 2026 · **Status:** accepted (agent's diagnosis of the CI failure the human reported). Extends D178 and D223; amends D260's "the next lever"
+
+The human reported this branch's E2E 2/2 failing. It ran 300 s and was stopped by the budget with 65 of its 66 tests
+passed, on a change that touched no app code. The same commit's other run passed shard 2 in 226 s.
+- **Shard 2 sat at its budget after D260 too.** Its test step ran 190–300 s in every run since 24 October, and it had already
+  failed at 300 s on `main` (#104's merge) and on `current-levels-input`. Shard 1 ran 166–272 s.
+- **Why shard 2.** `--shard` splits by count in project order (D223), and inside `chromium` the files sort by name.
+  `oral`, `translate`, `key-leak` and `sync`, the four heaviest, all sort late. Locally, at two workers:
+  - shard 1 held 27 hermetic tests worth 49 s, beside the 38 production specs;
+  - shard 2 held 65 hermetic tests worth 201 s, after a 36 s warmup that runs alone.
+- **Tried first, and reverted: three workers on CI.** Locally the suite used about 1.3 of 8 cores at two workers, and
+  three took it from 158 s to 127 s. On CI's four vCPUs it did not help: shard 2 took 260 s, then 289 s with the per-page
+  title test past its 30 s timeout. There the dev server is the bottleneck, so a third worker only adds contention.
+  Shard 1 dropped to about 200 s.
+- **So three shards.** Playwright 1.64 has no weighted sharding, and reordering files or splitting the `chromium` project
+  to move weight would tie the split to file names. Three shards by count give, locally:
+  - shard 1: the 38 production specs and 6 hermetic tests (9 s);
+  - shard 2: 43 hermetic tests (111 s);
+  - shard 3: 43 hermetic tests (141 s).
+
+  At two workers that puts the slowest shard at about 101 s, against 137 s before. The cost is a fourth medium-lane job
+  and one more warmup, on a public repository's free runners.
+- **The required checks change with it** (`docs/deploy.md`): `Medium lane: E2E 1/2` and `2/2` become `1/3`, `2/3` and
+  `3/3`, in the branch protection and in `deploy.md`'s table. `verify.yml`'s comment now counts four jobs.
+- **Not changed:** the 300 s budget, two workers, `retries: 0`, and the warmup.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
 
-### 26 October 2026 — `dougkeefe/dependabot-alerts-resolve-v2` (the open Dependabot alerts; D261)
+### 26 October 2026 — `dougkeefe/dependabot-alerts-resolve-v2` (the open Dependabot alerts, and E2E in three shards; D261, D262)
 
 Not *Next, decided*, which is unchanged (D206). The human asked for the open high and moderate Dependabot alerts to be
 resolved.
@@ -947,6 +960,9 @@ resolved.
 - **Alert #20, `zod` 3.25.76 under Lighthouse's `chromium-bidi`, is dismissed as `not_used`.** zod 4 would break
   `chromium-bidi`'s parser, and the BiDi code never loads on Lighthouse's CDP path (D261).
 - The rotation moved D251 to `deviations-D200-D299.md` and the oldest session entry to `sessions-2026-10.md`.
+- **The human then reported E2E 2/2 over its budget** on this branch. A third Playwright worker on CI was tried and
+  reverted, and the lane now runs three shards, with the required checks renamed to match (D262). D252 was rotated with
+  it.
 
 **Verified:**
 - Run with the repo's pnpm 10.13.1, through `npx pnpm@10.13.1`, since this machine's global `pnpm` is another front end.
@@ -955,6 +971,9 @@ resolved.
 - The smoke checks in D261 passed.
 - `pnpm verify` was green: 291 files, 4,686 tests passed (8 todo), with no dependency violations.
 - Not run: the medium lane's Lighthouse step locally; CI runs it.
+- For D262: the hermetic projects at two, three and four workers locally (158 s, 127 s, 117 s; 93 passed each time,
+  through a throwaway config on port 3010, since another app held 3000), and `playwright test --list --shard=n/3` for
+  the split. Three workers on CI: E2E 2/2 260 s, then 289 s with one timeout.
 
 ### 25 October 2026 — `dougkeefe/current-levels-input` (the SLE results a user holds shape the plan, with a staircase for each skill; D259)
 

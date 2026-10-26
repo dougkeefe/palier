@@ -1563,3 +1563,18 @@ The human looked at D250's screen on the deployed site and asked for it to work 
 - **The header's fifth destination is Translate** (`NAV_ITEMS`, `nav.translate`), in About's place. About stays in the
   footer, where it always was, so D145's "about" link is unchanged. The specs that clicked the first "About" now reach
   the footer's, and still land on `/about`.
+
+### D252 — The translator's explanation sits in the card, under the panes; the running total and the privacy line below it
+**Date:** 24 October 2026 · **Status:** accepted (human's request). Amends D251's layout only
+
+The human looked at D251's screen and asked to swap two things. The card held the panes, then the visit's running total
+and "Your text goes only to OpenAI…", and the explanation (a translation's "Choices worth knowing", or a correction's
+strengths, corrections and "What to study next") came after the card, furthest from the text it explains. The
+explanation is what the user values most, so it should sit closest to the text areas.
+
+- **In the card, in order:** the language choice, the two panes, then what bears on the next send (a failure, the cap's
+  pause, the over-cap press with its estimate, the cap reminder; absent in the usual case, when a pause translates), then
+  the explanation. The press stays next to the text it sends, rather than under a long explanation.
+- **Below the card:** the visit's total and "Your text goes only to OpenAI", still shown only with a key held, where the
+  no-key card is shown without one.
+- The explanation keeps its 760px reading measure inside the 1160px card. No message, decision or style changed.
