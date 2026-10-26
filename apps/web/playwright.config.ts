@@ -39,10 +39,6 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: 0,
-  // Three on CI, where Playwright's default of half the cores gave two of the runner's four (progress.md D262). The
-  // suite mostly waits on the dev server rather than computing, so a third worker shortens each shard. The fourth core is
-  // left to the servers.
-  ...(process.env.CI ? { workers: 3 } : {}),
   reporter: process.env.CI ? "github" : "list",
   use: {
     // Kept for a failed test only. With `retries: 0`, "on-first-retry" never recorded one, so a
