@@ -3,6 +3,35 @@
 Newest first. Moved verbatim from `docs/progress.md` on 24 October 2026 (D255). Its index there points here. The rules are
 `progress.md`'s: never edit a session entry, and mark a deviation resolved in place, updating its index line too.
 
+### 23 October 2026 — `dougkeefe/translate-to-french` (the translator reviewed against the standards; D250)
+
+Not *Next, decided*, which is unchanged (Gate O). The human asked whether PR #96 met the project's standards, its
+documentation especially. The code and its tests did; the documents outside this file did not, and the prompt
+contradicted itself.
+- **The documents brought in line with D250.** `implementation-plan.md` §3.3 gains `translate`, and `interpretDiagnostic`,
+  which ADR 25 added without amending it; `architecture.md` §4's tree gains `content/resources/`; `product-requirements.md`
+  §8.7 gains an "As built" paragraph for the translator; `apps/web/CLAUDE.md`'s island list names it.
+- **The prompt no longer asks for every value.** Its example shows both jobs' fields, and its closing line, shared with
+  the other prompts, said "filling every value", which asks for the mixed shape `checkTranslation` refuses, a retry billed
+  twice. It now says which arrays each job leaves empty, and names no source in the example when the model is to decide.
+  `PROMPT_VERSION` stays at 5: nothing for this prompt is recorded.
+- **The screen's locale decisions moved into `translate-view.ts`** with tests (`translatorFeedbackLang` over the oral
+  report's `feedbackLangFor`, `resourceTitle`, `resourceInOtherLanguage`), so `Translator.tsx` holds rendering only.
+- **A correction to the entry below**: `translate.spec.ts` has 3 tests, not 4; the run's fourth was the warmup.
+- **The translator is D250, not D248.** Main's #95 merged D248 (Today's tabs) and D249 (the warmup) while this branch
+  was open, so every D248 this branch wrote, in code, tests and documents, now reads D250 (D16's lesson: a number is
+  taken at merge).
+- **Two specs followed D248's tabs.** After the merge, `translate.spec.ts`'s first test and `key-leak.spec.ts`'s step 3g
+  still chose Today's writing plan by its old radio, so the first timed out and pushed E2E 2/2 past its budget. Both now
+  click the tab, as main's own specs do; locally both specs passed, 5 of 5 with the warmup, on two workers.
+
+**Verified:**
+- `pnpm verify` was green: 282 files, 4,545 tests passed (8 todo), with no dependency violations.
+- After `pnpm --filter @palier/web build`, the chromium project's `translate.spec.ts` (3 tests) and `key-leak.spec.ts`
+  passed with the warmup, 5 of 5, run with `--workers=1` on port 3050, since another project held 3000 here. In parallel,
+  `key-leak` and the first translator test failed in onboarding before reaching the translator; serially both passed.
+- Not run: `csp-production` and the live smoke.
+
 ### 23 October 2026 — `dougkeefe/translate-to-french` (the translator; D250)
 
 Not *Next, decided*, which is unchanged (Gate O), except that the live smoke's next funded `--record` now also writes

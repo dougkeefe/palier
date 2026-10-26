@@ -1507,3 +1507,74 @@ corrected, with links to study each error.
   `NonAffiliation` is needed.
 - **Not built:** a history of past translations (nothing is kept, by design), and an English target, which waits for the
   English mirror (Phase 8). The request already takes `target`.
+
+### D251 — The translator translates on a pause, Google Translate's way, on a page wide enough for two panes
+**Date:** 24 October 2026 · **Status:** accepted (human's request; agent's pause length, cap rule and layout). Amends
+D237 for the translator only, D250's screen, and D202's header
+
+The human looked at D250's screen on the deployed site and asked for it to work like Google Translate:
+- the panes were cramped in the 760px column, and the French box sat about 56px below the editor;
+- "Always in French", the intro paragraph and "Start again" were noise;
+- it should translate after a pause in typing, with no button. No estimate before each call was needed, but a running
+  total while in use was welcome;
+- copying should be a standard icon at the French's top right;
+- the header's About should become Translate, with About kept in the footer.
+
+- **No ADR records "one press spends"**: D237 made it, amending D108. This entry amends D237 for this screen only. Every
+  other spending screen keeps its button and its estimate beside it.
+- **Wide, not stacked.** The page carries `.app-wide` (1160px, as Today does). The panes sit side by side from 900px and
+  stack below that. Each pane is a CSS subgrid over three shared rows (its label, its box, what goes under it).
+  - **Why they misaligned:** each pane was its own grid stretched to the taller pane's height. The French pane has one
+    row fewer under its box, so its spare height went into its rows and pushed the box down.
+  - With the subgrid the boxes start on one line and are one height, and the French grows when the editor is resized.
+  - The explanation below keeps a 760px reading measure.
+- **The pause is 1.5 s** (`TRANSLATE_PAUSE_MS`, a product rule beside `MAX_TRANSLATION_CHARS`, not an exam rule). The
+  human suggested about 2 s and left it to the agent.
+  - It is roughly the end of a burst of typing and short of a mid-sentence think.
+  - Each send is a paid call on the `assess` model, whose own latency dwarfs the pause, so a shorter one would mostly buy
+    calls for half-written sentences.
+  - `shouldTranslate` sends only a text with words in it, within the limit, with nothing out or failed, whose French is
+    not already on screen. Space typed at the end is no change (`isStale` compares `trimEnd`), so the space before the
+    next word buys nothing.
+- **Typing never stops.** The reducer takes edits and a language change while a request is out, which D250 held.
+  - The answer lands with the request it answered, so its marks point into the text that was sent.
+  - It then reads as stale (drawn muted), and the next pause sends the newest text. Only one request is out at a time,
+    as `translationInFlight` already joins.
+  - Emptying the text empties the French, which replaced "Start again" and its `clear` action.
+- **A failure is never retried on its own.** It waits for the text to change, or for "Try again", which stays a press
+  with its estimate beside it (D237).
+- **Past the cap a pause no longer sends** (`autoTranslates`, from the pre-flight's `after`). The cap is soft and never
+  blocks (D104, D237), but a call on every pause must not quietly run past it.
+  - There the screen says translating as you type is paused, and offers one "Translate" press with its estimate:
+    D237's way.
+  - Near the cap it keeps translating and shows the reminder.
+- **The running total** is the visit's: `@palier/app`'s new `featureSpendSince({ feature, from })` over the ledger,
+  from the container's clock when the screen opened. It reads "This visit so far: US$0.04 on your OpenAI key, for 2
+  texts", re-read as each request settles, and it says "at least" when a call could not be priced.
+  - The estimate before a call is gone, as the human allowed.
+  - The no-key card still states the per-text cost.
+  - "Your text goes only to OpenAI" stays.
+- **Focus never moves.** D250 moved focus to the status line and then to the answer's heading; on every pause that would
+  pull the cursor out of the editor. A polite live region now says "The French is ready." as each answer lands. The
+  editor is never read-only, and the wait (`Waiting`, `live={false}`) sits under the French.
+- **The copy icon** is `@palier/ui`'s new `IconButton`, a glyph alone at the 44px target. Its `label` is required, as
+  its accessible name and its tooltip. `copy` joins `GLYPH_PATHS`, a new entry, never a case. "Copied." is still said in
+  a status line, and the glyph shows a tick for 2 s.
+- **The header's fifth destination is Translate** (`NAV_ITEMS`, `nav.translate`), in About's place. About stays in the
+  footer, where it always was, so D145's "about" link is unchanged. The specs that clicked the first "About" now reach
+  the footer's, and still land on `/about`.
+
+### D252 — The translator's explanation sits in the card, under the panes; the running total and the privacy line below it
+**Date:** 24 October 2026 · **Status:** accepted (human's request). Amends D251's layout only
+
+The human looked at D251's screen and asked to swap two things. The card held the panes, then the visit's running total
+and "Your text goes only to OpenAI…", and the explanation (a translation's "Choices worth knowing", or a correction's
+strengths, corrections and "What to study next") came after the card, furthest from the text it explains. The
+explanation is what the user values most, so it should sit closest to the text areas.
+
+- **In the card, in order:** the language choice, the two panes, then what bears on the next send (a failure, the cap's
+  pause, the over-cap press with its estimate, the cap reminder; absent in the usual case, when a pause translates), then
+  the explanation. The press stays next to the text it sends, rather than under a long explanation.
+- **Below the card:** the visit's total and "Your text goes only to OpenAI", still shown only with a key held, where the
+  no-key card is shown without one.
+- The explanation keeps its 760px reading measure inside the 1160px card. No message, decision or style changed.
