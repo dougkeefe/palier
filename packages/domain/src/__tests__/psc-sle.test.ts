@@ -79,6 +79,11 @@ describe("the psc-sle profile", () => {
     expect(withE).toEqual(["reading-supervised", "writing-supervised"]);
   });
 
+  it("names E as the exempt band, the top of the scale, so a skill held at it leaves the plan (D259)", () => {
+    expect(profile.exemptBand).toBe("E");
+    expect(profile.bands.at(-1)).toBe(profile.exemptBand);
+  });
+
   it("holds the four Leitner intervals from ADR 8, box 5 being retirement", () => {
     expect(profile.leitnerIntervalDays).toEqual([1, 3, 7, 21]);
   });

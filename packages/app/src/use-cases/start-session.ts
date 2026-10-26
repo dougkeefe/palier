@@ -1,4 +1,4 @@
-import type { AttemptMode, DiagnosticRules, SessionId } from "@palier/domain";
+import type { AttemptMode, Band, DiagnosticRules, SessionId } from "@palier/domain";
 import type { DayPlan } from "@palier/engine";
 
 import type {
@@ -54,6 +54,11 @@ export type StartSessionRequest = {
    * `focusSubSkills` and `placement`, from the `OralStore` (D124) and the diagnostic (ADR 25).
    */
   readonly plan: Omit<PlanDailySessionRequest, "lastDayCompleted" | "focusSubSkills" | "placement">;
+  /**
+   * The result the user declared for the skill (progress.md D259), which places the plan when no
+   * diagnostic has (`studyFocus`). Absent or null, only a diagnostic places it.
+   */
+  readonly declared?: Band | null;
 };
 
 export type StartSessionDeps = {
@@ -91,7 +96,10 @@ export const startSession = async (
 
   // No report and no diagnostic yet, no focus and no placement: the plan is exactly what it
   // was before either existed.
-  const focus = await studyFocus(request.plan, deps);
+  const focus = await studyFocus(
+    { ...request.plan, ...(request.declared === undefined ? {} : { declared: request.declared }) },
+    deps,
+  );
 
   const plan = await planDailySession(
     {

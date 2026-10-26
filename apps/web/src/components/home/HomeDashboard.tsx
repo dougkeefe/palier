@@ -1,12 +1,21 @@
 "use client";
 
 import type { DiagnosticResult, OralHistoryEntry, OralProgress, OralSessionChoice, StreakReport } from "@palier/app";
-import type { Pointer, ScoredSkill, SubSkill, TargetBand } from "@palier/domain";
-import { type DayPlan, type PracticeActivity, type SkillTrend, localDay } from "@palier/engine";
+import type { Band, Pointer, ScoredSkill, SubSkill, TargetBand } from "@palier/domain";
+import {
+  type DayPlacement,
+  type DayPlan,
+  type PracticeActivity,
+  type SkillStanding,
+  type SkillTrend,
+  localDay,
+} from "@palier/engine";
 import {
   Callout,
   Card,
   Glyph,
+  LevelStair,
+  Mascot,
   MonthCalendar,
   ProgressRail,
   Sparkline,
@@ -16,7 +25,7 @@ import {
   cardClass,
 } from "@palier/ui";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 
 import { focusText, interpretationFor, placementOf, scoreOf } from "../../features/diagnostic/result-view";
 import { feedbackLangFor } from "../../features/oral/report-view";
@@ -27,9 +36,12 @@ import { pickPointer } from "../../features/home/pointer";
 import {
   type Month,
   type SkillCard,
+  type SkillStandings,
   WEEK_OF_SUNDAY,
   calendarMarks,
+  heldSkills,
   monthOf,
+  planSkills,
   skillCards,
   stepMonth,
   weekMinutes,
@@ -41,7 +53,18 @@ import { type EvidenceLine, evidenceLine } from "../../features/telemetry/teleme
 import { hasAnyEstimate } from "../../features/trend/trend-lines";
 import { Link, useRouter } from "../../i18n/navigation";
 import type { Container } from "../../lib/container";
-import { type StudyProfile, daysUntil, minutesFor, planRows, readStudyProfile, sessionSizeFor } from "../../lib/study";
+import {
+  type StudyProfile,
+  currentFor,
+  dayRequestFor,
+  daysUntil,
+  minutesFor,
+  planRows,
+  readStudyProfile,
+  sessionSizeFor,
+  standingFor,
+  targetFor,
+} from "../../lib/study";
 import { deviceTimeZone } from "../../lib/time-zone";
 import { type ContainerState, useContainer } from "../ContainerProvider";
 import { MilestoneMoment, StreakFreezeNotice, StreakTile, useEngagement } from "../engagement/Engagement";
@@ -49,6 +72,7 @@ import { Cited } from "../library/Cited";
 import { NonAffiliation } from "../NonAffiliation";
 import { TrendMeters } from "../practice/TrendMeters";
 import { OralFixes, reportHref } from "../progress/OralCards";
+import { useSkillName, useStairText } from "../study/LevelPickers";
 
 /** What does not change with the skill switch: the week, the queue, the day's pointer (D219). */
 type Overview =
@@ -58,6 +82,11 @@ type Overview =
   | {
       readonly status: "ready";
       readonly profile: StudyProfile;
+      /** Each skill against its target, from the results declared (D259): exempt leaves the plan. */
+      readonly standings: SkillStandings;
+      /** The profile's bands and its exempt band, for the staircases (D259). */
+      readonly bands: readonly Band[];
+      readonly exemptBand: Band;
       /** The device's local day, `YYYY-MM-DD`. */
       readonly today: string;
       readonly activity: PracticeActivity;
@@ -70,7 +99,12 @@ type Overview =
 type ScoredView = {
   readonly status: "ready";
   readonly kind: ScoredSkill;
+  /** This skill's own target (D259). */
+  readonly target: TargetBand;
+  readonly standing: SkillStanding;
   readonly plan: DayPlan;
+  /** Where the day's new items start, from the diagnostic or the result declared, or none. */
+  readonly placement: DayPlacement | null;
   readonly trend: SkillTrend;
   /** What the trend rests on, for the §13.0 disclosure (D94). */
   readonly evidence: EvidenceLine | null;
@@ -86,6 +120,9 @@ type ScoredView = {
 type OralView = {
   readonly status: "ready";
   readonly kind: "oral";
+  /** Speaking's own target (D259). */
+  readonly target: TargetBand;
+  readonly standing: SkillStanding;
   readonly keyHeld: boolean;
   /** The picker's sessions, one per kind, at the study profile's band. */
   readonly choices: readonly OralSessionChoice[];
@@ -106,9 +143,15 @@ const loadOverview = async (container: Container): Promise<Overview> => {
   const profile = await readStudyProfile(container.settings);
   if (profile === null) return { status: "needs-setup" };
   const timeZone = deviceTimeZone();
+  const { bands, exemptBand } = container.profile;
   // The pointer is a grammar point, so it follows the writing plan's focus whichever skill is shown (D218).
   const [grammarFocus, activity, due] = await Promise.all([
-    container.useCases.studyFocus({ skill: "writing", lang: "fr", targetBand: profile.targetBand }),
+    container.useCases.studyFocus({
+      skill: "writing",
+      lang: "fr",
+      targetBand: targetFor(profile, "writing"),
+      declared: currentFor(profile, "writing"),
+    }),
     container.useCases.practiceActivity({ timeZone }),
     container.useCases.reviewQueue({ limit: DUE_LIMIT }),
   ]);
@@ -116,6 +159,13 @@ const loadOverview = async (container: Container): Promise<Overview> => {
   return {
     status: "ready",
     profile,
+    standings: {
+      reading: standingFor(profile, "reading", exemptBand),
+      writing: standingFor(profile, "writing", exemptBand),
+      oral: standingFor(profile, "oral", exemptBand),
+    },
+    bands,
+    exemptBand,
     today,
     activity,
     // The whole queue, both skills, read as `/review` reads it, so a retired item is never counted (D241).
@@ -128,15 +178,16 @@ const loadSkill = async (container: Container, skill: ScoredSkill, profile: Stud
   // A preview, not a session: `planDailySession` records nothing, so looking at the
   // card never counts as having started the day. It is biased by what the session will read
   // when it opens (`studyFocus`, ADR 25, D124), and only the plan waits for that.
-  const studying = container.useCases.studyFocus({ skill, lang: "fr", targetBand: profile.targetBand });
-  const [plan, trend, evidence, latestExam, examAtSkill, diagnostic] = await Promise.all([
+  const target = targetFor(profile, skill);
+  const standing = standingFor(profile, skill, container.profile.exemptBand);
+  const studying = container.useCases.studyFocus({ skill, lang: "fr", targetBand: target, declared: currentFor(profile, skill) });
+  const [focus, plan, trend, evidence, latestExam, examAtSkill, diagnostic] = await Promise.all([
+    studying,
     studying.then((focus) =>
       container.useCases.planDailySession({
         skill,
         lang: "fr",
-        targetBand: profile.targetBand,
-        sessionSize: sessionSizeFor(profile.dailyGoalMinutes),
-        ...(profile.testDate === null ? {} : { testDate: `${profile.testDate}T00:00:00.000Z` }),
+        ...dayRequestFor(profile, skill, container.profile.exemptBand),
         ...focus,
       }),
     ),
@@ -144,19 +195,23 @@ const loadSkill = async (container: Container, skill: ScoredSkill, profile: Stud
     container.useCases.practiceTrendEvidence({ skill }),
     container.useCases.latestExamResult(),
     container.useCases.latestExamResult({ skill }),
-    container.useCases.diagnosticResult({ skill, targetBand: profile.targetBand }),
+    container.useCases.diagnosticResult({ skill, targetBand: target }),
   ]);
   const step = nextStep({
     diagnostic: diagnostic === null ? null : { takenAt: diagnostic.summary.takenAt, retakeDue: diagnostic.retakeDue },
     trend,
-    targetBand: profile.targetBand,
+    targetBand: target,
     mockExamAdvised: plan.mockExamAdvised,
     lastExamAt: examAtSkill?.run.submittedAt ?? null,
+    held: standing === "held",
   });
   return {
     status: "ready",
     kind: skill,
+    target,
+    standing,
     plan,
+    placement: focus.placement ?? null,
     trend,
     evidence: evidenceLine(evidence, container.profile.itemStatistics.minResponsesDifficulty),
     exam: latestExam === null ? null : examReadiness(latestExam),
@@ -172,7 +227,7 @@ const loadSkill = async (container: Container, skill: ScoredSkill, profile: Stud
 const loadOral = async (container: Container, profile: StudyProfile): Promise<OralView> => {
   const [status, choices, history, progress] = await Promise.all([
     container.useCases.apiKeyStatus(),
-    container.useCases.oralSessionChoices({ targetBand: profile.targetBand, lang: "fr" }),
+    container.useCases.oralSessionChoices({ targetBand: targetFor(profile, "oral"), lang: "fr" }),
     container.useCases.oralHistory(),
     container.useCases.oralProgress({ limit: ORAL_RECENT_SESSIONS }),
   ]);
@@ -180,6 +235,8 @@ const loadOral = async (container: Container, profile: StudyProfile): Promise<Or
   return {
     status: "ready",
     kind: "oral",
+    target: targetFor(profile, "oral"),
+    standing: standingFor(profile, "oral", container.profile.exemptBand),
     keyHeld: status !== null,
     choices,
     history,
@@ -241,15 +298,19 @@ export function HomeDashboard() {
   const engagement = useEngagement(container);
   const overview = useOverview(container);
   const needsSetup = overview.status === "needs-setup";
-  const [skill, setSkill] = useState<SkillKind>("reading");
+  const [chosen, setSkill] = useState<SkillKind>("reading");
+  // An exempt skill leaves the plan (D259): the tabs are the rest, and the first of them is shown
+  // until another is chosen. With all three exempt there is no plan to show, and Today celebrates.
+  const kinds = overview.status === "ready" ? planSkills(overview.standings) : SKILL_KINDS;
+  const skill: SkillKind | null = kinds.includes(chosen) ? chosen : (kinds[0] ?? null);
   // Keyed by the skill it was loaded for, so switching skill reads as loading until
   // the new skill's data arrives, with no reset inside the effect.
   const [loaded, setLoaded] = useState<{ skill: SkillKind; view: SkillView } | null>(null);
-  const view: SkillView = loaded?.skill === skill ? loaded.view : { status: "loading" };
+  const view: SkillView = loaded !== null && loaded.skill === skill ? loaded.view : { status: "loading" };
   const profile = overview.status === "ready" ? overview.profile : null;
 
   useEffect(() => {
-    if (container.status !== "ready" || profile === null) return;
+    if (container.status !== "ready" || profile === null || skill === null) return;
     let live = true;
     loadView(container.container, skill, profile).then(
       (v) => live && setLoaded({ skill, view: v }),
@@ -287,34 +348,38 @@ export function HomeDashboard() {
             container={container.container}
           />
 
-          <Card className="app-home__plan">
-            <h2>{t("planTitle")}</h2>
-            <PlanTabs skill={skill} onSelect={setSkill} />
-            <TabPanel idPrefix={PLAN_ID} id={skill}>
-              {view.status === "loading" ? (
-                <p role="status">{tCommon("loading")}</p>
-              ) : view.kind === "oral" ? (
-                <OralPlanBody
-                  view={view}
-                  today={overview.activity.today}
-                  dueCount={overview.dueCount}
-                  targetBand={overview.profile.targetBand}
-                />
-              ) : (
-                <PlanBody
-                  view={view}
-                  dueCount={overview.dueCount}
-                  targetBand={overview.profile.targetBand}
-                  diagnosticSize={container.container.profile.diagnostic.size}
-                />
-              )}
-            </TabPanel>
-          </Card>
+          {skill === null ? (
+            <AllExempt />
+          ) : (
+            <Card className="app-home__plan">
+              <h2>{t("planTitle")}</h2>
+              <PlanTabs kinds={kinds} skill={skill} onSelect={setSkill} />
+              <TabPanel idPrefix={PLAN_ID} id={skill}>
+                {view.status === "loading" ? (
+                  <p role="status">{tCommon("loading")}</p>
+                ) : view.kind === "oral" ? (
+                  <OralPlanBody
+                    view={view}
+                    today={overview.activity.today}
+                    dueCount={overview.dueCount}
+                    current={overview.profile.current.oral}
+                  />
+                ) : (
+                  <PlanBody
+                    view={view}
+                    dueCount={overview.dueCount}
+                    current={overview.profile.current[view.kind]}
+                    diagnosticSize={container.container.profile.diagnostic.size}
+                  />
+                )}
+              </TabPanel>
+            </Card>
+          )}
 
           {view.status === "loading" ? null : view.kind === "oral" ? (
-            <OralStanding progress={view.progress} />
+            <OralStanding progress={view.progress} declared={<DeclaredHalf overview={overview} skill="oral" />} />
           ) : (
-            <WhereYouStand view={view} />
+            <WhereYouStand view={view} declared={<DeclaredHalf overview={overview} skill={view.kind} />} />
           )}
         </div>
 
@@ -335,7 +400,11 @@ export function HomeDashboard() {
 function Hero({ overview, countdown }: { overview: Extract<Overview, { status: "ready" }>; countdown: number | null }) {
   const t = useTranslations("today");
   const { week } = overview.activity;
-  const cards = skillCards(overview.activity, sessionSizeFor(overview.profile.dailyGoalMinutes));
+  const cards = skillCards(
+    overview.activity,
+    sessionSizeFor(overview.profile.dailyGoalMinutes),
+    heldSkills(overview.standings),
+  );
   return (
     <Card tone="deep" className="app-home__hero">
       <div className="app-home__hero-text">
@@ -348,7 +417,7 @@ function Hero({ overview, countdown }: { overview: Extract<Overview, { status: "
       <ol className="app-home__skills" aria-label={t("skillsLabel")}>
         {cards.map((card, i) => (
           <li key={card.kind}>
-            <SkillCardLink card={card} number={i + 1} />
+            <SkillCardLink card={card} number={i + 1} overview={overview} />
           </li>
         ))}
       </ol>
@@ -357,17 +426,30 @@ function Hero({ overview, countdown }: { overview: Extract<Overview, { status: "
 }
 
 /** One skill in the hero: its number, mark and name, today's progress in words and as a rail, and its practice. */
-function SkillCardLink({ card, number }: { card: SkillCard; number: number }) {
+function SkillCardLink({
+  card,
+  number,
+  overview,
+}: {
+  card: SkillCard;
+  number: number;
+  overview: Extract<Overview, { status: "ready" }>;
+}) {
   const t = useTranslations("today");
-  const tSkills = useTranslations("skills");
-  const name = card.kind === "oral" ? t("oralName") : tSkills(card.kind);
+  const tLevels = useTranslations("levels");
+  const skillName = useSkillName();
+  const name = skillName(card.kind);
   const look = SKILL_LOOK[card.kind];
+  const standing = overview.standings[card.kind];
+  const current = overview.profile.current[card.kind];
   const line =
-    card.kind === "oral"
-      ? card.sessions === 0
-        ? t("oralNotYet")
-        : t("oralToday", { count: card.sessions, minutes: card.minutes })
-      : t("skillToday", { done: card.done, goal: card.goal });
+    standing === "exempt"
+      ? t("skillExempt")
+      : card.kind === "oral"
+        ? card.sessions === 0
+          ? t("oralNotYet")
+          : t("oralToday", { count: card.sessions, minutes: card.minutes })
+        : t("skillToday", { done: card.done, goal: card.goal });
   return (
     <Link href={`/practice/${card.kind}`} className={`${cardClass(look.tone)} app-home__skill pl-focusable`}>
       <span className="app-home__skill-number" aria-hidden="true">
@@ -376,11 +458,23 @@ function SkillCardLink({ card, number }: { card: SkillCard; number: number }) {
       <Glyph name={look.glyph} className="app-home__skill-glyph" />
       <span className="app-home__skill-name">{name}</span>
       <span className="app-home__skill-line">{line}</span>
-      <ProgressRail
-        current={card.rail.current}
-        total={card.rail.total}
-        label={card.kind === "oral" ? t("oralRail") : t("skillRail", { skill: name })}
-      />
+      {/* The declared result as a staircase (D259): decoration, since the settings and where you stand say it in words. */}
+      {current === null ? null : (
+        <LevelStair
+          bands={overview.bands}
+          current={current}
+          target={overview.profile.targets[card.kind]}
+          size="sm"
+          {...(standing === "exempt" ? { stamp: tLevels("stamp") } : {})}
+        />
+      )}
+      {standing === "exempt" ? null : (
+        <ProgressRail
+          current={card.rail.current}
+          total={card.rail.total}
+          label={card.kind === "oral" ? t("oralRail") : t("skillRail", { skill: name })}
+        />
+      )}
     </Link>
   );
 }
@@ -428,15 +522,23 @@ function Statistics({
  * The plan's three tabs (D248), as `/progress`'s detail has (D247): another view of the same card, so
  * tabs and never a radio group, which reads as a question to answer. Each wears its skill's glyph and fill.
  */
-function PlanTabs({ skill, onSelect }: { skill: SkillKind; onSelect: (skill: SkillKind) => void }) {
+function PlanTabs({
+  kinds,
+  skill,
+  onSelect,
+}: {
+  kinds: readonly SkillKind[];
+  skill: SkillKind;
+  onSelect: (skill: SkillKind) => void;
+}) {
   const t = useTranslations("today");
-  const tSkills = useTranslations("skills");
+  const skillName = useSkillName();
   return (
     <Tabs
       label={t("skillLabel")}
-      items={SKILL_KINDS.map((kind) => ({
+      items={kinds.map((kind) => ({
         id: kind,
-        label: kind === "oral" ? t("oralName") : tSkills(kind),
+        label: skillName(kind),
         glyph: SKILL_LOOK[kind].glyph,
         tone: SKILL_LOOK[kind].tone,
       }))}
@@ -451,19 +553,27 @@ function PlanTabs({ skill, onSelect }: { skill: SkillKind; onSelect: (skill: Ski
 function PlanBody({
   view,
   dueCount,
-  targetBand,
+  current,
   diagnosticSize,
 }: {
   view: ScoredView;
   dueCount: number;
-  targetBand: TargetBand;
+  /** The result declared at this skill (D259), or none. */
+  current: Band | null;
   diagnosticSize: number;
 }) {
   const t = useTranslations("today");
+  const targetBand = view.target;
   return (
     <>
       <NextStepBanner step={view.step} targetBand={targetBand} taper={view.plan.mockExamAdvised} diagnosticSize={diagnosticSize} />
-      {view.diagnostic === null ? null : <PlanPlacement result={view.diagnostic} />}
+      {view.standing === "held" && current !== null ? (
+        <p>{t("planKeepSharp", { band: current })}</p>
+      ) : view.diagnostic !== null ? (
+        <PlanPlacement result={view.diagnostic} />
+      ) : view.placement !== null && current !== null ? (
+        <p>{t("planPlacedDeclared", { held: current, start: view.placement.startBand, target: targetBand })}</p>
+      ) : null}
       {view.plan.items.length === 0 ? (
         <div>
           <p>
@@ -492,13 +602,14 @@ function PlanBody({
 }
 
 /** Where you stand at the chosen skill: the diagnostic, the practice trend once there is one, the last exam once there is one. */
-function WhereYouStand({ view }: { view: ScoredView }) {
+function WhereYouStand({ view, declared }: { view: ScoredView; declared: ReactNode }) {
   const t = useTranslations("today");
   const tSkills = useTranslations("skills");
   const skill = view.kind;
   return (
     <Card className="app-home__readiness">
       <h2>{t("readinessCardTitle")}</h2>
+      {declared}
       {view.diagnostic === null ? (
         <p className="app-muted">{t("standEmpty")}</p>
       ) : (
@@ -528,14 +639,16 @@ function OralPlanBody({
   view,
   today,
   dueCount,
-  targetBand,
+  current,
 }: {
   view: OralView;
   today: PracticeActivity["today"];
   dueCount: number;
-  targetBand: TargetBand;
+  /** The result declared at speaking (D259), or none. */
+  current: Band | null;
 }) {
   const t = useTranslations("today");
+  const targetBand = view.target;
   const tOral = useTranslations("oral");
   const locale = useLocale();
   const plan = oralPlan({ today, choices: view.choices, history: view.history, perMinuteUsd: view.perMinuteUsd });
@@ -557,7 +670,9 @@ function OralPlanBody({
         <p>{t("oralNoSession")}</p>
       ) : (
         <div className="app-home__oral-plan">
-          <p className="app-muted">{t("oralPlanWhy")}</p>
+          <p className="app-muted">
+            {view.standing === "held" && current !== null ? t("oralKeepSharp", { band: current }) : t("oralPlanWhy")}
+          </p>
           <ul className="app-plan">
             <li className="app-plan__row">
               <span className="app-plan__kind">{tOral(`type_${plan.choice.sessionType}`)}</span>
@@ -593,7 +708,7 @@ function OralPlanBody({
  * fixes, each a way into its drill, or the way to a session a report can still be asked of. No criterion
  * level is shown off the report, where each stands beside its evidence (R10).
  */
-function OralStanding({ progress }: { progress: OralProgress }) {
+function OralStanding({ progress, declared }: { progress: OralProgress; declared: ReactNode }) {
   const t = useTranslations("today");
   const tProgress = useTranslations("progress");
   const format = useFormatter();
@@ -601,6 +716,7 @@ function OralStanding({ progress }: { progress: OralProgress }) {
   return (
     <Card className="app-home__readiness">
       <h2>{t("readinessCardTitle")}</h2>
+      {declared}
       <div className="app-exam-result">
         <h3>{tProgress("oralLatestTitle")}</h3>
         {detail.status === "empty" ? (
@@ -800,6 +916,79 @@ function PointerSection({ pointer }: { pointer: Pointer }) {
         </div>
       </Card>
     </section>
+  );
+}
+
+/**
+ * Where you stand's first half (D259): the result the user declared at this skill, as its staircase
+ * and in words, with the way to change it. Before any is declared, it says what declaring does.
+ * It is the user's word, never a measure (R10), so it says "you hold" and sits apart from the
+ * diagnostic, the trend and the exam below it.
+ */
+function DeclaredHalf({ overview, skill }: { overview: Extract<Overview, { status: "ready" }>; skill: SkillKind }) {
+  const t = useTranslations("today");
+  const tLevels = useTranslations("levels");
+  const stairText = useStairText();
+  const current = overview.profile.current[skill];
+  const target = overview.profile.targets[skill];
+  return (
+    <div className="app-exam-result app-home__declared">
+      <h3>{t("declaredTitle")}</h3>
+      {current === null ? (
+        <p className="app-muted">{t("declaredNone")}</p>
+      ) : (
+        <>
+          <LevelStair
+            bands={overview.bands}
+            current={current}
+            target={target}
+            label={stairText(skill, current, target, overview.exemptBand)}
+            {...(current === overview.exemptBand ? { stamp: tLevels("stamp") } : {})}
+          />
+          <p className="app-muted">{t("declaredNote")}</p>
+        </>
+      )}
+      <Link href="/settings/study" className="app-link pl-focusable">
+        {current === null ? t("declaredAdd") : t("declaredChange")}
+      </Link>
+    </div>
+  );
+}
+
+/**
+ * Today with every skill exempt (D259): no plan, since nothing is left to study, and Coco cheering.
+ * Practice stays one step away, for anyone who wants to keep their hand in.
+ */
+function AllExempt() {
+  const t = useTranslations("today");
+  return (
+    <Card className="app-home__plan app-home__all-exempt">
+      <Mascot pose="cheer" />
+      <h2>{t("allExemptTitle")}</h2>
+      <p>{t("allExemptBody")}</p>
+      <ul className="app-home__links">
+        <li>
+          <Link href="/practice/reading" className="app-link pl-focusable">
+            {t("allExemptReading")}
+          </Link>
+        </li>
+        <li>
+          <Link href="/practice/writing" className="app-link pl-focusable">
+            {t("allExemptWriting")}
+          </Link>
+        </li>
+        <li>
+          <Link href="/practice/oral" className="app-link pl-focusable">
+            {t("oralAction")}
+          </Link>
+        </li>
+        <li>
+          <Link href="/settings/study" className="app-link pl-focusable">
+            {t("declaredChange")}
+          </Link>
+        </li>
+      </ul>
+    </Card>
   );
 }
 

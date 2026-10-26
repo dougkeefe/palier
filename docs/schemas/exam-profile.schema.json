@@ -37,6 +37,16 @@
         ]
       }
     },
+    "exemptBand": {
+      "type": "string",
+      "enum": [
+        "X",
+        "A",
+        "B",
+        "C",
+        "E"
+      ]
+    },
     "variants": {
       "type": "object",
       "propertyNames": {
@@ -494,6 +504,7 @@
     "version",
     "skills",
     "bands",
+    "exemptBand",
     "variants",
     "subSkills",
     "topics",

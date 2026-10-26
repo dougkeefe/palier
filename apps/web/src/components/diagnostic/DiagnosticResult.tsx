@@ -22,7 +22,7 @@ import {
 import { feedbackLangFor } from "../../features/oral/report-view";
 import { Link } from "../../i18n/navigation";
 import type { Container } from "../../lib/container";
-import { readStudyProfile } from "../../lib/study";
+import { readStudyProfile, targetFor } from "../../lib/study";
 import { useContainer } from "../ContainerProvider";
 import { SpendOffer } from "../key/SpendOffer";
 import { usePreflight } from "../key/use-preflight";
@@ -43,7 +43,7 @@ type Loaded =
 const loadResult = async (container: Container, skill: ScoredSkill): Promise<Loaded> => {
   const profile = await readStudyProfile(container.settings);
   const [result, key] = await Promise.all([
-    container.useCases.diagnosticResult({ skill, targetBand: profile?.targetBand ?? "C" }),
+    container.useCases.diagnosticResult({ skill, targetBand: profile === null ? "C" : targetFor(profile, skill) }),
     container.useCases.apiKeyStatus(),
   ]);
   return result === null ? { status: "none" } : { status: "ready", result, keyHeld: key !== null };

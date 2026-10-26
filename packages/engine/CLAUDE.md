@@ -55,7 +55,11 @@ item is absent, not zero), the sub-skills weakest first, the focus (the weakest 
 below the target answered at `secureAccuracy`, else the lowest the run held at or below it, else the target. It is a
 place for practice to start, never a band (ADR 7). `DayPlanInput.placement` splits new items: `round(new × startShare)`
 at the starting band first, the rest from the working set above it, only when the start is below the target. Absent,
-or at the target, the plan is unchanged, and the goldens did not move. **Engagement** (`engagement.ts`, progress.md D159):
+or at the target, the plan is unchanged, and the goldens did not move. **A declared result** (`standing.ts`, progress.md D259): `skillStanding` is `unknown`, `exempt` (the profile's
+`exemptBand`, handed in), `held` (at or above the target) or `working`; `declaredStart` raises a result below the target to
+the lowest band an item carries, and is null when that is not below the target. `DayPlanInput.maintaining` takes
+`MAINTAIN_FACTOR` of the budget and draws no new items; absent, nothing changes, and the goldens did not move.
+**Engagement** (`engagement.ts`, progress.md D159):
 `localDay(at, timeZone)` is the device's calendar day, read by `Intl` part rather than a locale's separator; `streak` walks
 back from `today`, where today still to do breaks nothing, and a missed day is **frozen while fewer than the allowance are
 frozen in that day's own calendar month**. A frozen day keeps the streak but adds nothing to its length, and a freeze is kept

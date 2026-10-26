@@ -1195,3 +1195,78 @@
     transform: none;
   }
 }
+
+/* ---- Level stair (a declared result against its target, progress.md D259) ------ */
+
+/* A definite width, capped by its container: in a shrink-to-fit parent a percentage alone collapses to nothing. */
+.pl-level-stair {
+  position: relative;
+  display: inline-block;
+  inline-size: 232px;
+  max-inline-size: 100%;
+}
+
+.pl-level-stair--sm {
+  inline-size: 132px;
+}
+
+.pl-level-stair__drawing {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+.pl-level-stair__step rect {
+  fill: color-mix(in srgb, var(--ink) 12%, transparent);
+}
+
+.pl-level-stair__step text {
+  fill: var(--ink-muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.pl-level-stair__step--reached rect {
+  fill: var(--primary);
+}
+
+.pl-level-stair__step--reached text {
+  fill: var(--on-deep);
+}
+
+.pl-level-stair__flag {
+  stroke: var(--ink-soft);
+  fill: var(--accent);
+}
+
+/* The exemption: an official stamp, pressed once with the celebration spring (transform only). */
+.pl-level-stair__stamp {
+  position: absolute;
+  inset-block-start: 18%;
+  inset-inline-start: 50%;
+  padding: 2px 10px;
+  border: 3px double var(--primary);
+  border-radius: 6px;
+  color: var(--primary);
+  background-color: color-mix(in srgb, var(--surface) 70%, transparent);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transform: translateX(-50%) rotate(-12deg);
+  animation: pl-stamp-press var(--pl-motion-celebrate) var(--pl-ease-spring);
+}
+
+.pl-level-stair--sm .pl-level-stair__stamp {
+  font-size: 0.75rem;
+  border-width: 2px;
+}
+
+@keyframes pl-stamp-press {
+  from {
+    transform: translateX(-50%) rotate(-12deg) scale(1.6);
+  }
+  to {
+    transform: translateX(-50%) rotate(-12deg);
+  }
+}

@@ -225,6 +225,15 @@ describe("planDailySession", () => {
     expect(shortened.items.length).toBeLessThan(full.items.length);
   });
 
+  it("keeps a skill held at its target sharp: half the day and no new items (D259)", async () => {
+    const full = await planDailySession(aRequest, depsWith());
+    const held = await planDailySession({ ...aRequest, maintaining: true }, depsWith());
+
+    expect(held.newItems).toEqual([]);
+    expect(held.items.length).toBeGreaterThan(0);
+    expect(held.items.length).toBeLessThan(full.items.length);
+  });
+
   it("returns no reviews but still fills from the pool when nothing is due", async () => {
     const items = itemsOf(aPool());
     const plan = await planDailySession(aRequest, depsWith({ items }));

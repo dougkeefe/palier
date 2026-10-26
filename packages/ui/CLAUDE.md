@@ -45,6 +45,11 @@ system, not the application.
   assertion on their *states* — panel open, dialog focused — not the initial render alone.
 - Logic (formatters, band-meter and trend-chart geometry, timer tone classes, keyboard handling, registry
   lookups) is 90% branch; rendering has no line target on purpose (§6.3).
+- **LevelStair** (progress.md D259): a skill's declared result as a staircase, a step per band from the caller's `bands`
+  (never sorted by letter), solid up to the result, Coco on it and a flag on the target (`levelStairGeometry`). The
+  caller's `stamp` presses an exemption stamp on once with the celebration spring. With a `label` it is one `role="img"`
+  named by it; without one it is hidden whole, for a card whose words already say it. Its width is definite and capped
+  at 100%, because a percentage alone collapses in a shrink-to-fit parent.
 - **Primitives:** Button, Card, Callout, EmptyState, Glyph (its strokes the `GLYPH_PATHS` record: a new glyph is an
   entry, never a case), **IconButton** (D251: a glyph alone, `label` required as its accessible name and tooltip, at
   the 44px target), OptionRow, ProgressRail, **Sparkline** and **MonthCalendar** (D219: a small `aria-hidden` line

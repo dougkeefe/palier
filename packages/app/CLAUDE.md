@@ -216,7 +216,8 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   "diagnostic-interpretation", …, { sessionId })` call with the run's misses, then keeps it. **`DiagnosticReportStore {
   put, get, clear }` is device-local**, never synced or exported, cleared by `wipeData` and `deleteEverywhere`.
   **`studyFocus` is what biases a day**: an oral report's fixes, then the run's focus, each once, and the run's
-  `placement`; `startSession` reads it in place of its oral-only derivation, and the web's preview reads the same, so the
+  `placement`, or, with no run, the placement of the result the user declared (`declared`, the engine's `declaredStart`,
+  D259; a run, measured, always wins); `startSession` reads it in place of its oral-only derivation, and the web's preview reads the same, so the
   plan shown is the plan opened. `runDiagnostic` passes the profile's `bandQuota` through.
 - **Two trend readouts, each named for its evidence.** `diagnosticResult` reads diagnostic
   attempts only (D47, ADR 25); `practiceTrend` reads drill, review and diagnostic attempts and **never exam

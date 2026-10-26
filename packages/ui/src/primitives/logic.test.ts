@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  LEVEL_STAIR_HEIGHT,
+  levelStairGeometry,
   bandMeterGeometry,
   buttonClass,
   calloutState,
@@ -452,5 +454,47 @@ describe("tabIds and tabClass (D247)", () => {
   it("marks the shown tab, and only it", () => {
     expect(tabClass(true)).toBe("pl-tabs__tab pl-tabs__tab--selected");
     expect(tabClass(false)).toBe("pl-tabs__tab");
+  });
+});
+
+describe("levelStairGeometry", () => {
+  const bands = ["X", "A", "B", "C", "E"] as const;
+
+  it("draws one step per band, each higher than the last, on one baseline", () => {
+    const { steps } = levelStairGeometry({ bands, current: null, target: "C" });
+    expect(steps.map((step) => step.band)).toEqual(["X", "A", "B", "C", "E"]);
+    for (let i = 1; i < steps.length; i += 1) {
+      expect(steps[i]!.height).toBeGreaterThan(steps[i - 1]!.height);
+      expect(steps[i]!.x).toBeGreaterThan(steps[i - 1]!.x);
+    }
+    for (const step of steps) expect(step.y + step.height).toBe(LEVEL_STAIR_HEIGHT);
+  });
+
+  it("fills the steps up to the declared result and stands Coco on it", () => {
+    const geo = levelStairGeometry({ bands, current: "B", target: "C" });
+    expect(geo.steps.map((step) => step.reached)).toEqual([true, true, true, false, false]);
+    const b = geo.steps[2]!;
+    expect(geo.coco).toEqual({ x: b.x + 18, y: b.y });
+  });
+
+  it("leaves Coco on the ground before the first step with nothing declared", () => {
+    const geo = levelStairGeometry({ bands, current: null, target: "C" });
+    expect(geo.steps.every((step) => !step.reached)).toBe(true);
+    expect(geo.coco).toEqual({ x: 14, y: LEVEL_STAIR_HEIGHT });
+    expect(geo.coco.x).toBeLessThan(geo.steps[0]!.x);
+  });
+
+  it("flags the target's step", () => {
+    const geo = levelStairGeometry({ bands, current: "E", target: "C" });
+    const c = geo.steps[3]!;
+    expect(geo.flag).toEqual({ x: c.x + 31, y: c.y });
+  });
+
+  it("flags nothing when the target is not a step", () => {
+    expect(levelStairGeometry({ bands: ["X", "A"], current: "A", target: "C" }).flag).toBeNull();
+  });
+
+  it("sizes the box to the steps", () => {
+    expect(levelStairGeometry({ bands, current: null, target: "C" }).width).toBe(28 + 5 * 40 - 4);
   });
 });

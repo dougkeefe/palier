@@ -15,7 +15,8 @@ from disk (progress.md D154).
   belongs to an adapter or a build step. ESLint bans `async`, `await` and `Promise` in this
   package's source (§3.2).
 - **No exam rule in code.** Item counts, time limits, cut scores, level descriptors and the
-  taxonomies live in `content/profiles/*.json` (ADR 9); so do the Leitner intervals (ADR 8).
+  taxonomies live in `content/profiles/*.json` (ADR 9); so do the Leitner intervals (ADR 8), and the exempt band
+  (`exemptBand`, one of the profile's `bands`, D259), which takes a skill held at it out of the study plan.
   If you are about to type a number from `product-requirements.md` §5 into a `.ts` file, it
   belongs in the profile.
 - **Bands are ordered by `BAND_RANK`, never alphabetically.** E is above C — it is the

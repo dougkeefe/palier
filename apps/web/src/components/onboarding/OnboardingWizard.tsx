@@ -1,5 +1,6 @@
 "use client";
 
+import { SKILLS } from "@palier/domain";
 import { Button, Callout } from "@palier/ui";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
@@ -10,16 +11,20 @@ import {
   type OnboardingStep,
   destinationFor,
   finishLabel,
+  perSkillTargetsOpen,
+  placementsFor,
   profileFrom,
+  settle,
   stepAfter,
   stepBefore,
   stepperSegments,
   stepsFor,
 } from "../../features/onboarding/onboarding";
 import { useRouter } from "../../i18n/navigation";
-import { DAILY_GOALS, writeStudyProfile } from "../../lib/study";
+import { DAILY_GOALS, oneTarget, targetsOf, writeStudyProfile } from "../../lib/study";
 import { useContainer } from "../ContainerProvider";
 import { NonAffiliation } from "../NonAffiliation";
+import { ResultPicker, TargetPicker } from "../study/LevelPickers";
 import { KeyStep } from "./KeyStep";
 
 /**
@@ -28,8 +33,10 @@ import { KeyStep } from "./KeyStep";
  * the platform. Each step's heading takes focus as it appears, so a screen-reader user
  * hears where they are (§11: focus is never lost as a flow advances).
  *
- * The order is the owner's (progress.md D224): direction, target, goal, the key, then the placement,
- * whose choice is where the wizard lands. The key step is shown unless this browser already holds a
+ * The order is the owner's (progress.md D224), with the results already held after the target
+ * (D259): direction, target, results, goal, the key, then the placement, whose choice is where the
+ * wizard lands. The target is one answer, B or C, with a target per skill folded under it for a
+ * position whose profile differs; the results default to "not yet", so the step is skippable. The key step is shown unless this browser already holds a
  * key (D220): why Palier runs on the user's own key, what it costs, and how to get one, with the key
  * taken in place. It is `KeyStep`, outside the wizard's `<form>`, since the key's own form sits in
  * it. The non-affiliation statement heads the first step only; the footer carries it on every page.
@@ -43,6 +50,9 @@ export function OnboardingWizard() {
   const [choices, setChoices] = useState<OnboardingChoices>(DEFAULT_CHOICES);
   const [saving, setSaving] = useState(false);
   const [failed, setFailed] = useState(false);
+  // Once opened, the per-skill targets stay open: deriving it from the targets alone would close the
+  // disclosure under the user as soon as their choices happened to agree again (D259).
+  const [perSkillOpen, setPerSkillOpen] = useState(false);
   // Read once: a key saved in the key step itself keeps the step, so Back and forth never loses it.
   const [hasKey, setHasKey] = useState(false);
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -72,8 +82,16 @@ export function OnboardingWizard() {
   const steps = stepsFor(hasKey);
   const index = steps.indexOf(step);
 
-  const finish = async (final: OnboardingChoices) => {
+  const exemptBand = container.status === "ready" ? container.container.profile.exemptBand : null;
+  const bands = container.status === "ready" ? container.container.profile.bands : [];
+  const placements = exemptBand === null ? (["diagnostic", "skip"] as const) : placementsFor(choices, exemptBand);
+  const sharedTarget = oneTarget(choices.targets);
+  // A diagnostic chosen, then made pointless by the results, reads as a skip on screen and on finishing.
+  const placement = exemptBand === null ? choices.placement : settle(choices, exemptBand).placement;
+
+  const finish = async (chosen: OnboardingChoices) => {
     if (container.status !== "ready") return;
+    const final = settle(chosen, container.container.profile.exemptBand);
     setSaving(true);
     try {
       await writeStudyProfile(container.container.settings, profileFrom(final));
@@ -163,13 +181,31 @@ export function OnboardingWizard() {
                 type="radio"
                 name="target"
                 value={band}
-                checked={choices.targetBand === band}
-                onChange={() => choose({ targetBand: band })}
+                checked={sharedTarget === band}
+                onChange={() => choose({ targets: targetsOf(band) })}
               />
               <span className="app-choice__label">{t(band === "B" ? "targetB" : "targetC")}</span>
               <span className="app-choice__hint">{t(band === "B" ? "targetBHint" : "targetCHint")}</span>
             </label>
           ))}
+          <details
+            className="app-key-step__more"
+            open={perSkillTargetsOpen(perSkillOpen, choices.targets)}
+            onToggle={(event) => setPerSkillOpen(event.currentTarget.open)}
+          >
+            <summary>{t("targetPerSkill")}</summary>
+            <div className="app-stack">
+              <p className="app-muted">{t("targetPerSkillHint")}</p>
+              {SKILLS.map((skill) => (
+                <TargetPicker
+                  key={skill}
+                  skill={skill}
+                  value={choices.targets[skill]}
+                  onChange={(band) => choose({ targets: { ...choices.targets, [skill]: band } })}
+                />
+              ))}
+            </div>
+          </details>
           <label className="app-field">
             <span>{t("testDateLabel")}</span>
             <input
@@ -182,6 +218,31 @@ export function OnboardingWizard() {
         </fieldset>
       ) : null}
 
+      {step === "now" && exemptBand !== null ? (
+        <fieldset className="app-fieldset">
+          <legend>
+            <h2 ref={headingRef} tabIndex={-1} className="app-step-heading">
+              {t("nowHeading")}
+            </h2>
+          </legend>
+          <p className="app-muted">{t("nowIntro")}</p>
+          <div className="app-levels">
+            {SKILLS.map((skill) => (
+              <ResultPicker
+                key={skill}
+                skill={skill}
+                value={choices.current[skill]}
+                target={choices.targets[skill]}
+                bands={bands}
+                exemptBand={exemptBand}
+                onChange={(band) => choose({ current: { ...choices.current, [skill]: band } })}
+              />
+            ))}
+          </div>
+          <p className="app-muted">{t("nowHint")}</p>
+        </fieldset>
+      ) : null}
+
       {step === "placement" ? (
         <fieldset className="app-fieldset">
           <legend>
@@ -189,20 +250,21 @@ export function OnboardingWizard() {
               {t("placementHeading")}
             </h2>
           </legend>
-          {(["diagnostic", "skip"] as const).map((placement) => (
-            <label key={placement} className="app-choice">
+          {placements.length === 1 ? <p>{t("placementNothing")}</p> : null}
+          {placements.map((offered) => (
+            <label key={offered} className="app-choice">
               <input
                 type="radio"
                 name="placement"
-                value={placement}
-                checked={choices.placement === placement}
-                onChange={() => choose({ placement })}
+                value={offered}
+                checked={placement === offered}
+                onChange={() => choose({ placement: offered })}
               />
               <span className="app-choice__label">
-                {t(placement === "diagnostic" ? "placementDiagnostic" : "placementSkip")}
+                {t(offered === "diagnostic" ? "placementDiagnostic" : "placementSkip")}
               </span>
               <span className="app-choice__hint">
-                {t(placement === "diagnostic" ? "placementDiagnosticHint" : "placementSkipHint")}
+                {t(offered === "diagnostic" ? "placementDiagnosticHint" : "placementSkipHint")}
               </span>
             </label>
           ))}
@@ -241,7 +303,7 @@ export function OnboardingWizard() {
           </Button>
         )}
         <Button type="submit" arrow="next" disabled={saving || container.status !== "ready"}>
-          {after === null ? t(finishLabel(choices.placement)) : t("next")}
+          {after === null ? t(finishLabel(placement)) : t("next")}
         </Button>
       </div>
     </form>

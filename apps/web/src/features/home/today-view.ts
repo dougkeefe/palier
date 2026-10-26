@@ -1,6 +1,8 @@
-import type { ScoredSkill } from "@palier/domain";
-import type { PracticeActivity } from "@palier/engine";
+import { SCORED_SKILLS, type ScoredSkill } from "@palier/domain";
+import { MAINTAIN_FACTOR, type PracticeActivity, type SkillStanding } from "@palier/engine";
 import type { CalendarMark } from "@palier/ui";
+
+import { SKILL_KINDS, type SkillKind } from "../skills/skill-look";
 
 /**
  * The decisions behind Today's dashboard (progress.md D219): the three skill cards in the hero,
@@ -31,9 +33,17 @@ const MINUTE_MS = 60_000;
 /** Milliseconds as whole minutes, as the hero's oral card and speaking's plan both show them. */
 export const minutesOf = (ms: number): number => Math.round(ms / MINUTE_MS);
 
-export const skillCards = (activity: PracticeActivity, sessionSize: number): readonly SkillCard[] => {
-  const goal = Math.max(1, sessionSize);
+/**
+ * The hero's three cards. A skill held at its target is planned on the planner's keep-sharp share
+ * of the day (D259), so its rail measures against that.
+ */
+export const skillCards = (
+  activity: PracticeActivity,
+  sessionSize: number,
+  held: readonly ScoredSkill[] = [],
+): readonly SkillCard[] => {
   const scored = (kind: ScoredSkill): SkillCard => {
+    const goal = Math.max(1, held.includes(kind) ? Math.floor(sessionSize * MAINTAIN_FACTOR) : sessionSize);
     const done = activity.today[kind];
     return { kind, done, goal, rail: { current: Math.min(done, goal), total: goal } };
   };
@@ -49,6 +59,20 @@ export const skillCards = (activity: PracticeActivity, sessionSize: number): rea
     },
   ];
 };
+
+/** Each skill's standing against its target, from the results the user declared (D259). */
+export type SkillStandings = Readonly<Record<SkillKind, SkillStanding>>;
+
+/**
+ * The skills today's plan offers as tabs (D259): every skill but one the user holds at the
+ * exemption, which leaves the plan. Empty when all three are exempt, and Today celebrates instead.
+ */
+export const planSkills = (standings: SkillStandings): readonly SkillKind[] =>
+  SKILL_KINDS.filter((kind) => standings[kind] !== "exempt");
+
+/** The scored skills the user holds at their target, which the plan only keeps sharp (D259). */
+export const heldSkills = (standings: SkillStandings): readonly ScoredSkill[] =>
+  SCORED_SKILLS.filter((kind) => standings[kind] === "held");
 
 /** The statistics tile's figure and its line: the week's practice minutes, and each day's. */
 export const weekMinutes = (msByDay: readonly number[]): { readonly total: number; readonly byDay: readonly number[] } => ({

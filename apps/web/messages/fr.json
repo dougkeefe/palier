@@ -31,7 +31,8 @@
     "key": "Votre clé d’API",
     "library": "Bibliothèque",
     "about": "À propos",
-    "privacy": "Confidentialité"
+    "privacy": "Confidentialité",
+    "levels": "Vos niveaux"
   },
   "landing": {
     "navLabel": "Sur cette page",
@@ -206,7 +207,7 @@
     "title": "Confidentialité",
     "intro": "Palier garde votre pratique dans votre navigateur. Quand la synchronisation est activée, ce qui est le cas à moins que vous la désactiviez, une copie de vos progrès est aussi gardée sur le serveur de Palier, pour que vos autres appareils y aient accès. Cette page dit exactement ce que contient cette copie, et ce qui ne quitte jamais votre appareil.",
     "heldTitle": "Ce que le serveur conserve, quand la synchronisation est activée",
-    "held": "Un identifiant de compte aléatoire, un secret brouillé (haché) pour chaque appareil, vos paramètres de langue et de niveau visé, les étapes franchies et les avis de série déjà affichés, et une copie de vos progrès : vos réponses, votre calendrier de révision et vos résultats d’examen. Aucun nom, aucun courriel, aucun ministère, aucun texte libre, et rien qui vous identifie.",
+    "held": "Un identifiant de compte aléatoire, un secret brouillé (haché) pour chaque appareil, vos paramètres de langue, vos niveaux visés et votre objectif quotidien, les résultats d’ELS que vous avez indiqués, les étapes franchies et les avis de série déjà affichés, et une copie de vos progrès : vos réponses, votre calendrier de révision et vos résultats d’examen. Aucun nom, aucun courriel, aucun ministère, aucun texte libre, et rien qui vous identifie.",
     "neverTitle": "Ce que Palier ne conserve jamais",
     "neverIntro": "Ces éléments restent sur votre appareil, quel que soit le réglage :",
     "neverServer": "Le serveur ne conserve pas non plus votre adresse IP, sauf pour s’en servir un instant afin de limiter les abus, et rien ne relie une statistique anonyme sur un item à votre compte.",
@@ -304,7 +305,13 @@
     "targetC": "Niveau C",
     "targetCHint": "Vous gérez des sujets complexes, abstraits et délicats, y compris les nuances, le registre et les sous-entendus.",
     "testDateLabel": "J’ai un test prévu le (facultatif)",
+    "targetPerSkill": "Mon poste exige un niveau différent dans chaque compétence",
+    "targetPerSkillHint": "Le profil d’un poste, comme CBC, fixe un niveau pour la compréhension de l’écrit, un pour l’expression écrite et un pour l’oral. Choisissez chacun.",
+    "nowHeading": "Quels résultats d’ELS détenez-vous déjà?",
+    "nowIntro": "Si vous avez déjà passé l’Évaluation de langue seconde, indiquez vos résultats. Une compétence où vous détenez un E sort de votre plan, et une compétence déjà à votre cible ne fait que s’entretenir.",
+    "nowHint": "Laissez « Pas encore » là où vous n’avez pas de résultat. Vous pourrez les changer en tout temps sous Vos niveaux.",
     "placementHeading": "Où en êtes-vous?",
+    "placementNothing": "Vos résultats atteignent déjà vos cibles en compréhension de l’écrit et en expression écrite : le diagnostic n’a rien à situer.",
     "placementDiagnostic": "Faire le diagnostic",
     "placementDiagnosticHint": "Environ 15 minutes par compétence, avec votre clé OpenAI. Il se termine par votre résultat, le niveau où commence votre plan et ce qu’il faut travailler en premier.",
     "placementSkip": "Plus tard",
@@ -327,6 +334,29 @@
     "keyHowRead": "Lire plutôt les étapes",
     "keyHowGuide": "Ouvrir le guide dans une page à part",
     "keySkip": "Pas maintenant, continuer sans clé"
+  },
+  "levels": {
+    "notYet": "Pas encore",
+    "stamp": "Exemption",
+    "targetOption": "Niveau {band}",
+    "stairNone": "{skill} : aucun résultat encore. Votre cible est {target}.",
+    "stairHeld": "{skill} : vous détenez un {current}. Votre cible est {target}.",
+    "stairExempt": "{skill} : vous détenez un {current}, l’exemption. Plus rien à étudier ici."
+  },
+  "studySettings": {
+    "title": "Vos niveaux et vos objectifs",
+    "intro": "Ce que vous détenez et ce que vous visez façonnent le plan du jour. Une compétence où vous détenez un E sort du plan; une compétence déjà à sa cible ne fait que s’entretenir.",
+    "none": "Vous n’avez pas encore préparé votre pratique.",
+    "setUp": "Préparer votre pratique",
+    "resultsTitle": "Vos résultats d’ELS actuels",
+    "resultsHint": "Les résultats que vous détenez, comme vous écririez votre profil, par exemple ECB. Laissez « Pas encore » là où vous n’en avez pas.",
+    "targetsTitle": "Vos cibles",
+    "targetsHint": "Le niveau qu’exige chaque compétence pour le poste que vous visez.",
+    "goalTitle": "Votre objectif quotidien",
+    "save": "Enregistrer les changements",
+    "saved": "Enregistré. Le plan du jour suit vos nouveaux niveaux.",
+    "saveFailed": "Vos changements n’ont pas pu être enregistrés. Réessayez.",
+    "toToday": "Retour à aujourd’hui"
   },
   "today": {
     "title": "Aujourd’hui",
@@ -404,7 +434,20 @@
     "oralStart": "Commencer à parler, {minutes} min",
     "oralAgain": "Pratiquer de nouveau",
     "oralNoSession": "Aucune séance orale n’est offerte pour l’instant.",
-    "oralNoKey": "La pratique orale passe par votre clé OpenAI."
+    "oralNoKey": "La pratique orale passe par votre clé OpenAI.",
+    "skillExempt": "Exemption : rien à pratiquer",
+    "planKeepSharp": "Vous détenez un {band}, votre cible : aujourd’hui, on l’entretient seulement, avec des révisions et des exercices familiers, une demi-séance.",
+    "planPlacedDeclared": "Établi à partir du résultat que vous détenez, {held} : commence au niveau {start}, progresse jusqu’au niveau {target}.",
+    "oralKeepSharp": "Vous détenez un {band} à l’oral, votre cible : une séance suffit à l’entretenir. Celle d’aujourd’hui est du type que vous avez le moins pratiqué dernièrement.",
+    "declaredTitle": "Votre résultat d’ELS",
+    "declaredNone": "Indiquez les résultats que vous détenez déjà, et votre plan sautera ce que vous avez déjà réussi.",
+    "declaredNote": "Le résultat que vous avez indiqué, pas une mesure de votre pratique.",
+    "declaredAdd": "Ajouter vos résultats",
+    "declaredChange": "Changer vos niveaux",
+    "allExemptTitle": "Vous détenez un E dans les trois compétences",
+    "allExemptBody": "Il ne reste rien qu’un plan puisse vous apprendre. Coco applaudit. Pratiquez quand vous voulez, simplement pour garder la main.",
+    "allExemptReading": "Pratiquer la compréhension de l’écrit quand même",
+    "allExemptWriting": "Pratiquer l’expression écrite quand même"
   },
   "drill": {
     "progress": "Item {current} sur {total}",

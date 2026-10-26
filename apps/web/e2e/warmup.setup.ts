@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 
 import { test as setup } from "@playwright/test";
 
@@ -16,16 +16,38 @@ import { test as setup } from "@playwright/test";
  * own click compiled it (progress.md D249).
  *
  * The route list is the app's one list, `src/lib/routes.json` (D199), the library's articles
- * included, so it cannot drift from the app. Each route is visited in English only: `[locale]` is a
+ * included, so it cannot drift from the app. **One page per route file, not per entry** (progress.md D260): the
+ * eighteen articles are one route, `library/[subSkill]`, so its first article compiles it and the other
+ * seventeen only rendered and waited for the network, in a warmup that runs alone before either worker
+ * of a hermetic shard can start. Each route is visited in English only: `[locale]` is a
  * segment of the same route, so French adds nothing to compile but `request.ts`'s
  * messages, which one visit to `/fr` loads. The French pass cost a third of the
  * warmup, which runs in both shards (progress.md D223).
  */
 const ROUTES = JSON.parse(readFileSync(new URL("../src/lib/routes.json", import.meta.url), "utf8")) as string[];
 
+/** Whether an entry is a page file of its own, rather than one expansion of a dynamic route such as an article. */
+const isPageFile = (route: string): boolean =>
+  existsSync(new URL(`../src/app/[locale]/${route === "" ? "" : `${route}/`}page.tsx`, import.meta.url));
+
+/**
+ * Every page file once, and the first expansion of each dynamic route under its parent: an entry with
+ * no page file of its own is an expansion, and one visit compiles the route they all share.
+ */
+const warmupRoutes = (routes: readonly string[], pageFile: (route: string) => boolean = isPageFile): string[] => {
+  const expanded = new Set<string>();
+  return routes.filter((route) => {
+    if (pageFile(route)) return true;
+    const parent = route.slice(0, route.lastIndexOf("/"));
+    if (expanded.has(parent)) return false;
+    expanded.add(parent);
+    return true;
+  });
+};
+
 setup("compile every route once, one at a time", async ({ page }) => {
   setup.setTimeout(180_000);
-  const english = ROUTES.map((route) => (route === "" ? "/en" : `/en/${route}`));
+  const english = warmupRoutes(ROUTES).map((route) => (route === "" ? "/en" : `/en/${route}`));
   for (const path of ["/fr", ...english]) {
     await page.goto(path);
     await page.waitForLoadState("networkidle");

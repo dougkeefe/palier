@@ -60,6 +60,18 @@ describe("nextStep", () => {
   });
 });
 
+describe("nextStep, for a skill held at its target (D259)", () => {
+  it("is the plan itself: no diagnostic to place it, no exam to prove it", () => {
+    expect(nextStep(input({ held: true, diagnostic: null }))).toBe("plan");
+    expect(nextStep(input({ held: true, trend: trendWith(estimated) }))).toBe("plan");
+    expect(nextStep(input({ held: true, mockExamAdvised: true }))).toBe("plan");
+  });
+
+  it("changes nothing when not held", () => {
+    expect(nextStep(input({ held: false, diagnostic: null }))).toBe("diagnostic");
+  });
+});
+
 describe("practisedAtTarget", () => {
   it("is true only when the target band itself has an estimate", () => {
     expect(practisedAtTarget(trendWith(estimated), "C")).toBe(true);

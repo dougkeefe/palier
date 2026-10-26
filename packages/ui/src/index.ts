@@ -21,6 +21,11 @@ export {
 export {
   bandMeterGeometry,
   buttonClass,
+  levelStairGeometry,
+  LEVEL_STAIR_HEIGHT,
+  type LevelStairGeometry,
+  type LevelStairInput,
+  type LevelStairStep,
   calloutState,
   cardClass,
   dialogClass,
@@ -84,6 +89,7 @@ export { IconButton, type IconButtonProps } from "./primitives/IconButton.js";
 export { OptionRow, type OptionRowProps } from "./primitives/OptionRow.js";
 export { ProgressRail, type ProgressRailProps } from "./primitives/ProgressRail.js";
 export { BandMeter, type BandMeterProps } from "./primitives/BandMeter.js";
+export { LevelStair, type LevelStairProps } from "./primitives/LevelStair.js";
 export { TrendChart, type TrendChartProps } from "./primitives/TrendChart.js";
 export { Sparkline, type SparklineProps } from "./primitives/Sparkline.js";
 export { TallyBar, type TallyBarProps } from "./primitives/TallyBar.js";

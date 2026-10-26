@@ -20,7 +20,7 @@ import {
 } from "../../features/writing/workshop-view";
 import type { Container } from "../../lib/container";
 import { latch } from "../../lib/latch";
-import { readStudyProfile } from "../../lib/study";
+import { readStudyProfile, targetFor } from "../../lib/study";
 import { deviceTimeZone } from "../../lib/time-zone";
 import { useContainer } from "../ContainerProvider";
 import { NoKeyCard } from "../key/NoKeyCard";
@@ -51,7 +51,7 @@ const loadSetup = async (container: Container): Promise<{ readonly setup: Setup;
     history
       .map((submission) => ({ submission, result: container.useCases.writingFeedbackInFlight({ submissionId: submission.id }) }))
       .find((entry): entry is Pending => entry.result !== null) ?? null;
-  return { setup: { keyHeld: status !== null, targetBand: profile?.targetBand ?? DEFAULT_TARGET, history }, pending };
+  return { setup: { keyHeld: status !== null, targetBand: profile === null ? DEFAULT_TARGET : targetFor(profile, "writing"), history }, pending };
 };
 
 /**

@@ -363,6 +363,29 @@ describe("studyFocus", () => {
     });
   });
 
+  it("places the plan at a declared result below the target when no run has (D259)", async () => {
+    expect(await studyFocus({ ...FOCUS, declared: "B" }, focusDeps([]))).toEqual({
+      placement: { startBand: "B", startShare: 0.7 },
+    });
+  });
+
+  it("starts a declared X at A, the lowest band an item carries", async () => {
+    expect(await studyFocus({ ...FOCUS, declared: "X" }, focusDeps([]))).toEqual({
+      placement: { startBand: "A", startShare: 0.7 },
+    });
+  });
+
+  it("places nothing for a declared result at the target, or none declared", async () => {
+    expect(await studyFocus({ ...FOCUS, declared: "C" }, focusDeps([]))).toEqual({});
+    expect(await studyFocus({ ...FOCUS, declared: null }, focusDeps([]))).toEqual({});
+  });
+
+  it("lets a diagnostic run win over a declaration, since the run is measured", async () => {
+    const focus = await studyFocus({ ...FOCUS, declared: "A" }, focusDeps(placedAtB()));
+
+    expect(focus.placement).toEqual({ startBand: "B", startShare: 0.7 });
+  });
+
   it("places the plan even when a perfect run left nothing to focus on", async () => {
     const perfect = placedAtB().map((attempt) => ({ ...attempt, correct: true }));
 

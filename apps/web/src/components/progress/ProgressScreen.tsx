@@ -12,7 +12,7 @@ import { flushSync } from "react-dom";
 import { DETAIL_TABS, ORAL_RECENT_SESSIONS, oralDetail, tallyScale } from "../../features/progress/progress-view";
 import { SKILL_LOOK, type SkillKind } from "../../features/skills/skill-look";
 import { TREND_HISTORY_WEEKS, historyBand } from "../../features/trend/trend-history";
-import { readStudyProfile } from "../../lib/study";
+import { highestScoredTarget, readStudyProfile, targetFor } from "../../lib/study";
 import { deviceTimeZone } from "../../lib/time-zone";
 import { useContainer } from "../ContainerProvider";
 import { ExportButton } from "../data/ExportButton";
@@ -29,8 +29,10 @@ type Loaded = {
   readonly reports: Readonly<Record<ScoredSkill, ProgressReport>>;
   /** Each skill's trend at the end of each of the last `TREND_HISTORY_WEEKS` weeks (D198). */
   readonly histories: Readonly<Record<ScoredSkill, readonly TrendPoint[]>>;
-  /** The band the history follows: the study profile's target. */
+  /** The band the overview reads: the highest scored skill's target (D259). */
   readonly band: TargetBand;
+  /** The band each skill's history follows: that skill's target (D259). */
+  readonly bands: Readonly<Record<ScoredSkill, TargetBand>>;
   readonly oral: OralTotals;
   /** Speaking's detail: its newest sessions and its newest report (D247). */
   readonly oralProgress: OralProgress;
@@ -98,7 +100,10 @@ export function ProgressScreen() {
         setLoaded({
           reports: Object.fromEntries(SCORED_SKILLS.map((s, i) => [s, reports[i]!])) as Record<ScoredSkill, ProgressReport>,
           histories: Object.fromEntries(SCORED_SKILLS.map((s, i) => [s, histories[i]!])) as Record<ScoredSkill, TrendPoint[]>,
-          band: historyBand(profile?.targetBand ?? null),
+          band: historyBand(profile === null ? null : highestScoredTarget(profile)),
+          bands: Object.fromEntries(
+            SCORED_SKILLS.map((s) => [s, historyBand(profile === null ? null : targetFor(profile, s))]),
+          ) as Record<ScoredSkill, TargetBand>,
           oral,
           oralProgress,
           printedAt: clock.now(),
@@ -149,7 +154,7 @@ export function ProgressScreen() {
                   skill={s}
                   report={loaded.reports[s]}
                   history={loaded.histories[s]}
-                  band={loaded.band}
+                  band={loaded.bands[s]}
                   printing
                   printOnly={s !== skill}
                 />
@@ -165,7 +170,7 @@ export function ProgressScreen() {
                   skill={skill}
                   report={loaded.reports[skill]}
                   history={loaded.histories[skill]}
-                  band={loaded.band}
+                  band={loaded.bands[skill]}
                   printing={false}
                   printOnly={false}
                 />

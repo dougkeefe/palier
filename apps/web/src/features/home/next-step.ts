@@ -11,7 +11,9 @@ import type { SkillTrend } from "@palier/engine";
  *    at the target band, so `MIN_EVIDENCE` answers there. Or while the planner advises one before
  *    the test date (§7.4's taper). Once per diagnostic: an exam at this skill since the run means
  *    it has been taken, and the result is on the card.
- * 4. **The plan itself**, otherwise: no banner, the rows and the start button are the step.
+ * 4. **The plan itself**, otherwise: no banner, the rows and the start button are the step. Always,
+ *    for a skill the user holds at its target (progress.md D259): there is nothing to place and no
+ *    level to prove, so the plan only keeps it sharp.
  *
  * No number is typed here: the threshold is the trend's, the taper the planner's, the retake the
  * profile's.
@@ -27,6 +29,8 @@ export type NextStepInput = {
   readonly mockExamAdvised: boolean;
   /** When the latest mock exam at this skill was submitted, or `null` with none. */
   readonly lastExamAt: string | null;
+  /** The user holds the skill at its target already (D259). Absent, not held. */
+  readonly held?: boolean;
 };
 
 /** Whether the practice trend has an estimate at the target band: enough answers there to measure. */
@@ -35,6 +39,7 @@ export const practisedAtTarget = (trend: SkillTrend, targetBand: TargetBand): bo
 
 export const nextStep = (input: NextStepInput): NextStep => {
   const { diagnostic } = input;
+  if (input.held === true) return "plan";
   if (diagnostic === null) return "diagnostic";
   if (diagnostic.retakeDue) return "retake-diagnostic";
   const examSinceDiagnostic = input.lastExamAt !== null && input.lastExamAt >= diagnostic.takenAt;

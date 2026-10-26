@@ -342,6 +342,33 @@ describe("startSession: the latest diagnostic's placement (ADR 25)", () => {
   });
 });
 
+describe("startSession: a declared result (D259)", () => {
+  const pool = aPool();
+
+  it("starts the day's new items at a declared result below the target, with no diagnostic", async () => {
+    const { plan } = await startSession({ ...aRequest(), declared: "A" }, depsWith({ items: itemsOf(pool) }));
+
+    expect(plan.newItems.map((item) => item.targetBand)).toEqual(["A", "A", "A", "A", "A", "B", "B"]);
+  });
+
+  it("plans exactly as before with nothing declared", async () => {
+    const declared = await startSession({ ...aRequest(), declared: null }, depsWith({ items: itemsOf(pool) }));
+    const absent = await startSession(aRequest(), depsWith({ items: itemsOf(pool) }));
+
+    expect(declared.plan).toEqual(absent.plan);
+  });
+
+  it("passes keeping sharp through to the plan", async () => {
+    const request = aRequest();
+    const { plan } = await startSession(
+      { ...request, plan: { ...request.plan, maintaining: true } },
+      depsWith({ items: itemsOf(pool) }),
+    );
+
+    expect(plan.newItems).toEqual([]);
+  });
+});
+
 describe("startSession: ordering", () => {
   it("reads the previous session before it creates this one, so the new session cannot poison its own signal", async () => {
     const order: string[] = [];

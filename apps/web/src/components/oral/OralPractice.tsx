@@ -28,7 +28,7 @@ import { Link } from "../../i18n/navigation";
 import type { Container } from "../../lib/container";
 import { browserLevelKit, measureLevel } from "../../lib/oral/level";
 import { browserMediaKit } from "../../lib/oral/recorder";
-import { readStudyProfile } from "../../lib/study";
+import { readStudyProfile, targetFor } from "../../lib/study";
 import { useContainer } from "../ContainerProvider";
 import { SpendOffer } from "../key/SpendOffer";
 import { OralPicker } from "./OralPicker";
@@ -69,7 +69,7 @@ const loadSetup = async (container: Container): Promise<Setup> => {
     container.useCases.realtimeEndpoint(),
   ]);
   const choices = await container.useCases.oralSessionChoices({
-    targetBand: profile?.targetBand ?? DEFAULT_TARGET,
+    targetBand: profile === null ? DEFAULT_TARGET : targetFor(profile, "oral"),
     lang: TARGET_LANG,
   });
   const costs = container.useCases.featureCosts();
