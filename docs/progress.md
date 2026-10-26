@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 25 October 2026 (the SLE results a user holds, declared in onboarding and at `/settings/study`, shape the plan, D259; next, D206's bank budget)
+**Last updated:** 26 October 2026 (the SLE results a user holds shape the plan, D259; the E2E warmup one page per route file, D260; next, D206's bank budget)
 **Current phase:** **1.0 is reached** (24 October 2026, D253): the human passed Gate O and Gate M and read bank v4 with no
 disagreement, so Phases 6 and 7 are complete. After 1.0, reading's library articles are built (D254), and D206's bank
 budget is next. Phase 3's product pilot still runs (Gate E, D97), and Phase 8, the English mirror, is the plan's next
@@ -593,53 +593,7 @@ full.
 - **D247** — `/progress`'s detail is three equal tabs, speaking included; never a radio switch · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d247--progresss-detail-is-three-equal-tabs-speaking-included-never-a-radio-switch)
 - **D248** — Today's plan is three equal tabs, speaking included; its plan is one suggested session · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d248--todays-plan-is-three-equal-tabs-speaking-included-its-plan-is-one-suggested-session)
 - **D249** — the E2E warmup reads `routes.json`, articles included, and compiles the pages it cannot name · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d249--the-e2e-warmup-reads-routesjson-articles-included-and-compiles-the-pages-it-cannot-name)
-
-### D250 — The translator: one call, two jobs, and study links that are data, never a model's
-**Date:** 23 October 2026 · **Status:** accepted (human's request; agent's design and copy)
-
-The human asked for a translator like Google Translate: the left text area in English or French, the right one always
-French. English gets the best translation for the Canadian federal government. French is the user's own attempt, so the
-right side is its corrected version, and below it an explanation of what was strong, where each error was and why it was
-corrected, with links to study each error.
-
-- **One `AiProvider` method, `translate`, a sixth amendment to §3.3.** It takes `{ text, source, target, feedbackLang }`;
-  `source: null` lets the model say which language the text is in. **A text in the target language is a correction**:
-  `output` is the text with only its errors fixed, `strengths` up to four, and `corrections` placed over the user's words.
-  **Any other text is a translation**: `output` and up to six `notes` on its choices (a federal term, an official name, a
-  false friend avoided). `checkTranslation` holds the shape (no notes on a correction; no strengths or corrections on a
-  translation), and `assembleTranslation` places each correction by its excerpt, D105's rule, so a model never sends
-  offsets. A source the user named that the model disagrees with is a malformed answer, retried once.
-- **Each correction names a written-expression sub-skill, and the links come from data.** A model-written URL could be
-  dead or wrong, so the model names the sub-skill and the screen links (1) Palier's own library article for it and (2) the
-  sub-skill's entries in **`content/resources/resources.json`**, a new content artefact (`study-resource` in
-  `CONTENT_SCHEMAS`). `parseStudyResources` refuses a duplicate id or address, an address that is not `https`, that carries
-  credentials, or that is not on its source's own host (`STUDY_RESOURCE_HOSTS`: the Language Portal of Canada at
-  `nos-langues.canada.ca`, the OQLF's Banque de dépannage linguistique, and TERMIUM Plus), and a list missing any
-  written-expression sub-skill. The draft schema is strict, so an answer carrying a link of its own is refused.
-  - The 21 addresses were checked by hand on 23 October 2026 against the sources' own index pages. The Language Portal's
-    *Clés de la rédaction* has no thematic index (only an alphabetical one), so its federal tools stand where they fit
-    (ConjugArt, Le Rouleau des prépositions, the Dictionnaire des cooccurrences, the Lexique analogique, the correspondence
-    section, TERMIUM Plus), and the OQLF's theme pages cover the rest.
-- **The `assess` model and one feature, `translation`.** `pricing.json`'s figure is a PLACEHOLDER (about 1,500 tokens in
-  and 1,500 out) until the live smoke records it: the smoke now translates two fixed texts, `TRANSLATIONS`, and records
-  `translate.json` with `--record`, as it does `interpretDiagnostic` (D211). `PROMPT_VERSION` stays at 5: a new prompt does
-  not change the others.
-- **Nothing is stored.** The text goes to OpenAI with the user's key and nowhere else [R12]; the answer lives on the
-  screen. So there is no store, no sync, no export and nothing for a wipe beyond the in-flight request, which
-  `forgetInFlight` drops. One request at a time is joined from module scope (`translationInFlight`, D143), so leaving and
-  coming back follows it rather than paying twice. `/privacy` needed no change: its "paid features call OpenAI" covers it.
-- **Limits are product rules, not exam rules.** `MAX_TRANSLATION_CHARS` (4,000, about a page) is in the use case, which
-  refuses an empty or over-long text before any request. The screen shows the characters left and holds the button.
-- **The screen** (`components/translate/Translator.tsx`, decisions in `features/translate/translate-view.ts`): a
-  Detect / English / French choice and "Always in French", the two panes side by side from 640px, the estimate beside the
-  button (D237), "Copy the French", and an answer that stays through an edit and says it is for an earlier text. Below: for
-  a correction, the strengths, the user's text with each correction marked and numbered, each correction as
-  "“original” becomes “correction”" with its sub-skill and reason, then "What to study next", grouped by sub-skill, most
-  corrections first, with the guide and the references, each in a new tab with `rel="noopener noreferrer"` and
-  `hreflang`. For a translation, its notes. An AI caution is shown with every answer. No band is shown, so no
-  `NonAffiliation` is needed.
-- **Not built:** a history of past translations (nothing is kept, by design), and an English target, which waits for the
-  English mirror (Phase 8). The request already takes `target`.
+- **D250** — The translator: one call, two jobs, and study links that are data, never a model's · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d250--the-translator-one-call-two-jobs-and-study-links-that-are-data-never-a-models)
 
 ### D251 — The translator translates on a pause, Google Translate's way, on a page wide enough for two panes
 **Date:** 24 October 2026 · **Status:** accepted (human's request; agent's pause length, cap rule and layout). Amends
@@ -975,6 +929,27 @@ kept sharp rather than dropped; and a staircase with a stamp as the mastery indi
   takes optional `results`. No assertion about behaviour that this change did not alter was touched.
 - **Not an ADR.** Product scope and flow on an existing requirement, recorded here and in the PRD, as D220 and D224 were.
 
+### D260 — the E2E warmup visits one page per route file, and the levels journey onboards once: shard 2 back inside its budget
+**Date:** 26 October 2026 · **Status:** accepted (agent's diagnosis of a CI failure the human reported). Amends D249's
+warmup list
+
+The human reported #105's medium lane: E2E shard 2 ran past its 300 s budget. It was not this branch's alone: `main` had
+failed the same shard at 300 s on #104's merge, and had taken 231 s, then 282 s, on the two merges before it.
+- **Where the time goes.** `--shard` splits by count in project order (D223), so shard 2 is all hermetic `chromium` tests,
+  and all of them wait for the warmup, which runs alone. Locally, with CI's two workers, shard 2 took 151 s, the warmup
+  44 s of it; CI ran about 1.8 times slower, 270 s of tests after 11 s of server start.
+- **The warmup visits one page per route file** (`warmup.setup.ts`'s `warmupRoutes`): an entry of `routes.json` with no
+  `page.tsx` of its own is an expansion of a dynamic route, and only the first expansion under each parent is visited.
+  The eighteen library articles are one route, `library/[subSkill]`, so one article compiles it, which is what D249
+  needed; the other seventeen only rendered and waited for the network. 42 visits became 25, and the warmup went from
+  43–44 s to 30.6 s locally, in both shards.
+- **D259's levels journey onboards once.** Its first two tests each onboarded from a fresh page load; they are one journey
+  now, with the same assertions, and the French test is unchanged.
+- **Measured locally** (`--workers=2`, a hermetic `next dev` at port 3010, since another app held 3000): shard 2 137 s, twice,
+  against 151 s; shard 1 118 s; no test failed or was retried.
+- **Not changed:** the budget, and the warmup's serial order (D67). Shard 2 remains the tighter of the two, since nothing
+  runs beside its warmup; splitting the hermetic project would be the next lever, if the creep continues.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
@@ -1008,6 +983,8 @@ an E taking its skill out of the plan, and a fun indicator of mastery.
   `csp-production.spec.ts` and `offline.spec.ts`: 17 of 17, `/settings/study` in both locales included.
 - Screenshots on the production build: the results step at 1280px, and in French at 390px; Today with reading exempt,
   writing held and oral working; the study settings; and Today with all three exempt.
+- **26 October 2026, CI:** shard 2 of the medium lane ran past its 300 s budget, as it had on `main`; the warmup visits
+  one page per route file and the levels journey onboards once (D260). Shard 2 measured 137 s locally against 151 s.
 - A candid review loop of the branch found two issues, both fixed: the target step's per-skill disclosure closed under
   the user when their targets agreed again (now `perSkillTargetsOpen`, tested), and `heldSkills` restated
   `SCORED_SKILLS`. A second pass found none; `pnpm verify` then passed 291 files, 4,686 tests (8 todo).

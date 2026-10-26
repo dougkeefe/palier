@@ -1460,3 +1460,50 @@ the URL never left `/en/library`. It had failed the same way once locally, on th
   rebuild is short, and it comes from a test that only reloads and reads; it can still drop another test's click in the
   same window.
 - **Not changed:** no test's assertions. The failing test was right; its route was cold.
+
+### D250 — The translator: one call, two jobs, and study links that are data, never a model's
+**Date:** 23 October 2026 · **Status:** accepted (human's request; agent's design and copy)
+
+The human asked for a translator like Google Translate: the left text area in English or French, the right one always
+French. English gets the best translation for the Canadian federal government. French is the user's own attempt, so the
+right side is its corrected version, and below it an explanation of what was strong, where each error was and why it was
+corrected, with links to study each error.
+
+- **One `AiProvider` method, `translate`, a sixth amendment to §3.3.** It takes `{ text, source, target, feedbackLang }`;
+  `source: null` lets the model say which language the text is in. **A text in the target language is a correction**:
+  `output` is the text with only its errors fixed, `strengths` up to four, and `corrections` placed over the user's words.
+  **Any other text is a translation**: `output` and up to six `notes` on its choices (a federal term, an official name, a
+  false friend avoided). `checkTranslation` holds the shape (no notes on a correction; no strengths or corrections on a
+  translation), and `assembleTranslation` places each correction by its excerpt, D105's rule, so a model never sends
+  offsets. A source the user named that the model disagrees with is a malformed answer, retried once.
+- **Each correction names a written-expression sub-skill, and the links come from data.** A model-written URL could be
+  dead or wrong, so the model names the sub-skill and the screen links (1) Palier's own library article for it and (2) the
+  sub-skill's entries in **`content/resources/resources.json`**, a new content artefact (`study-resource` in
+  `CONTENT_SCHEMAS`). `parseStudyResources` refuses a duplicate id or address, an address that is not `https`, that carries
+  credentials, or that is not on its source's own host (`STUDY_RESOURCE_HOSTS`: the Language Portal of Canada at
+  `nos-langues.canada.ca`, the OQLF's Banque de dépannage linguistique, and TERMIUM Plus), and a list missing any
+  written-expression sub-skill. The draft schema is strict, so an answer carrying a link of its own is refused.
+  - The 21 addresses were checked by hand on 23 October 2026 against the sources' own index pages. The Language Portal's
+    *Clés de la rédaction* has no thematic index (only an alphabetical one), so its federal tools stand where they fit
+    (ConjugArt, Le Rouleau des prépositions, the Dictionnaire des cooccurrences, the Lexique analogique, the correspondence
+    section, TERMIUM Plus), and the OQLF's theme pages cover the rest.
+- **The `assess` model and one feature, `translation`.** `pricing.json`'s figure is a PLACEHOLDER (about 1,500 tokens in
+  and 1,500 out) until the live smoke records it: the smoke now translates two fixed texts, `TRANSLATIONS`, and records
+  `translate.json` with `--record`, as it does `interpretDiagnostic` (D211). `PROMPT_VERSION` stays at 5: a new prompt does
+  not change the others.
+- **Nothing is stored.** The text goes to OpenAI with the user's key and nowhere else [R12]; the answer lives on the
+  screen. So there is no store, no sync, no export and nothing for a wipe beyond the in-flight request, which
+  `forgetInFlight` drops. One request at a time is joined from module scope (`translationInFlight`, D143), so leaving and
+  coming back follows it rather than paying twice. `/privacy` needed no change: its "paid features call OpenAI" covers it.
+- **Limits are product rules, not exam rules.** `MAX_TRANSLATION_CHARS` (4,000, about a page) is in the use case, which
+  refuses an empty or over-long text before any request. The screen shows the characters left and holds the button.
+- **The screen** (`components/translate/Translator.tsx`, decisions in `features/translate/translate-view.ts`): a
+  Detect / English / French choice and "Always in French", the two panes side by side from 640px, the estimate beside the
+  button (D237), "Copy the French", and an answer that stays through an edit and says it is for an earlier text. Below: for
+  a correction, the strengths, the user's text with each correction marked and numbered, each correction as
+  "“original” becomes “correction”" with its sub-skill and reason, then "What to study next", grouped by sub-skill, most
+  corrections first, with the guide and the references, each in a new tab with `rel="noopener noreferrer"` and
+  `hreflang`. For a translation, its notes. An AI caution is shown with every answer. No band is shown, so no
+  `NonAffiliation` is needed.
+- **Not built:** a history of past translations (nothing is kept, by design), and an English target, which waits for the
+  English mirror (Phase 8). The request already takes `target`.

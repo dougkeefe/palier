@@ -493,8 +493,8 @@ import every package; holds the concrete-adapter wiring nothing else may name.
 - Medium lane (`.github/workflows/verify.yml`): Playwright in three projects.
   **`warmup`** compiles every route once, serially, before the parallel hermetic tests. A cold
   Turbopack dev server under parallel first requests can read a build file mid-write (D67);
-  keep it the `chromium` project's dependency. It visits **every route in `src/lib/routes.json`**, the library's articles
-  included, in English, and `/fr` once (D223), then the pages that list does not name: an unknown path's 404 and the
+  keep it the `chromium` project's dependency. It visits **every route file in `src/lib/routes.json`** once, a dynamic
+  route by its first expansion (one library article for all eighteen, D260), in English, and `/fr` once (D223), then the pages that list does not name: an unknown path's 404 and the
   hermetic error hook's two views (`UNLISTED`, D249). A first compile mid-run makes the dev server rebuild every open
   page, and a rebuild drops a link click in flight; a page a spec visits that `routes.json` cannot name joins `UNLISTED`. **`offline` is listed before `chromium`**
   so `--shard` puts the production specs in shard 1 beside the warmup; listed last, they pushed shard 2 past its budget (D223). **`chromium`** (hermetic, `next dev`) runs the
