@@ -98,7 +98,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/jq472` | **The open Dependabot alerts**: three dev-only transitive packages refreshed within their parents' ranges, and Lighthouse's `zod` 3 dismissed as unreachable (D261). | 26 October 2026 |
+| `dougkeefe/dependabot-alerts-resolve-v2` | **The open Dependabot alerts**: three dev-only transitive packages refreshed within their parents' ranges, and Lighthouse's `zod` 3 dismissed as unreachable (D261). | 26 October 2026 |
 
 *(Merged rows are removed: this table tracks current work, and the session log is the permanent record. The rows
 removed up to 24 October 2026, the last of them the reading articles (#100), are listed in
@@ -937,7 +937,7 @@ dev-only.
 
 Newest first. One entry per session that changed something. Never edit an older entry.
 
-### 26 October 2026 — `dougkeefe/jq472` (the open Dependabot alerts; D261)
+### 26 October 2026 — `dougkeefe/dependabot-alerts-resolve-v2` (the open Dependabot alerts; D261)
 
 Not *Next, decided*, which is unchanged (D206). The human asked for the open high and moderate Dependabot alerts to be
 resolved.
