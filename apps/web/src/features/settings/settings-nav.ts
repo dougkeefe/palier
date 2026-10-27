@@ -12,8 +12,6 @@ export const SETTINGS_ITEMS = [
   { key: "sync", href: "/settings/sync" },
 ] as const;
 
-export type SettingsKey = (typeof SETTINGS_ITEMS)[number]["key"];
-
 /**
  * Whether the page at `pathname` (next-intl's, without the locale) shows the settings menu: every screen in the area,
  * but not the overview, whose cards are already the menu and would otherwise be every link twice.

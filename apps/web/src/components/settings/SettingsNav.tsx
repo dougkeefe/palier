@@ -23,7 +23,7 @@ export function SettingsNav() {
         <Link
           key={item.key}
           href={item.href}
-          className="app-header__link pl-focusable"
+          className="app-settings-nav__link pl-focusable"
           aria-current={isCurrent(pathname, item.href) ? "page" : undefined}
         >
           {t(`items.${item.key}.name`)}

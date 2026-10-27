@@ -145,10 +145,11 @@ body {
 }
 
 /*
- * Header controls (links, toggle, status). Every interactive target clears the
+ * Header controls (links, toggle, status), and the settings menu's links (D264). Every interactive target clears the
  * 24x24 CSS px floor (WCAG 2.5.8) via min-height/min-width.
  */
 .app-header__link,
+.app-settings-nav__link,
 .app-lang-toggle {
   display: inline-flex;
   align-items: center;
@@ -166,13 +167,15 @@ body {
   transition: background-color var(--pl-motion-state) var(--pl-ease);
 }
 
-.app-header__link:hover {
+.app-header__link:hover,
+.app-settings-nav__link:hover {
   color: var(--ink);
   background: color-mix(in srgb, var(--surface) 55%, transparent);
 }
 
 /* The page you are on is a white pill, and its weight says so too, not the fill alone. */
-.app-header__link[aria-current="page"] {
+.app-header__link[aria-current="page"],
+.app-settings-nav__link[aria-current="page"] {
   background: var(--surface);
   font-weight: 600;
 }
