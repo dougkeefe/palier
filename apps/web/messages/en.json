@@ -12,7 +12,8 @@
     "review": "Review",
     "oral": "Oral practice",
     "progress": "Progress",
-    "translate": "Translate"
+    "translate": "Translate",
+    "settings": "Settings"
   },
   "languageToggle": {
     "otherLanguage": "Français"
@@ -26,13 +27,10 @@
   },
   "footer": {
     "nonAffiliation": "Palier is an independent, source-available study tool. It is not affiliated with, endorsed by, or connected to the Public Service Commission of Canada. It contains no real test questions and its results are not official.",
-    "yourData": "Your data",
-    "sync": "Sync",
-    "key": "Your API key",
+    "settings": "Settings",
     "library": "Library",
     "about": "About",
-    "privacy": "Privacy",
-    "levels": "Your levels"
+    "privacy": "Privacy"
   },
   "landing": {
     "navLabel": "On this page",
@@ -357,6 +355,29 @@
     "saved": "Saved. Today’s plan follows your new levels.",
     "saveFailed": "Your changes could not be saved. Try again.",
     "toToday": "Back to today"
+  },
+  "settings": {
+    "title": "Settings",
+    "intro": "What you set for Palier, in one place.",
+    "navLabel": "Settings",
+    "items": {
+      "levels": {
+        "name": "Your levels",
+        "description": "The SLE results you hold, your target in each skill, your daily goal and your test date."
+      },
+      "key": {
+        "name": "Your API key",
+        "description": "The OpenAI key that turns on the parts of Palier that use AI, what it has spent, and your spending cap."
+      },
+      "data": {
+        "name": "Your data",
+        "description": "Export everything, import an export, delete everything, and decide about your recordings and shared answers."
+      },
+      "sync": {
+        "name": "Sync",
+        "description": "Turn sync on or off, link another device by a short code, and delete the copy on our server."
+      }
+    }
   },
   "today": {
     "title": "Today",

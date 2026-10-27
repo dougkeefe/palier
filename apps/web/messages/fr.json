@@ -12,7 +12,8 @@
     "review": "Révision",
     "oral": "Pratique orale",
     "progress": "Progrès",
-    "translate": "Traduire"
+    "translate": "Traduire",
+    "settings": "Paramètres"
   },
   "languageToggle": {
     "otherLanguage": "English"
@@ -26,13 +27,10 @@
   },
   "footer": {
     "nonAffiliation": "Palier est un outil d'étude indépendant, au code source accessible. Il n'est ni affilié à la Commission de la fonction publique du Canada, ni approuvé ou reconnu par celle-ci. Il ne contient aucune question d'examen réelle et ses résultats ne sont pas officiels.",
-    "yourData": "Vos données",
-    "sync": "Synchronisation",
-    "key": "Votre clé d’API",
+    "settings": "Paramètres",
     "library": "Bibliothèque",
     "about": "À propos",
-    "privacy": "Confidentialité",
-    "levels": "Vos niveaux"
+    "privacy": "Confidentialité"
   },
   "landing": {
     "navLabel": "Sur cette page",
@@ -357,6 +355,29 @@
     "saved": "Enregistré. Le plan du jour suit vos nouveaux niveaux.",
     "saveFailed": "Vos changements n’ont pas pu être enregistrés. Réessayez.",
     "toToday": "Retour à aujourd’hui"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "intro": "Tout ce que vous réglez dans Palier, au même endroit.",
+    "navLabel": "Paramètres",
+    "items": {
+      "levels": {
+        "name": "Vos niveaux",
+        "description": "Les résultats d’ELS que vous détenez, votre cible dans chaque compétence, votre objectif quotidien et la date de votre examen."
+      },
+      "key": {
+        "name": "Votre clé d’API",
+        "description": "La clé OpenAI qui active les fonctions de Palier faisant appel à l’IA, ce qu’elle a dépensé et votre plafond de dépenses."
+      },
+      "data": {
+        "name": "Vos données",
+        "description": "Tout exporter, importer une exportation, tout supprimer, et choisir le sort de vos enregistrements et des réponses partagées."
+      },
+      "sync": {
+        "name": "Synchronisation",
+        "description": "Activer ou désactiver la synchronisation, relier un autre appareil par un code court et supprimer la copie sur notre serveur."
+      }
+    }
   },
   "today": {
     "title": "Aujourd’hui",

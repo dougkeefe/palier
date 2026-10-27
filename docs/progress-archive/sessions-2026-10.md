@@ -3,6 +3,23 @@
 Newest first. Moved verbatim from `docs/progress.md` on 24 October 2026 (D255). Its index there points here. The rules are
 `progress.md`'s: never edit a session entry, and mark a deviation resolved in place, updating its index line too.
 
+### 24 October 2026 — `dougkeefe/translate-page-output-order` (the translator's explanation in the card; D252)
+
+Not *Next, decided*, which is unchanged (Gate O): a human-requested detour. The human asked for the explanation to sit
+closest to the text areas, and the visit's total and "Your text goes only to OpenAI" to sit below the white card.
+- **The screen** (`Translator.tsx`): `Explanation` moves inside the `Card`, after the panes and the send controls; the
+  running total and the privacy line move below the card, still shown only with a key held. No message, decision or
+  style changed, and no branch was added.
+- **`apps/web/CLAUDE.md`**: the translator's bullet says where each sits.
+
+**Verified:**
+- `pnpm verify`: check-types, lint and boundaries were clean, and `pnpm test` passed 283 files, 4,570 tests (8 todo).
+- The chromium project, with the warmup, passed 6 of 6 for `translate.spec.ts` and 14 of 14 for `key-leak` and
+  `journeys`. Both runs used port 3010 through a temporary, uncommitted config, since another project's dev server held 3000.
+- A temporary, uncommitted spec checked at 1440px and 375px that "Choices worth knowing" is inside the card holding the
+  editor, and that the total is outside the card and below its bottom edge. It also took the screenshots.
+- Not run: the `offline` project, `csp-production` and the live smoke.
+
 ### 24 October 2026 — `dougkeefe/translate-page-access` (the translator reworked, translating on a pause; D251)
 
 Not *Next, decided*, which is unchanged (Gate O): a human-requested detour. The human asked for the translator to work

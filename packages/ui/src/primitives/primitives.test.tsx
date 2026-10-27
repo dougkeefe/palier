@@ -186,9 +186,9 @@ describe("Glyph", () => {
 });
 
 describe("Glyph's registry (D219)", () => {
-  it("draws every registered glyph, the skills' and the calendar's among them", () => {
+  it("draws every registered glyph, the skills', the calendar's and the settings gear among them", () => {
     const names = Object.keys(GLYPH_PATHS) as (keyof typeof GLYPH_PATHS)[];
-    expect(names).toEqual(expect.arrayContaining(["book", "pen", "mic", "chevron-left", "chevron-right"]));
+    expect(names).toEqual(expect.arrayContaining(["book", "pen", "mic", "chevron-left", "chevron-right", "gear"]));
     const { container } = render(
       <div>
         {names.map((name) => (

@@ -46,7 +46,8 @@ export type GlyphName =
   | "mic"
   | "chevron-left"
   | "chevron-right"
-  | "copy";
+  | "copy"
+  | "gear";
 
 export type OptionOutcome = "correct" | "incorrect";
 

@@ -43,6 +43,7 @@ const PAGES = [
   "/privacy",
   "/progress",
   "/review",
+  "/settings",
   "/settings/data",
   "/settings/key",
   "/settings/key/guide",

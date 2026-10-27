@@ -1,6 +1,6 @@
 import { type Page, expect, test } from "@playwright/test";
 
-import { axeClean, onboard } from "./helpers";
+import { axeClean, onboard, openSettings } from "./helpers";
 
 /**
  * The results a user already holds (progress.md D259, PRD §8.1 step 3's "self-declare a current
@@ -29,7 +29,7 @@ test("results declared in onboarding shape today, and the study settings change 
   await expect(page.getByRole("img", { name: "Written expression: you hold C. Your target is C." })).toBeVisible();
   await axeClean(page);
 
-  await page.getByRole("contentinfo").getByRole("link", { name: "Your levels" }).click();
+  await openSettings(page, "Your levels");
   await expect(page).toHaveURL(/\/en\/settings\/study$/);
   await expect(page.getByRole("heading", { level: 1, name: "Your levels and goals" })).toBeVisible();
   // The staircase is the picker (D263): its E is checked, and its caption says it in words.

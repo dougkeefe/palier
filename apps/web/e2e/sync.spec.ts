@@ -1,6 +1,6 @@
 import { type Browser, expect, type Page, test } from "@playwright/test";
 
-import { axeClean, drillThroughByKeyboard, onboard } from "./helpers";
+import { axeClean, drillThroughByKeyboard, onboard, openSettings } from "./helpers";
 
 /**
  * Sync, on the hermetic lane: each browser context is its own device (its page load
@@ -12,7 +12,7 @@ import { axeClean, drillThroughByKeyboard, onboard } from "./helpers";
 const device = async (browser: Browser): Promise<Page> => (await browser.newContext()).newPage();
 
 const openSync = async (page: Page) => {
-  await page.getByRole("link", { name: "Sync", exact: true }).click();
+  await openSettings(page, "Sync");
   await expect(page.getByRole("heading", { level: 1, name: "Sync" })).toBeVisible();
 };
 

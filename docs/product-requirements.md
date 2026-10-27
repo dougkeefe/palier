@@ -232,7 +232,7 @@ Every item answered incorrectly, and every item answered correctly but slowly or
 /review                 Spaced repetition queue and mistake library
 /progress               History, band trend, per-sub-skill detail, exports
 /library                Grammar and vocabulary reference, register guide, reading strategies (D254)
-/settings
+/settings               The overview: a card for each screen below, each of which carries one menu; the header's gear and the footer's link lead here (D264)
   /key                  API key management and spend meter
   /sync                 Sync switch, paired devices, and pairing by code (ADR 5)
   /data                 Export, import, delete everything

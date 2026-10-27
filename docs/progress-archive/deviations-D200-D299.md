@@ -1605,3 +1605,38 @@ answers ADR 24's first *revisit when*
   `tts-1` voice), and D206's bank-size finding.
 - **After 1.0**, Gate K's deferrals open (D145): reading's library articles, XP and levels, and the countdown. Reading's
   articles come first (D254).
+
+### D254 — reading's library articles: eight, with excerpts in place of sentences to write
+**Date:** 24 October 2026 · **Status:** accepted (agent), Gate K's "after 1.0" (D145) now that 1.0 is reached (D253); the
+human asked about the library's "Articles on reading comprehension come after 1.0." Amends D162's "one article per
+written-expression sub-skill"; `architecture.md` §5's tree and PRD §8's `/library` row amended in place
+
+- **One article per reading sub-skill, eight**, at `content/library/<subSkill>.json`, beside writing's ten. Each has a
+  bilingual title and summary, two sections of two paragraphs on what to look for and the traps in the options, and three
+  **original** excerpts in federal administrative French, each with what to notice. They are the agent's drafts, French
+  included, written from how bank v4's reading items test each sub-skill; they are the human's to read (*Next, decided*).
+- **The article's shape follows its sub-skill.** `LibraryArticle` is now a union: `WritingLibraryArticle` keeps
+  `{ avoid?, write, why }` examples, and `ReadingLibraryArticle` takes `LibraryExcerpt`, `{ excerpt, why }`. "Instead
+  of / Write" means nothing for a reading point, and a reading article cannot pass with sentences to write, nor relate to
+  a writing article. The schema is a `z.discriminatedUnion` on `subSkill`, so a mismatch is reported at its own path
+  (`3.examples.0…`), not as one "invalid input".
+- **`parseLibrary` requires one article per `LIBRARY_SUB_SKILLS`** (reading's eight, then writing's ten), and an oral
+  sub-skill is refused. `articleHref` answers for reading too, so **a reading item's explanation now links its article**,
+  in the drill (a new tab) and the exam review, through the existing `ArticleLink`, with no change to either screen.
+- **The web:** `/library` lists reading first, then writing, each under its heading, and `library.readingLater` is gone.
+  A reading article's excerpts are tagged "Read" / « Lisez » with the article's `lang`, and its button leads to
+  `/practice/reading`. `skillHeading` became `writingHeading` beside `readingHeading`; `intro` names both skills. The eight
+  routes joined `routes.json` (so the warmup visits them) and the precache, by file name, with no script change.
+- **A content bar for reading:** at least three excerpts per article, beside writing's four sentences to write.
+  Excerpts are longer, and three cover each sub-skill's traps.
+- **Tests whose premise changed, said here as D207 did:**
+  - `links.test.ts`'s "links a reading sub-skill nowhere, since reading's articles come after 1.0" now holds that every
+    reading sub-skill links to an article, and that an oral one links nowhere.
+  - `lib/library.test.ts` counted ten articles; `library-content.test.ts` counted `WRITING_SUB_SKILLS` files and required
+    four `avoid` examples of every article; `library.test.ts` built writing articles only. Each now covers both skills.
+  - `content.spec.ts`'s library test counted ten entries and probed `/en/library/main-idea` as a 404. It counts eighteen,
+    and probes an oral sub-skill, `/en/library/fluency-and-hesitation`. A reading drill's journey into its article is new.
+- **Lighthouse's list is unchanged** (19 URLs): a reading article is the same server template as `/fr/library/agreement`,
+  which it already measures, and a 20th URL adds five runs to the medium lane. `csp-production.spec.ts` gained
+  `/library/inference`, which costs one page load.
+- **The bank grows by nothing**; the precache gains eight article pages in each locale.

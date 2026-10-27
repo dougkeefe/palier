@@ -1,6 +1,6 @@
 import { type Page, expect, test } from "@playwright/test";
 
-import { addKeyAtDiagnosticGate, axeClean, onboard } from "./helpers";
+import { addKeyAtDiagnosticGate, axeClean, onboard, openSettings } from "./helpers";
 import { SENTINEL, stubOpenAi } from "./leak-guard";
 
 /**
@@ -26,8 +26,8 @@ test("journey 5: onboarding's step 5 takes the key and checks it, then the key s
   await onboard(page, "skip", { key: SENTINEL });
   await expect(page.getByRole("heading", { name: "Today’s plan" })).toBeVisible();
 
-  // The key screen, by the footer's link: the same key, described by its last four only.
-  await page.getByRole("link", { name: "Your API key", exact: true }).click();
+  // The key screen, by the footer's settings link: the same key, described by its last four only.
+  await openSettings(page, "Your API key");
   await expect(page.getByRole("heading", { level: 1, name: "Your API key" })).toBeVisible();
   const ending = SENTINEL.slice(-4);
   await expect(page.getByText(`Saved on this device: the key ending in ${ending}.`)).toBeVisible();
@@ -81,12 +81,13 @@ test("journey 5: onboarding's step 5 takes the key and checks it, then the key s
   await page.getByRole("button", { name: "Check the key" }).click();
   await expect(page.getByRole("status").filter({ hasText: "This key works." })).toBeVisible();
 
-  // A wipe takes the key too.
-  await page.getByRole("link", { name: "Your data", exact: true }).click();
+  // A wipe takes the key too, reached by the settings menu (D264).
+  const menu = page.getByRole("navigation", { name: "Settings" });
+  await menu.getByRole("link", { name: "Your data", exact: true }).click();
   await page.getByRole("button", { name: "Delete everything" }).click();
   await page.getByRole("button", { name: "Yes, delete everything" }).click();
   await expect(page.getByText("Everything on this device has been deleted.")).toBeVisible();
-  await page.getByRole("link", { name: "Your API key", exact: true }).click();
+  await menu.getByRole("link", { name: "Your API key", exact: true }).click();
   await expect(field).toBeVisible();
   await expect(page.getByText(/the key ending in/)).toHaveCount(0);
 });
