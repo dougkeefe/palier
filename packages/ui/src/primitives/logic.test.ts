@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   LEVEL_STAIR_HEIGHT,
   levelStairGeometry,
+  LEVEL_STAIR_PICK_GROUND,
   bandMeterGeometry,
   buttonClass,
   calloutState,
@@ -496,5 +497,31 @@ describe("levelStairGeometry", () => {
 
   it("sizes the box to the steps", () => {
     expect(levelStairGeometry({ bands, current: null, target: "C" }).width).toBe(28 + 5 * 40 - 4);
+  });
+
+  it("widens the ground on request, moving the steps and Coco's waiting spot with it (D263)", () => {
+    const geo = levelStairGeometry({ bands, current: null, target: "C", ground: LEVEL_STAIR_PICK_GROUND });
+    expect(geo.width).toBe(LEVEL_STAIR_PICK_GROUND + 5 * 40 - 4);
+    expect(geo.steps[0]!.x).toBe(LEVEL_STAIR_PICK_GROUND);
+    expect(geo.coco).toEqual({ x: LEVEL_STAIR_PICK_GROUND / 2, y: LEVEL_STAIR_HEIGHT });
+  });
+
+  it("puts each step's hit box over its column, in percent of the drawing (D263)", () => {
+    const geo = levelStairGeometry({ bands, current: null, target: "C", ground: LEVEL_STAIR_PICK_GROUND });
+    for (const step of geo.steps) {
+      expect(step.hit.left).toBeCloseTo((step.x / geo.width) * 100);
+      expect(step.hit.width).toBeCloseTo((36 / geo.width) * 100);
+      expect(step.hit.top).toBeCloseTo((step.y / LEVEL_STAIR_HEIGHT) * 100);
+    }
+    const last = geo.steps[4]!.hit;
+    expect(last.left + last.width).toBeCloseTo(100);
+  });
+
+  it("gives the ground a hit box that stops short of the first step and outlines Coco waiting (D263)", () => {
+    const geo = levelStairGeometry({ bands, current: null, target: "C", ground: LEVEL_STAIR_PICK_GROUND });
+    expect(geo.groundHit.left).toBe(0);
+    expect(geo.groundHit.width).toBeLessThan(geo.steps[0]!.hit.left);
+    expect(geo.groundHit.top).toBeGreaterThan(0);
+    expect(geo.groundHit.top).toBeLessThan(100);
   });
 });

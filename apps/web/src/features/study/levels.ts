@@ -8,14 +8,8 @@ import type { Band, TargetBand } from "@palier/domain";
 /** The targets offered: onboarding's B or C (§8.1 step 2), per skill when a position's profile differs. */
 export const TARGET_CHOICES: readonly TargetBand[] = ["B", "C"];
 
-/** A result picker's choices: "not yet", then every band the profile names, lowest first. */
-export const resultChoices = (bands: readonly Band[]): readonly (Band | null)[] => [null, ...bands];
-
-/** A result choice's value in the form, since a radio's value is a string: "none" for not yet. */
-export const resultValue = (band: Band | null): string => band ?? "none";
-
 /**
- * What the staircase beside a picker says (D259), as a message key in `levels`: the result held and
+ * What a skill's staircase says, under it as the picker's caption (D259, D263), as a message key in `levels`: the result held and
  * the target, or only the target with none declared, or the exemption. It is the user's word,
  * never a measure, so every sentence says "you hold".
  */

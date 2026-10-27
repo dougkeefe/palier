@@ -17,6 +17,7 @@ import { Passage } from "./Passage.js";
 import { ProgressRail } from "./ProgressRail.js";
 import { Sheet } from "./Sheet.js";
 import { LevelStair } from "./LevelStair.js";
+import { LevelStairPicker } from "./LevelStairPicker.js";
 import { Mascot } from "./Mascot.js";
 import { StreakFlame } from "./StreakFlame.js";
 import { Toast } from "./Toast.js";
@@ -697,5 +698,105 @@ describe("LevelStair", () => {
   it("takes the small size", () => {
     const { container } = render(<LevelStair bands={bands} current={null} target="B" label="l" size="sm" />);
     expect(container.querySelector(".pl-level-stair--sm")).not.toBeNull();
+  });
+});
+
+describe("LevelStairPicker", () => {
+  const bands = ["X", "A", "B", "C", "E"] as const;
+  const picker = (props: { current?: "X" | "A" | "B" | "C" | "E" | null; stamp?: string; onChange?: () => void } = {}) =>
+    render(
+      <LevelStairPicker
+        bands={bands}
+        current={props.current ?? null}
+        target="C"
+        legend="Reading"
+        name="result-reading"
+        notYetLabel="Not yet"
+        caption="Reading: no result yet. Your target is C."
+        onChange={props.onChange ?? (() => undefined)}
+        {...(props.stamp === undefined ? {} : { stamp: props.stamp })}
+      />,
+    );
+
+  it("is a group named by its legend, with not yet and a radio for every band, in the profile's order", () => {
+    picker();
+    const group = screen.getByRole("group", { name: "Reading" });
+    const radios = Array.from(group.querySelectorAll<HTMLInputElement>('input[type="radio"]'));
+    expect(radios.map((radio) => radio.labels?.[0]?.textContent)).toEqual(["Not yet", "X", "A", "B", "C", "E"]);
+    expect(new Set(radios.map((radio) => radio.name))).toEqual(new Set(["result-reading"]));
+  });
+
+  it("checks the result chosen, and not yet with none", () => {
+    picker({ current: "B" });
+    expect((screen.getByRole("radio", { name: "B" }) as HTMLInputElement).checked).toBe(true);
+    expect((screen.getByRole("radio", { name: "Not yet" }) as HTMLInputElement).checked).toBe(false);
+    cleanup();
+    picker();
+    expect((screen.getByRole("radio", { name: "Not yet" }) as HTMLInputElement).checked).toBe(true);
+  });
+
+  it("picks a band when its step is pressed", () => {
+    const onChange = vi.fn();
+    picker({ onChange });
+    fireEvent.click(screen.getByRole("radio", { name: "C" }));
+    expect(onChange).toHaveBeenCalledWith("C");
+  });
+
+  it("picks not yet when the ground is pressed", () => {
+    const onChange = vi.fn();
+    picker({ current: "A", onChange });
+    fireEvent.click(screen.getByText("Not yet"));
+    expect(onChange).toHaveBeenCalledWith(null);
+  });
+
+  it("says the choice in its caption, and hides the drawing", () => {
+    const { container } = picker();
+    expect(screen.getByText("Reading: no result yet. Your target is C.")).toBeTruthy();
+    expect(container.querySelector("svg")?.getAttribute("aria-hidden")).toBe("true");
+  });
+
+  it("lays each step's hit box over its column", () => {
+    const { container } = picker();
+    const hits = container.querySelectorAll<HTMLLabelElement>(".pl-level-stair__hit");
+    expect(hits).toHaveLength(6);
+    expect(hits[0]!.style.insetInlineStart).toBe("0%");
+    expect(hits[1]!.style.getPropertyValue("--pl-step-top")).toMatch(/%$/);
+  });
+
+  it("keys Coco's hop by the result, so a new choice hops again", () => {
+    const { container, rerender } = picker({ current: "A" });
+    const before = container.querySelector(".pl-level-stair__hop");
+    expect(before).not.toBeNull();
+    rerender(
+      <LevelStairPicker
+        bands={bands}
+        current="B"
+        target="C"
+        legend="Reading"
+        name="result-reading"
+        notYetLabel="Not yet"
+        caption="c"
+        onChange={() => undefined}
+      />,
+    );
+    expect(container.querySelector(".pl-level-stair__hop")).not.toBe(before);
+  });
+
+  it("presses the stamp only when given one, hidden from assistive technology", () => {
+    const { container } = picker({ current: "C" });
+    expect(container.querySelector(".pl-level-stair__stamp")).toBeNull();
+    cleanup();
+    const stamped = picker({ current: "E", stamp: "Exempt" });
+    const stamp = stamped.container.querySelector(".pl-level-stair__stamp");
+    expect(stamp?.textContent).toBe("Exempt");
+    expect(stamp?.getAttribute("aria-hidden")).toBe("true");
+  });
+});
+
+describe("LevelStair's Coco", () => {
+  it("hops only in the picker: the read-only stair keys no hop", () => {
+    const { container } = render(<LevelStair bands={["X", "A"]} current="A" target="A" label="l" />);
+    expect(container.querySelector(".pl-level-stair__hop")).toBeNull();
+    expect(container.querySelector<SVGGElement>(".pl-level-stair__coco")?.style.transform).toMatch(/^translate\(/);
   });
 });

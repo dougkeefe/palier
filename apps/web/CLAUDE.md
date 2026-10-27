@@ -321,7 +321,8 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     all three exempt shows `AllExempt`), `held` plans with `maintaining` and no next step (`nextStep`'s `held`), and
     `working` with no diagnostic is placed at the declared result (`studyFocus`'s `declared`). **`dayRequestFor` is the
     one request a scored day is planned with**, by Today's preview and the drill alike. The level pickers are
-    `components/study/LevelPickers.tsx` (decisions in `features/study/levels.ts`), shared by onboarding and
+    `components/study/LevelPickers.tsx` (decisions in `features/study/levels.ts`; a result is picked on its staircase,
+    `@palier/ui`'s `LevelStairPicker`, one stair to a row, D263), shared by onboarding and
     **`/settings/study`** (`components/settings/StudySettings.tsx`, `features/settings/study-view.ts`), the one screen that
     edits the profile after onboarding; it carries `NonAffiliation`. A declared result is the user's word, never an
     estimate: every sentence says "you hold".

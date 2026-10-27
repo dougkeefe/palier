@@ -1239,6 +1239,15 @@
   fill: var(--accent);
 }
 
+/* A new result slides Coco across with the celebration spring, and the steps fill behind it. */
+.pl-level-stair__coco {
+  transition: transform var(--pl-motion-celebrate) var(--pl-ease-spring);
+}
+
+.pl-level-stair__step rect {
+  transition: fill var(--pl-motion-state) var(--pl-ease);
+}
+
 /* The exemption: an official stamp, pressed once with the celebration spring (transform only). */
 .pl-level-stair__stamp {
   position: absolute;
@@ -1268,5 +1277,115 @@
   }
   to {
     transform: translateX(-50%) rotate(-12deg);
+  }
+}
+
+/* ---- The stair as the picker (progress.md D263) -------------------------------
+   Each step's column is a label over the drawing, holding a visually hidden radio. Hover
+   outlines the step, the keyboard's focus rings it, and the drawing shows the choice. */
+
+.pl-level-stair--pick {
+  display: block;
+  inline-size: 360px;
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.pl-level-stair__legend {
+  padding: 0;
+  margin-block-end: 8px;
+  font-weight: 600;
+}
+
+.pl-level-stair__stage {
+  position: relative;
+}
+
+.pl-level-stair__hit {
+  position: absolute;
+  inset-block: 0;
+  cursor: pointer;
+}
+
+/* The radio covers its column, transparent, so a click or a tap lands on the control itself. */
+.pl-level-stair__radio {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* The outline drawn round the step itself, from its top (the geometry's percentage) to the ground. */
+.pl-level-stair__hit::before {
+  content: "";
+  position: absolute;
+  inset-block: var(--pl-step-top) -3px;
+  inset-inline: -3px;
+  border: 2px dashed transparent;
+  border-radius: 6px;
+  transition: border-color var(--pl-motion-state) var(--pl-ease);
+}
+
+.pl-level-stair__hit:hover::before {
+  border-color: var(--accent);
+}
+
+.pl-level-stair__hit:has(input:focus-visible)::before {
+  border-style: solid;
+  border-color: var(--accent);
+}
+
+/* The ground's word hangs below the drawing, and its outline takes the word in. */
+.pl-level-stair__hit--ground::before {
+  inset-block-end: calc(-1.5rem - 3px);
+}
+
+.pl-level-stair__ground-word {
+  position: absolute;
+  inset-block-start: 100%;
+  inset-inline: 0;
+  padding-block-start: 4px;
+  color: var(--ink-muted);
+  font-size: 0.8125rem;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.pl-level-stair--pick .pl-level-stair__stamp {
+  pointer-events: none;
+}
+
+.pl-level-stair__caption {
+  margin: 1.75rem 0 0;
+  color: var(--ink-muted);
+  font-size: 0.9375rem;
+}
+
+/* Coco hops on arriving: the picker keys the hop by the result, so each choice replays it. */
+.pl-level-stair__hop {
+  animation: pl-coco-hop var(--pl-motion-celebrate) var(--pl-ease);
+}
+
+@keyframes pl-coco-hop {
+  0% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-14px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Under forced colours the drawing keeps its fills, but the chosen step is ringed in the system's colour too. */
+@media (forced-colors: active) {
+  .pl-level-stair__hit:has(input:checked)::before {
+    border: 2px solid Highlight;
   }
 }
