@@ -50,6 +50,11 @@ system, not the application.
   caller's `stamp` presses an exemption stamp on once with the celebration spring. With a `label` it is one `role="img"`
   named by it; without one it is hidden whole, for a card whose words already say it. Its width is definite and capped
   at 100%, because a percentage alone collapses in a shrink-to-fit parent.
+- **LevelStairPicker** (progress.md D263): the same stair as the control. Over each step's column a label holds a real
+  radio, transparent and covering the column (a visually hidden one is covered by its label, so a pointer misses it),
+  named by the band; the ground is "Not yet", written under it. The hit boxes are `levelStairGeometry`'s, in percent, with
+  the picker's wider `ground`. Coco is placed by `transform`, so a choice slides it over, and the picker keys a hop by the
+  result; the drawing is `aria-hidden`, and the caller's `caption` under it says the choice, not live.
 - **Primitives:** Button, Card, Callout, EmptyState, Glyph (its strokes the `GLYPH_PATHS` record: a new glyph is an
   entry, never a case), **IconButton** (D251: a glyph alone, `label` required as its accessible name and tooltip, at
   the 44px target), OptionRow, ProgressRail, **Sparkline** and **MonthCalendar** (D219: a small `aria-hidden` line

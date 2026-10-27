@@ -3,6 +3,46 @@
 Newest first. Moved verbatim from `docs/progress.md` on 24 October 2026 (D255). Its index there points here. The rules are
 `progress.md`'s: never edit a session entry, and mark a deviation resolved in place, updating its index line too.
 
+### 24 October 2026 — `dougkeefe/translate-page-access` (the translator reworked, translating on a pause; D251)
+
+Not *Next, decided*, which is unchanged (Gate O): a human-requested detour. The human asked for the translator to work
+like Google Translate, on a page wide enough for its two panes, after looking at D250's screen on the deployed site.
+- **The decisions** (`translate-view.ts`):
+  - the reducer takes typing while a call is out;
+  - an emptied text empties the French;
+  - `clear` is removed;
+  - `isStale` ignores space at the end;
+  - `shouldTranslate`, `autoTranslates` and `TRANSLATE_PAUSE_MS` (1.5 s) are new.
+- **The screen** (`Translator.tsx`): the pause effect, the over-cap press, the running total, the polite announcement in
+  place of the focus moves, the copy icon in the French's corner, and the wait under the French. The page takes
+  `.app-wide`, and the panes share a subgrid.
+- **`@palier/app`**: `featureSpendSince` and `FeatureSpend`, wired in the container. **`@palier/ui`**: `IconButton` and
+  the `copy` glyph, with `packages/ui/CLAUDE.md` updated.
+- **The header**: `NAV_ITEMS`' fifth item is Translate, in About's place.
+- **Messages** in both languages:
+  - removed: `intro`, `targetLabel`, `stale`, `clear` and the three `button_*`;
+  - added: `ready`, `translateNow`, `capPaused`, `visitTotal`, `visitTotalUnpriced` and `nav.translate`;
+  - changed: `editorHint` and `sending`.
+- **Tests**:
+  - `translate.spec.ts` is rewritten as 5 tests:
+    - the header's way in, and the drill's, with no key and no call;
+    - a correction on a pause with no button, the copy icon and the running total;
+    - space at the end buying nothing, then a new sentence sent;
+    - an emptied text;
+    - a call held while the user types on, which then sends the newest text;
+    - past the cap, no call until the press;
+    - a failure never retried.
+  - Key-leak step 3g sends on the pause.
+  - Unit tests cover each new branch.
+
+**Verified:**
+- `pnpm verify`: check-types, lint and boundaries were clean, and `pnpm test` passed 283 files, 4,570 tests (8 todo).
+- After `pnpm build`, the chromium project passed 6 of 6 for `translate.spec.ts` with the warmup. The same project then
+  passed 48 of 48 for `key-leak`, `smoke`, `content`, `generate`, `workshop` and `journeys`. Both runs were on port 3010
+  through a temporary, uncommitted config, since another project's dev server held 3000.
+- In Chrome at 1440px the editor and the French measured one top (392px) and one height (286px). At 375px they stack.
+- Not run: the `offline` project, `csp-production` and the live smoke.
+
 ### 23 October 2026 — `dougkeefe/translate-to-french` (the translator reviewed against the standards; D250)
 
 Not *Next, decided*, which is unchanged (Gate O). The human asked whether PR #96 met the project's standards, its

@@ -24,6 +24,7 @@ export {
   levelStairGeometry,
   LEVEL_STAIR_HEIGHT,
   type LevelStairGeometry,
+  type LevelStairHit,
   type LevelStairInput,
   type LevelStairStep,
   calloutState,
@@ -90,6 +91,7 @@ export { OptionRow, type OptionRowProps } from "./primitives/OptionRow.js";
 export { ProgressRail, type ProgressRailProps } from "./primitives/ProgressRail.js";
 export { BandMeter, type BandMeterProps } from "./primitives/BandMeter.js";
 export { LevelStair, type LevelStairProps } from "./primitives/LevelStair.js";
+export { LevelStairPicker, type LevelStairPickerProps } from "./primitives/LevelStairPicker.js";
 export { TrendChart, type TrendChartProps } from "./primitives/TrendChart.js";
 export { Sparkline, type SparklineProps } from "./primitives/Sparkline.js";
 export { TallyBar, type TallyBarProps } from "./primitives/TallyBar.js";

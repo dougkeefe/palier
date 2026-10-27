@@ -1,7 +1,7 @@
 import type { Band } from "@palier/domain";
 import type { JSX } from "react";
 
-import { LEVEL_STAIR_HEIGHT, LEVEL_STAIR_STEP_WIDTH, levelStairGeometry } from "./logic.js";
+import { LEVEL_STAIR_HEIGHT, LEVEL_STAIR_STEP_WIDTH, type LevelStairGeometry, levelStairGeometry } from "./logic.js";
 
 export type LevelStairProps = {
   /** The profile's bands, lowest first: one step each. */
@@ -29,47 +29,52 @@ export type LevelStairProps = {
  * The drawing and the stamp are hidden from assistive technology, and `label` names the figure; with
  * no label, inside a link or beside a sentence that says the same, the whole of it is hidden.
  */
-export const LevelStair = ({ bands, current, target, label, stamp, size = "md" }: LevelStairProps): JSX.Element => {
-  const geo = levelStairGeometry({ bands, current, target });
-  const { x, y } = geo.coco;
-  return (
-    <div
-      className={`pl-level-stair pl-level-stair--${size}`}
-      {...(label === undefined ? { "aria-hidden": true } : { role: "img", "aria-label": label })}
-    >
-      <svg
-        className="pl-level-stair__drawing"
-        viewBox={`0 0 ${geo.width} ${LEVEL_STAIR_HEIGHT}`}
-        aria-hidden="true"
-        focusable="false"
-      >
-        {geo.steps.map((step) => (
-          <g key={step.band} className={step.reached ? "pl-level-stair__step pl-level-stair__step--reached" : "pl-level-stair__step"}>
-            <rect x={step.x} y={step.y} width={LEVEL_STAIR_STEP_WIDTH} height={step.height} rx="3" />
-            <text x={step.x + LEVEL_STAIR_STEP_WIDTH / 2} y={LEVEL_STAIR_HEIGHT - 4} textAnchor="middle">
-              {step.band}
-            </text>
-          </g>
-        ))}
-        {geo.flag === null ? null : (
-          <g className="pl-level-stair__flag">
-            <path d={`M${geo.flag.x} ${geo.flag.y} v-26`} strokeWidth="2" />
-            <path d={`M${geo.flag.x} ${geo.flag.y - 26} l12 5 l-12 5 z`} />
-          </g>
-        )}
-        {/* Coco, small, standing on the declared step: the empty state's parrot, in miniature. */}
-        <g className="pl-level-stair__coco">
-          <ellipse cx={x} cy={y - 9} rx="8" ry="9" fill="var(--primary)" />
-          <circle cx={x} cy={y - 21} r="6" fill="var(--primary)" />
-          <path d={`M${x + 4} ${y - 22} q5 1 4 5 q-3 -2 -5 -2 z`} fill="var(--accent)" />
-          <circle cx={x - 2} cy={y - 22} r="1.5" fill="var(--surface)" />
-        </g>
-      </svg>
-      {stamp === undefined ? null : (
-        <span className="pl-level-stair__stamp" aria-hidden="true">
-          {stamp}
-        </span>
-      )}
-    </div>
-  );
-};
+export const LevelStair = ({ bands, current, target, label, stamp, size = "md" }: LevelStairProps): JSX.Element => (
+  <div
+    className={`pl-level-stair pl-level-stair--${size}`}
+    {...(label === undefined ? { "aria-hidden": true } : { role: "img", "aria-label": label })}
+  >
+    <StairDrawing geo={levelStairGeometry({ bands, current, target })} />
+    {stamp === undefined ? null : <StairStamp word={stamp} />}
+  </div>
+);
+
+/**
+ * The stair's drawing, shared by `LevelStair` and `LevelStairPicker`, always hidden from assistive
+ * technology. Coco is drawn about its feet and moved there by `transform`, so a new result slides it
+ * across; given `hop`, which the picker keys by the result, Coco also hops on arriving.
+ */
+export const StairDrawing = ({ geo, hop }: { geo: LevelStairGeometry; hop?: string }): JSX.Element => (
+  <svg className="pl-level-stair__drawing" viewBox={`0 0 ${geo.width} ${LEVEL_STAIR_HEIGHT}`} aria-hidden="true" focusable="false">
+    {geo.steps.map((step) => (
+      <g key={step.band} className={step.reached ? "pl-level-stair__step pl-level-stair__step--reached" : "pl-level-stair__step"}>
+        <rect x={step.x} y={step.y} width={LEVEL_STAIR_STEP_WIDTH} height={step.height} rx="3" />
+        <text x={step.x + LEVEL_STAIR_STEP_WIDTH / 2} y={LEVEL_STAIR_HEIGHT - 4} textAnchor="middle">
+          {step.band}
+        </text>
+      </g>
+    ))}
+    {geo.flag === null ? null : (
+      <g className="pl-level-stair__flag">
+        <path d={`M${geo.flag.x} ${geo.flag.y} v-26`} strokeWidth="2" />
+        <path d={`M${geo.flag.x} ${geo.flag.y - 26} l12 5 l-12 5 z`} />
+      </g>
+    )}
+    {/* Coco, small, standing on the declared step: the empty state's parrot, in miniature. */}
+    <g className="pl-level-stair__coco" style={{ transform: `translate(${geo.coco.x}px, ${geo.coco.y}px)` }}>
+      <g key={hop} className={hop === undefined ? undefined : "pl-level-stair__hop"}>
+        <ellipse cx="0" cy="-9" rx="8" ry="9" fill="var(--primary)" />
+        <circle cx="0" cy="-21" r="6" fill="var(--primary)" />
+        <path d="M4 -22 q5 1 4 5 q-3 -2 -5 -2 z" fill="var(--accent)" />
+        <circle cx="-2" cy="-22" r="1.5" fill="var(--surface)" />
+      </g>
+    </g>
+  </svg>
+);
+
+/** The exemption's stamp, pressed on once with the celebration spring; the caller's words say it. */
+export const StairStamp = ({ word }: { word: string }): JSX.Element => (
+  <span className="pl-level-stair__stamp" aria-hidden="true">
+    {word}
+  </span>
+);

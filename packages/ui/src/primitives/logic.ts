@@ -487,6 +487,8 @@ const STEP_WIDTH = 36;
 const STEP_GAP = 4;
 const STEP_BASE = 14;
 const STEP_RISE = 12;
+/** Coco's height above its feet, with a margin: the ground's hit box outlines Coco waiting there. */
+const COCO_REACH = 34;
 
 export type LevelStairInput = {
   /** The profile's bands, lowest first, as the stair's steps. */
@@ -494,7 +496,12 @@ export type LevelStairInput = {
   /** The declared result, or null with none: Coco waits on the ground. */
   readonly current: Band | null;
   readonly target: Band;
+  /** The ground's width before the first step: wider for the picker, whose ground is "Not yet". */
+  readonly ground?: number;
 };
+
+/** Where a choice's hit box sits over the drawing, in percent of its width and height. */
+export type LevelStairHit = { readonly left: number; readonly width: number; readonly top: number };
 
 export type LevelStairStep = {
   readonly band: Band;
@@ -503,6 +510,8 @@ export type LevelStairStep = {
   readonly height: number;
   /** At or below the declared result, so drawn solid. */
   readonly reached: boolean;
+  /** The step's column, for the picker's hit box over it. */
+  readonly hit: LevelStairHit;
 };
 
 export type LevelStairGeometry = {
@@ -512,6 +521,8 @@ export type LevelStairGeometry = {
   readonly coco: { readonly x: number; readonly y: number };
   /** The foot of the target's flagpole, or null when the target is not a step. */
   readonly flag: { readonly x: number; readonly y: number } | null;
+  /** The ground's hit box, where the picker's "Not yet" sits. */
+  readonly groundHit: LevelStairHit;
 };
 
 /**
@@ -520,27 +531,41 @@ export type LevelStairGeometry = {
  * before the first with nothing declared, and a flag marks the target's step. Order comes from the
  * profile's `bands`, never from the letters.
  */
-export const levelStairGeometry = ({ bands, current, target }: LevelStairInput): LevelStairGeometry => {
+export const levelStairGeometry = ({
+  bands,
+  current,
+  target,
+  ground = STAIR_GROUND,
+}: LevelStairInput): LevelStairGeometry => {
+  const width = ground + bands.length * (STEP_WIDTH + STEP_GAP) - STEP_GAP;
+  const percent = (units: number): number => (units / width) * 100;
   const reachedUpTo = current === null ? -1 : bands.indexOf(current);
   const steps = bands.map((band, i) => {
     const height = STEP_BASE + i * STEP_RISE;
+    const x = ground + i * (STEP_WIDTH + STEP_GAP);
+    const y = LEVEL_STAIR_HEIGHT - height;
     return {
       band,
-      x: STAIR_GROUND + i * (STEP_WIDTH + STEP_GAP),
-      y: LEVEL_STAIR_HEIGHT - height,
+      x,
+      y,
       height,
       reached: i <= reachedUpTo,
+      hit: { left: percent(x), width: percent(STEP_WIDTH), top: (y / LEVEL_STAIR_HEIGHT) * 100 },
     };
   });
   const on = steps[reachedUpTo];
   const flagged = steps[bands.indexOf(target)];
   return {
-    width: STAIR_GROUND + bands.length * (STEP_WIDTH + STEP_GAP) - STEP_GAP,
+    width,
     steps,
-    coco: on === undefined ? { x: STAIR_GROUND / 2, y: LEVEL_STAIR_HEIGHT } : { x: on.x + STEP_WIDTH / 2, y: on.y },
+    coco: on === undefined ? { x: ground / 2, y: LEVEL_STAIR_HEIGHT } : { x: on.x + STEP_WIDTH / 2, y: on.y },
     flag: flagged === undefined ? null : { x: flagged.x + STEP_WIDTH - 5, y: flagged.y },
+    groundHit: { left: 0, width: percent(ground - STEP_GAP), top: ((LEVEL_STAIR_HEIGHT - COCO_REACH) / LEVEL_STAIR_HEIGHT) * 100 },
   };
 };
 
 /** The width of one step, for the renderer. */
 export const LEVEL_STAIR_STEP_WIDTH = STEP_WIDTH;
+
+/** The picker's ground (progress.md D263): wide enough for "Pas encore" under Coco. */
+export const LEVEL_STAIR_PICK_GROUND = 64;

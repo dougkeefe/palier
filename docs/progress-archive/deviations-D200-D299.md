@@ -1578,3 +1578,30 @@ explanation is what the user values most, so it should sit closest to the text a
 - **Below the card:** the visit's total and "Your text goes only to OpenAI", still shown only with a key held, where the
   no-key card is shown without one.
 - The explanation keeps its 760px reading measure inside the 1160px card. No message, decision or style changed.
+
+### D253 — Gates O and M passed and bank v4 read: 1.0
+**Date:** 24 October 2026 · **Status:** accepted (human decision); resolves Gate O and Gate M, completes Phases 6 and 7, and
+answers ADR 24's first *revisit when*
+
+- **The human reported all three done**, asked which in turn: the read of bank v4, Gate O and Gate M. Their scope is the one
+  *Next, decided* gave them, which is superseded now but visible in git history.
+  - **v4:** "I've read the bank and we're good to go." No disagreement was reported, so ADR 24's first *revisit when*
+    (disagreement on more than two items) is not met, and **ADR 24 stands**. No cross-family re-review is owed before v5.
+  - **Gate O:** `docs/realtime-checklist.md` on its six browser and platform pairs, the realtime route read line by line with
+    its rate limit, the self-hosted endpoint deployed and read, `docs/deploy.md`'s log check, the screens built since Gate L
+    on the deployed site, and the French of the copy added since Gate L.
+  - **Gate M:** an outside item submission [R13] and §12.1's trademark check. The repo was public (D195), the domain done
+    (D238) and the full-volume bank shipped (D203) before.
+- **No finding came with it, so no message, content or code changed.** Gate O asked open questions: whether
+  `key.offerStays`'s "which keeps nothing" still reads true, whether D193's reading is what ADR 3 meant, the landing
+  headline's three lines, "Start free" in the menu, the circle on the French video's closing card, and a French key video.
+  No change was asked for, so each stands as built. They are not recorded as separate answers.
+- **Not reported:** which submission was the outside one, and the trademark check's detail. The gate holds the tick, as
+  D164's unreported screen-reader user's pass did not.
+- **Ticked:** Phase 6's Gate O and exit criteria 3 and 5; Phase 7's Gate M and exit criteria 1 and 3; R1's real-browser pass,
+  R2's human read of a sample, R8's copy since Gate L, and R13.
+- **What stays open, outside both gates:** the product pilot (Gate E, Phase 3's last criterion), Gate J, Phase 5's deferred
+  criterion (D130), the standing human items in *Next, decided* (`PALIER_SITE_URL`, the retention dry run, the examiner's
+  `tts-1` voice), and D206's bank-size finding.
+- **After 1.0**, Gate K's deferrals open (D145): reading's library articles, XP and levels, and the countdown. Reading's
+  articles come first (D254).

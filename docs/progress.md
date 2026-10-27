@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 26 October 2026 (the SLE results a user holds shape the plan, D259; the E2E warmup one page per route file, D260; next, D206's bank budget)
+**Last updated:** 26 October 2026 (the staircase is the result picker, D263; next, D206's bank budget)
 **Current phase:** **1.0 is reached** (24 October 2026, D253): the human passed Gate O and Gate M and read bank v4 with no
 disagreement, so Phases 6 and 7 are complete. After 1.0, reading's library articles are built (D254), and D206's bank
 budget is next. Phase 3's product pilot still runs (Gate E, D97), and Phase 8, the English mirror, is the plan's next
@@ -99,6 +99,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 | Branch | Task | Session started |
 | --- | --- | --- |
 | `dougkeefe/dependabot-alerts-resolve-v2` | **The open Dependabot alerts**: three dev-only transitive packages refreshed within their parents' ranges, and Lighthouse's `zod` 3 dismissed as unreachable (D261). **E2E in three shards** (D262). | 26 October 2026 |
+| `dougkeefe/image-clickable-bars` | **The staircase is the result picker**: a skill's result is picked by tapping its step, Coco hops there, and the pill row is gone (D263). | 26 October 2026 |
 
 *(Merged rows are removed: this table tracks current work, and the session log is the permanent record. The rows
 removed up to 24 October 2026, the last of them the reading articles (#100), are listed in
@@ -596,33 +597,7 @@ full.
 - **D250** — The translator: one call, two jobs, and study links that are data, never a model's · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d250--the-translator-one-call-two-jobs-and-study-links-that-are-data-never-a-models)
 - **D251** — The translator translates on a pause, Google Translate's way, on a page wide enough for two panes · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d251--the-translator-translates-on-a-pause-google-translates-way-on-a-page-wide-enough-for-two-panes)
 - **D252** — The translator's explanation sits in the card, under the panes; the running total and the privacy line below it · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d252--the-translators-explanation-sits-in-the-card-under-the-panes-the-running-total-and-the-privacy-line-below-it)
-
-### D253 — Gates O and M passed and bank v4 read: 1.0
-**Date:** 24 October 2026 · **Status:** accepted (human decision); resolves Gate O and Gate M, completes Phases 6 and 7, and
-answers ADR 24's first *revisit when*
-
-- **The human reported all three done**, asked which in turn: the read of bank v4, Gate O and Gate M. Their scope is the one
-  *Next, decided* gave them, which is superseded now but visible in git history.
-  - **v4:** "I've read the bank and we're good to go." No disagreement was reported, so ADR 24's first *revisit when*
-    (disagreement on more than two items) is not met, and **ADR 24 stands**. No cross-family re-review is owed before v5.
-  - **Gate O:** `docs/realtime-checklist.md` on its six browser and platform pairs, the realtime route read line by line with
-    its rate limit, the self-hosted endpoint deployed and read, `docs/deploy.md`'s log check, the screens built since Gate L
-    on the deployed site, and the French of the copy added since Gate L.
-  - **Gate M:** an outside item submission [R13] and §12.1's trademark check. The repo was public (D195), the domain done
-    (D238) and the full-volume bank shipped (D203) before.
-- **No finding came with it, so no message, content or code changed.** Gate O asked open questions: whether
-  `key.offerStays`'s "which keeps nothing" still reads true, whether D193's reading is what ADR 3 meant, the landing
-  headline's three lines, "Start free" in the menu, the circle on the French video's closing card, and a French key video.
-  No change was asked for, so each stands as built. They are not recorded as separate answers.
-- **Not reported:** which submission was the outside one, and the trademark check's detail. The gate holds the tick, as
-  D164's unreported screen-reader user's pass did not.
-- **Ticked:** Phase 6's Gate O and exit criteria 3 and 5; Phase 7's Gate M and exit criteria 1 and 3; R1's real-browser pass,
-  R2's human read of a sample, R8's copy since Gate L, and R13.
-- **What stays open, outside both gates:** the product pilot (Gate E, Phase 3's last criterion), Gate J, Phase 5's deferred
-  criterion (D130), the standing human items in *Next, decided* (`PALIER_SITE_URL`, the retention dry run, the examiner's
-  `tts-1` voice), and D206's bank-size finding.
-- **After 1.0**, Gate K's deferrals open (D145): reading's library articles, XP and levels, and the countdown. Reading's
-  articles come first (D254).
+- **D253** — Gates O and M passed and bank v4 read: 1.0 · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d253--gates-o-and-m-passed-and-bank-v4-read-10)
 
 ### D254 — reading's library articles: eight, with excerpts in place of sentences to write
 **Date:** 24 October 2026 · **Status:** accepted (agent), Gate K's "after 1.0" (D145) now that 1.0 is reached (D253); the
@@ -951,9 +926,61 @@ passed, on a change that touched no app code. The same commit's other run passed
   `3/3`, in `deploy.md`'s table and, with the human's approval once CI was green, in `main`'s branch protection. `verify.yml`'s comment now counts four jobs.
 - **Not changed:** the 300 s budget, two workers, `retries: 0`, and the warmup.
 
+### D263 — the staircase is the result picker: a skill's result is picked by tapping its step, and the pill row is gone
+**Date:** 26 October 2026 · **Status:** accepted (human's request and choice; agent's design). Amends D259's "one row of
+pill radios per skill, each with its staircase"
+
+The human: on a standard monitor the six pills wrapped, leaving E alone on a second line, and the staircase beside them
+should be the control, "a much more whimsical user experience". Asked, the human chose the stair only, with no pills.
+- **`@palier/ui`'s `LevelStairPicker`**, a new primitive beside `LevelStair`, which stays read-only for Today. A
+  fieldset named by the skill holds the stair, and over each step's whole column a label holds a real radio, named by
+  the band and transparent, covering the column. The ground before the first step is "Not yet", written under it. So a
+  pointer lands on the control itself, the arrow keys walk Coco along the stair, and the E2E helpers' `group` and `radio`
+  queries are unchanged. A visually hidden radio was tried first and refused: Playwright found it covered by its label,
+  as any pointer would.
+- **The geometry is shared.** `levelStairGeometry` takes an optional `ground` (the picker's is `LEVEL_STAIR_PICK_GROUND`,
+  wide enough for "Pas encore") and returns each step's hit box, and the ground's, in percent of the drawing, so the
+  labels line up with the SVG at any width. No existing geometry value moved.
+- **The motion.** Coco is drawn about its feet and placed by `transform`, so a new result slides it over on the
+  celebration spring, and the picker keys a short hop by the result, so each choice replays it; the steps' fill eases.
+  Transform only, on the motion tokens, and off under the global switch (D160). Hover outlines the step, and the
+  keyboard's focus rings it in `accent`. Under forced colours the chosen step is ringed in `Highlight`.
+- **The caption** under the stair is D259's sentence, now visible, with no live region, since the checked radio is
+  already announced.
+- **The layout is one stair to a row.** Three across the 760px column shrank the steps' letters to about 8px.
+  `features/study/levels.ts`'s `resultChoices` and `resultValue` went with the pills, and their tests with them.
+- **The copy** says to pick the step (`start.nowHint`, now above the stairs, and `studySettings.resultsHint`), in both
+  languages.
+- **A test whose premise changed**, said here as D259 did: `e2e/levels.spec.ts` found the settings' reading stair as an
+  image named by its sentence. The stair is now a radio group, so it checks the group's E and finds the sentence as the
+  caption. Today's read-only stair is still found as an image, unchanged.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 26 October 2026 — `dougkeefe/image-clickable-bars` (the staircase is the result picker; D263)
+
+Not *Next, decided*, which is unchanged (D206). The human reported the results step's pills wrapping E onto its own line
+and asked for the staircase's steps to be the control.
+- **UI:** `LevelStairPicker`, `levelStairGeometry`'s `ground` and hit boxes, `LevelStair`'s drawing shared and Coco
+  placed by `transform`, the picker's styles and Coco's hop.
+- **Web:** `ResultPicker` renders the picker; `.app-levels` one stair to a row, and `.app-level`'s rules removed; the
+  results hint above the stairs; `resultChoices` and `resultValue` removed.
+- **Tests:** the geometry's ground and hit boxes; the picker's group, radios, checked state, both kinds of press, caption,
+  hit boxes, hop and stamp; the read-only stair's Coco.
+- **Docs:** D263; D253 and the 24 October entry for the translator's pause are archived (rule 8); `packages/ui/CLAUDE.md`
+  and `apps/web/CLAUDE.md`.
+
+**Verified:**
+- `pnpm verify` exit 0: check-types, lint and boundaries clean; `pnpm test` passed 291 files, 4,696 tests (8 todo).
+- The hermetic chromium project, through a temporary, uncommitted config on port 3456 (another project's dev server held
+  3000), on two workers: 92 of 93 passed, `levels.spec.ts` after its premise change (D263). The one failure,
+  `content.spec.ts`'s library test, was axe's colour contrast on a library page this branch does not touch, and it passed
+  alone on a rerun.
+- In Chrome at 1280px and 390px, in English and French: each step picks by click, the arrow keys move Coco, E presses the
+  stamp, the focus ring and hover outline show, and nothing wraps.
+- Not run: the `offline` project, `csp-production` and Lighthouse.
 
 ### 26 October 2026 — `dougkeefe/dependabot-alerts-resolve-v2` (the open Dependabot alerts, and E2E in three shards; D261, D262)
 
@@ -1170,46 +1197,6 @@ closest to the text areas, and the visit's total and "Your text goes only to Ope
   `journeys`. Both runs used port 3010 through a temporary, uncommitted config, since another project's dev server held 3000.
 - A temporary, uncommitted spec checked at 1440px and 375px that "Choices worth knowing" is inside the card holding the
   editor, and that the total is outside the card and below its bottom edge. It also took the screenshots.
-- Not run: the `offline` project, `csp-production` and the live smoke.
-
-### 24 October 2026 — `dougkeefe/translate-page-access` (the translator reworked, translating on a pause; D251)
-
-Not *Next, decided*, which is unchanged (Gate O): a human-requested detour. The human asked for the translator to work
-like Google Translate, on a page wide enough for its two panes, after looking at D250's screen on the deployed site.
-- **The decisions** (`translate-view.ts`):
-  - the reducer takes typing while a call is out;
-  - an emptied text empties the French;
-  - `clear` is removed;
-  - `isStale` ignores space at the end;
-  - `shouldTranslate`, `autoTranslates` and `TRANSLATE_PAUSE_MS` (1.5 s) are new.
-- **The screen** (`Translator.tsx`): the pause effect, the over-cap press, the running total, the polite announcement in
-  place of the focus moves, the copy icon in the French's corner, and the wait under the French. The page takes
-  `.app-wide`, and the panes share a subgrid.
-- **`@palier/app`**: `featureSpendSince` and `FeatureSpend`, wired in the container. **`@palier/ui`**: `IconButton` and
-  the `copy` glyph, with `packages/ui/CLAUDE.md` updated.
-- **The header**: `NAV_ITEMS`' fifth item is Translate, in About's place.
-- **Messages** in both languages:
-  - removed: `intro`, `targetLabel`, `stale`, `clear` and the three `button_*`;
-  - added: `ready`, `translateNow`, `capPaused`, `visitTotal`, `visitTotalUnpriced` and `nav.translate`;
-  - changed: `editorHint` and `sending`.
-- **Tests**:
-  - `translate.spec.ts` is rewritten as 5 tests:
-    - the header's way in, and the drill's, with no key and no call;
-    - a correction on a pause with no button, the copy icon and the running total;
-    - space at the end buying nothing, then a new sentence sent;
-    - an emptied text;
-    - a call held while the user types on, which then sends the newest text;
-    - past the cap, no call until the press;
-    - a failure never retried.
-  - Key-leak step 3g sends on the pause.
-  - Unit tests cover each new branch.
-
-**Verified:**
-- `pnpm verify`: check-types, lint and boundaries were clean, and `pnpm test` passed 283 files, 4,570 tests (8 todo).
-- After `pnpm build`, the chromium project passed 6 of 6 for `translate.spec.ts` with the warmup. The same project then
-  passed 48 of 48 for `key-leak`, `smoke`, `content`, `generate`, `workshop` and `journeys`. Both runs were on port 3010
-  through a temporary, uncommitted config, since another project's dev server held 3000.
-- In Chrome at 1440px the editor and the French measured one top (392px) and one height (286px). At 375px they stack.
 - Not run: the `offline` project, `csp-production` and the live smoke.
 
 Older entries, newest first: [October 2026](progress-archive/sessions-2026-10.md) ·

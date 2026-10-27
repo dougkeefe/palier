@@ -1,14 +1,14 @@
 "use client";
 
 import type { Band, Skill, TargetBand } from "@palier/domain";
-import { LevelStair } from "@palier/ui";
+import { LevelStairPicker } from "@palier/ui";
 import { useTranslations } from "next-intl";
 
-import { TARGET_CHOICES, resultChoices, resultValue, stairMessage } from "../../features/study/levels";
+import { TARGET_CHOICES, stairMessage } from "../../features/study/levels";
 
 /**
  * The study profile's level pickers (progress.md D259), shared by onboarding and the study settings:
- * a skill's result held, as a row of pill radios with its staircase beside it, and a skill's target.
+ * a skill's result held, picked on its staircase by tapping a step (D263), and a skill's target.
  * Real radio inputs, so the keyboard and a screen reader get the platform's behaviour.
  */
 
@@ -45,32 +45,18 @@ export function ResultPicker({
   const t = useTranslations("levels");
   const skillName = useSkillName();
   const stairText = useStairText();
-  const name = `result-${skill}`;
   return (
-    <div className="app-level">
-      <fieldset className="app-segmented app-level__choices">
-        <legend className="app-level__legend">{skillName(skill)}</legend>
-        {resultChoices(bands).map((band) => (
-          <label key={resultValue(band)} className="app-segmented__option app-level__option">
-            <input
-              type="radio"
-              name={name}
-              value={resultValue(band)}
-              checked={value === band}
-              onChange={() => onChange(band)}
-            />
-            {band === null ? t("notYet") : band}
-          </label>
-        ))}
-      </fieldset>
-      <LevelStair
-        bands={bands}
-        current={value}
-        target={target}
-        label={stairText(skill, value, target, exemptBand)}
-        {...(value === exemptBand ? { stamp: t("stamp") } : {})}
-      />
-    </div>
+    <LevelStairPicker
+      bands={bands}
+      current={value}
+      target={target}
+      legend={skillName(skill)}
+      name={`result-${skill}`}
+      notYetLabel={t("notYet")}
+      caption={stairText(skill, value, target, exemptBand)}
+      onChange={onChange}
+      {...(value === exemptBand ? { stamp: t("stamp") } : {})}
+    />
   );
 }
 

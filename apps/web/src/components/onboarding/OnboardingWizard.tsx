@@ -226,6 +226,7 @@ export function OnboardingWizard() {
             </h2>
           </legend>
           <p className="app-muted">{t("nowIntro")}</p>
+          <p className="app-muted">{t("nowHint")}</p>
           <div className="app-levels">
             {SKILLS.map((skill) => (
               <ResultPicker
@@ -239,7 +240,6 @@ export function OnboardingWizard() {
               />
             ))}
           </div>
-          <p className="app-muted">{t("nowHint")}</p>
         </fieldset>
       ) : null}
 

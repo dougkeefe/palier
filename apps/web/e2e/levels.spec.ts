@@ -32,8 +32,9 @@ test("results declared in onboarding shape today, and the study settings change 
   await page.getByRole("contentinfo").getByRole("link", { name: "Your levels" }).click();
   await expect(page).toHaveURL(/\/en\/settings\/study$/);
   await expect(page.getByRole("heading", { level: 1, name: "Your levels and goals" })).toBeVisible();
-  // The staircase says it in words, and the stamp presses on at the exemption.
-  await expect(page.getByRole("img", { name: "Reading: you hold E, the exemption. Nothing left to study here." })).toBeVisible();
+  // The staircase is the picker (D263): its E is checked, and its caption says it in words.
+  await expect(page.getByRole("group", { name: "Reading", exact: true }).getByRole("radio", { name: "E", exact: true })).toBeChecked();
+  await expect(page.getByText("Reading: you hold E, the exemption. Nothing left to study here.")).toBeVisible();
   const save = page.getByRole("button", { name: "Save changes" });
   await expect(save).toBeDisabled();
   for (const skill of ["Written expression", "Oral expression"]) {
