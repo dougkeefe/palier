@@ -22,7 +22,7 @@
     "clean": "rm -rf .next .lighthouseci *.tsbuildinfo public/content public/sw.js"
   },
   "dependencies": {
-    "@electric-sql/pglite": "0.5.10",
+    "@electric-sql/pglite": "0.5.11",
     "@palier/adapters": "workspace:*",
     "@palier/app": "workspace:*",
     "@palier/content": "workspace:*",
@@ -30,7 +30,7 @@
     "@palier/engine": "workspace:*",
     "@palier/ui": "workspace:*",
     "drizzle-orm": "0.45.4",
-    "next": "16.4.2",
+    "next": "16.4.3",
     "next-intl": "4.14.9",
     "postgres": "3.4.9",
     "react": "19.3.1",
