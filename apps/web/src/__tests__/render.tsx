@@ -16,7 +16,8 @@ export type Locale = "en" | "fr";
 
 const MESSAGES = { en, fr } as const;
 
-const provided = (node: ReactNode, locale: Locale) => (
+/** The node inside next-intl's provider, with the real messages; `dom.tsx` renders through it too. */
+export const provided = (node: ReactNode, locale: Locale) => (
   <NextIntlClientProvider locale={locale} messages={MESSAGES[locale]} timeZone="America/Toronto">
     {node}
   </NextIntlClientProvider>

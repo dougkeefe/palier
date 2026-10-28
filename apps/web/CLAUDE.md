@@ -497,6 +497,12 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   real messages; `fakeNavigation` in place of `src/i18n/navigation`, which needs Next's router), and each test asserts what
   the component does: where a link leads, what is current, what is left out. A screen's decisions still go in
   `src/features/**` and its journeys in Playwright; a test that only shows a component rendered is not one of these.
+- **Every component has a unit test beside it** (D268): `Name.test.tsx` for `Name.tsx` under `src/components/`, held by
+  `components/components-tested.test.ts`. `components/untested-components.json` lists those untested when the ratchet
+  began; **it may only shrink**: never add a component to it, and remove an entry in the same change that gives it a test.
+  A test that needs effects, clicks or a loaded island opts into jsdom per file (`// @vitest-environment jsdom`) and
+  renders through `src/__tests__/dom.tsx`'s `renderIsland`: the real messages and `ContainerProvider` over the hermetic
+  graph. The project stays in node; jsdom and `@testing-library/react` are `@palier/ui`'s pinned versions.
 - Fast lane: `docs/progress.md`'s bounds and its archive's integrity (`src/docs/progress.test.ts`, D255: `docs/` is no
   workspace, so its one test lives here, reading by file URL), i18n key parity (`messages.test.ts`), container wiring test — including the
   production graph over `fake-indexeddb` planning a day from the committed bank, and one sync

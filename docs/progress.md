@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 28 October 2026 (each settings screen opens with links to its sections, D266, and the app header folds into a menu on a phone, D267; next, D206's bank budget)
+**Last updated:** 28 October 2026 (each settings screen opens with links to its sections, D266, the app header folds into a menu on a phone, D267, and every component has a unit test or a place on a shrinking list, D268; next, D206's bank budget)
 **Current phase:** **1.0 is reached** (24 October 2026, D253): the human passed Gate O and Gate M and read bank v4 with no
 disagreement, so Phases 6 and 7 are complete. After 1.0, reading's library articles are built (D254), and D206's bank
 budget is next. Phase 3's product pilot still runs (Gate E, D97), and Phase 8, the English mirror, is the plan's next
@@ -101,7 +101,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 | `dougkeefe/dependabot-alerts-resolve-v2` | **The open Dependabot alerts**: three dev-only transitive packages refreshed within their parents' ranges, and Lighthouse's `zod` 3 dismissed as unreachable (D261). **E2E in three shards** (D262). | 26 October 2026 |
 | `dougkeefe/image-clickable-bars` | **The staircase is the result picker**: a skill's result is picked by tapping its step, Coco hops there, and the pill row is gone (D263). | 26 October 2026 |
 | `dougkeefe/settings-shared-menu` | **One settings area**: `/settings` lists levels, the key, your data and sync, each screen carries one menu, and a gear at the header's top right and one footer link lead there (D264). | 27 October 2026 |
-| `dougkeefe/settings-subsections-navigation` | **Each settings screen opens with "On this page"**: a pill row of links to its sections, each landing on its card (D266). **The app header folds into a menu below 1100px** (D267). | 28 October 2026 |
+| `dougkeefe/settings-subsections-navigation` | **Each settings screen opens with "On this page"**: a pill row of links to its sections, each landing on its card (D266). **The app header folds into a menu below 1100px** (D267). **Every component has a unit test, or a line on a list that only shrinks** (D268). | 28 October 2026 |
 
 *(Merged rows are removed: this table tracks current work, and the session log is the permanent record. The rows
 removed up to 24 October 2026, the last of them the reading articles (#100), are listed in
@@ -616,20 +616,7 @@ full.
 - **D255** — `progress.md` holds current state, and `progress-archive/` holds the record · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d255--progressmd-holds-current-state-and-progress-archive-holds-the-record)
 - **D256** — the library as a browsable index and readable articles, with three photographs served from this origin · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d256--the-library-as-a-browsable-index-and-readable-articles-with-three-photographs-served-from-this-origin)
 - **D257** — the library's index is one grid of cards under pills that filter by skill or topic, each article with its own photograph · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d257--the-librarys-index-is-one-grid-of-cards-under-pills-that-filter-by-skill-or-topic-each-article-with-its-own-photograph)
-
-### D258 — The translator's no-key card sits above the editor, and its French language labels are capitalised
-**Date:** 25 October 2026 · **Status:** accepted (human's request). Amends D252's layout only
-
-The human found two things on the translator.
-- **Without a key, the warning came too late.** D252 put PRD §14's no-key card below the translator's card, so a user
-  could type into the editor, see nothing happen, and find the reason only by scrolling past the panes. The card now
-  sits first, above the language choice and the panes. It is the same `NoKeyCard`, same copy, still inline and never a
-  modal or a blocked page (D108); the editor below it still works. With a key nothing moved.
-- **"anglais" and "français" read as a mistake on the radio control.** Lower case is right in running French, but as
-  labels on a segmented control beside "Détecter" they looked wrong. `translate.source_en` and `translate.source_fr`
-  are now "Anglais" and "Français". Only the radios read these two keys.
-- **Tests:** `translate.spec.ts`'s no-key test asserts the card's heading sits above the editor; its French test
-  asserts the two radios by their capitalised names.
+- **D258** — The translator's no-key card sits above the editor, and its French language labels are capitalised · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d258--the-translators-no-key-card-sits-above-the-editor-and-its-french-language-labels-are-capitalised)
 
 ### D259 — the SLE results a user holds are declared in onboarding and at `/settings/study`, and shape the plan: E leaves it, a result at the target keeps it sharp
 **Date:** 25 October 2026 · **Status:** accepted (human's request and three answers; agent's design). Builds PRD §8.1
@@ -891,11 +878,42 @@ wrapped the header to three rows (the wordmark; the five destinations on two lin
   it, then Back with it open closing it (without the fix, it stayed open); at 1280px no button and the five destinations
   in the row.
 
+### D268 — every component has a unit test beside it, held by a ratchet; `apps/web`'s component tests may run in jsdom
+**Date:** 28 October 2026 · **Status:** accepted (human's choices). Amends D265 ("the rule for the rest of `apps/web` is
+unchanged") and `implementation-plan.md` §6.3's "rendering is covered by E2E" for `apps/web`'s components
+
+candid-ship's test map found nine changed components with no unit test: `HeaderMenu`, `LandingMenu` and the settings
+islands (`StudySettings`, `KeySettings`, `SpendSettings`, `DataSettings`, `TelemetrySettings`, `OralStorageSettings`,
+`SyncSettings`). E2E drove each, and no gate asked for more: §6.3 leaves rendering to Playwright, the coverage thresholds
+are glob-keyed with no entry for `apps/web/src/components`, and `CLAUDE.md`'s "every new branch gets a unit test" is met by
+a change that only adds ids. The human asked for the tests, and for a check that keeps it from happening again. Asked,
+they chose jsdom with Testing Library over D265's node rendering, and a ratchet over a coverage threshold or a CI map of
+changed files.
+- **jsdom, per file:** the `web` project stays in node; a component test opts in with `// @vitest-environment jsdom`.
+  `jsdom` 30.1.3 and `@testing-library/react` 16.3.3 join `apps/web`'s devDependencies at `@palier/ui`'s pinned versions,
+  so the lockfile gains six lines and no package. D265's node rendering could not run an effect or a click: `SpendSettings`
+  draws its cards only once the ledger is read, `StudySettings` its form only once the profile is, and `HeaderMenu`'s
+  behaviour is Escape, taps, focus and Back.
+- **`src/__tests__/dom.tsx`'s `renderIsland`** renders through the real messages and the real `ContainerProvider` over the
+  hermetic graph, so a test sees the island as it loads. `StudySettings`' test builds the hermetic container itself, to
+  store a profile first.
+- **The nine tests** assert behaviour: each screen's "On this page" links match its cards' ids in order, and each card
+  holds its heading; the study screen shows no links before there is a profile; sharing answers turns on; a cap is set
+  and removed; the menu's open, Escape back onto the button, a followed link, a tap inside, a tap or focus outside, and a
+  page change. **Proven to bite:** a spend card without its id failed two; the menu ignoring a page change failed one.
+- **The ratchet**, `components/components-tested.test.ts`: every `.tsx` under `src/components/` has a `.test.tsx` beside
+  it, or a line in `components/untested-components.json`, the 61 of 76 untested when it began. A new component without a
+  test fails it, and so does an entry that has gained a test or is gone, so the list only shrinks. **Proven to bite:** a
+  new untested component, `HeaderMenu`'s test removed, and a listed component given a test each failed it.
+- **Not held, and said so:** a test's quality (the gate counts a file, not what it asserts); `src/app/**`'s pages and
+  `src/features/**` and `src/lib/**`, which have no coverage threshold either. The thresholds stay glob-keyed (D9), since one
+  on components would fail until all 61 were backfilled.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
 
-### 28 October 2026 — `dougkeefe/settings-subsections-navigation` (links to each settings screen's sections, and the app header's menu on a phone; D266, D267)
+### 28 October 2026 — `dougkeefe/settings-subsections-navigation` (links to each settings screen's sections, the app header's menu on a phone, and a test for every component; D266–D268)
 
 Not *Next, decided*, which is unchanged (D206). The human asked for each settings screen's subsections to be reachable from
 the top of the screen, and chose a pill row on each screen; then for the header's destinations to fold behind a menu
@@ -908,7 +926,11 @@ button on a phone.
 - **Then the header (D267):** `HeaderMenu.tsx` from `LandingMenu`'s body, `features/nav/menu.ts` from `landing.ts`, the
   header's panel and gear, `nav.menu` in both languages, the narrow-screen header in `globals.css`; a `Header.test.tsx`
   case and two `smoke.spec.ts` journeys.
-- **Docs:** D266, D267; D256, D257 and the 24 October entry recording 1.0 are archived (rule 8); `apps/web/CLAUDE.md`.
+- **Then the tests (D268), from candid-ship's test map:** `jsdom` and `@testing-library/react` in `apps/web`'s
+  devDependencies, `src/__tests__/dom.tsx`, unit tests for the nine components, and the ratchet,
+  `components/components-tested.test.ts` over `components/untested-components.json`; the `vitest.config.mts` note.
+- **Docs:** D266, D267, D268; D256, D257, D258 and the 24 October entry recording 1.0 are archived (rule 8);
+  `apps/web/CLAUDE.md`.
 
 **Verified:**
 - `pnpm verify` exit 0: check-types, lint and boundaries clean; `pnpm test` passed 301 files, 4,735 tests (8 todo).
@@ -924,6 +946,9 @@ button on a phone.
 - After D267, `pnpm verify` exit 0 again: 302 files, 4,736 tests (8 todo).
 - candid-loop (auto): one finding, the menu left open by a navigation it did not start, fixed. `smoke` and `settings`,
   22 of 22; the new Back step failed with the fix removed and passed with it. `pnpm verify` exit 0: 302 files, 4,737 tests (8 todo).
+- For D268: `pnpm verify` exit 0, 312 files, 4,765 tests (8 todo), then `pnpm test` again, the same. The nine new tests and
+  the ratchet each failed on a deliberate break (above, in D268) and passed restored. Under the full suite's load three
+  island tests first timed out at Testing Library's one-second wait; `dom.tsx` sets ten.
 - Not run: the `offline` project, Lighthouse and the live smoke.
 
 ### 27 October 2026 — `dougkeefe/settings-shared-menu` (one settings area, a gear in the header; D264)

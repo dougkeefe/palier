@@ -1786,3 +1786,17 @@ on its page too, and the index's photograph kept beside its title.
   or an unknown one. `content.spec.ts`'s library test now asserts eighteen h2s, nineteen photographs and credits, the
   Grammar pill pressing, the hash, six cards shown and the status, All restoring eighteen, `#reading` opening on eight,
   and the breadcrumb opening the index on writing's ten, with an axe check on the filtered index too.
+
+### D258 — The translator's no-key card sits above the editor, and its French language labels are capitalised
+**Date:** 25 October 2026 · **Status:** accepted (human's request). Amends D252's layout only
+
+The human found two things on the translator.
+- **Without a key, the warning came too late.** D252 put PRD §14's no-key card below the translator's card, so a user
+  could type into the editor, see nothing happen, and find the reason only by scrolling past the panes. The card now
+  sits first, above the language choice and the panes. It is the same `NoKeyCard`, same copy, still inline and never a
+  modal or a blocked page (D108); the editor below it still works. With a key nothing moved.
+- **"anglais" and "français" read as a mistake on the radio control.** Lower case is right in running French, but as
+  labels on a segmented control beside "Détecter" they looked wrong. `translate.source_en` and `translate.source_fr`
+  are now "Anglais" and "Français". Only the radios read these two keys.
+- **Tests:** `translate.spec.ts`'s no-key test asserts the card's heading sits above the editor; its French test
+  asserts the two radios by their capitalised names.
