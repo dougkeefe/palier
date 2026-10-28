@@ -1665,3 +1665,138 @@ written-expression sub-skill"; `architecture.md` §5's tree and PRD §8's `/libr
   already tests `selfhost/` by file URL. Rule 8 and `progress-archive/README.md` give the rotation.
 - **Not done:** no entry was edited, and none was summarised in place of its text. An archived deviation's status is
   still marked in place when it is resolved, as before, with its index line changed to match.
+
+### D256 — the library as a browsable index and readable articles, with three photographs served from this origin
+**Date:** 24 October 2026 · **Status:** accepted (human request; the agent's design and choice of photographs, for the human's look). Amends D162's and D254's page shape
+
+The human asked for an easier, more visually appealing library, with royalty-free photographs credited, without losing
+the information hierarchy, accessibility or ease of navigation, and chose: both the index and the articles, the agent
+picks the photographs and shows screenshots, and a linked credit at the foot of the page. The index was one column of
+eighteen bold links, the article titles were not headings, and an article was a run of prose ending in a bulleted list.
+
+- **The index, on `.app-wide`:**
+  - The title, a line, and a way to each skill, beside the library's photograph. Each way is a pill with the skill's
+    glyph, name and count, linking to `#library-reading` or `#library-writing`.
+  - Each skill's section has its `SKILL_LOOK` mark, its name, its count and a line on what its articles hold (the old
+    intro's second sentence, split), with its photograph beside them from 600px. Its articles follow as cards in the
+    skill's fill, numbered in the taxonomy's order.
+  - The headings run h1, then h2 per skill, then **h3 per article**, so a screen reader can move from article to article.
+  - A card's link covers the card by `::after`, so the whole card answers a click while the link's name stays the
+    title alone.
+- **An article:**
+  - A breadcrumb (Library › its skill › its title, `aria-current="page"`) replaces "All articles". The skill's link
+    goes to its section on the index.
+  - The head sits beside the skill's photograph from 900px.
+  - **"On this page"** lists the sections, Examples and Read next. From 1000px it is sticky beside the prose; below
+    that it is a quiet panel above it. The DOM order is the same at every width.
+  - **The examples are white panels.**
+    - A writing example sets the sentence to write against the one it replaces. ✓ and ✗ in `correct` and `incorrect`
+      mark them, and the labels stay, so colour is never the only signal.
+    - A reading example is an excerpt in passage type (19px at 1.65) with a rule at its start.
+  - Read next uses the index's cards.
+  - The practise button sits in a deep panel and is still the page's only one.
+  - **Previous and next stay within the skill** (`adjacentArticles`). Neither wraps, and reading's last article never
+    runs on into writing.
+- **The photographs, the way D201 did it:**
+  - Three photos under the Unsplash License: Fang-Wei Lin's open book, Praise Judah's reader of a document and Marcos
+    Paulo Prado's hand writing in a notebook.
+  - Each was downloaded at 2400px and cut to WebP: 33, 22 and 17 KB, in `components/library/images/`.
+  - They are CSS backgrounds in `library.css`, so `img-src 'self'` is unchanged and the worker precaches them by
+    following the stylesheet. An article is whole offline, photograph included.
+  - They are decorative: `aria-hidden`, with no text over them. The index preloads its own, which is its largest paint.
+  - Each page credits the ones it shows, each name linked to its photo (`features/library/photos.ts`, `PhotoCredit`).
+    Unsplash asks for that, though its licence does not require it.
+  - `images/SOURCES.md` records each photo, and `photos.test.ts` holds the file, the row and the credit together.
+  - None repeats a landing photographer, and none shows anything official, any maple leaf or any red and white
+    (PRD §10.1).
+- **Contrast, by the gate's own pairs.** On a skill's fill only the inks and `primary` are held (D219), so a card's title
+  is `ink`, never `link`. A card's focus ring is drawn outside it, on the paper, where `accent` clears 3:1. No new token
+  and no new pair were needed.
+- **`components/library/library.css`:** the library's rules left `globals.css` for a sheet only its two pages import.
+  Every rule is scoped under `.app-library`, as `landing.css` is under `.landing`, since Next keeps a page's stylesheet
+  after a soft navigation. `motion.test.ts` reads it, and the hover lift applies only under
+  `prefers-reduced-motion: no-preference`.
+- **Messages:**
+  - `intro` is shorter, and `back` is gone.
+  - New in both languages: `jumpLabel`, `articleCount`, `readingLede`, `writingLede`, `breadcrumb`, `onThisPage`,
+    `siblings`, `previous`, `next`, `practiseTitle`, `photosBy` and `onUnsplash`.
+  - The French is the agent's.
+- **Tests added, none loosened:**
+  - `content.spec.ts`'s library test now also asserts eighteen h3s, three `aria-hidden` photographs and three credit
+    links to Unsplash on the index. On an article it asserts the breadcrumb's links, the one credit, next and back
+    again, and the breadcrumb's way to the skill's section. Its axe checks are the same four pages.
+  - `lib/library.test.ts` covers `skillOf`, and `adjacentArticles` at a skill's two ends and in its middle.
+  - `features/library/photos.test.ts` and `contents.test.ts` are new. The second covers "Read next", which the
+    contents list only when an article has related articles.
+- **For the human:** look at the photographs and the pages (the pull request has screenshots), and read the new French.
+
+### D257 — the library's index is one grid of cards under pills that filter by skill or topic, each article with its own photograph
+**Date:** 25 October 2026 · **Status:** accepted (human request and choices; the agent's design, topics and photographs, for the human's look). Amends D256's index, its photographs and its "no text over a photograph"
+
+The human asked for the library's index to keep its look but take the layout of a course catalogue they showed: tag pills
+at the top that filter the articles, one grid of cards each with its own royalty-free photograph, and no separate
+sections, since the tags do that. Asked, they chose: pills for both the skills and topics, each article's own photograph
+on its page too, and the index's photograph kept beside its title.
+- **The index:**
+  - The title and its line keep the library's photograph beside them. D256's pills to each skill's section, and the two
+    sections with their marks, counts, lines and photographs, are gone.
+  - Under them, a centred row of pills: All, Reading, Writing, then, after a rule, Comprehension, Vocabulary, Grammar,
+    Structure, Tone and register, each with its count. From 1,100px or so they sit on one row. One is pressed at a time.
+  - Then **one grid of all eighteen cards**, reading's eight first, each skill's in the taxonomy's order. The headings run
+    h1, then **h2 per article**, since no section heading is left between them.
+- **A card** keeps its skill's fill, the link covering it and the ring outside it, and gains:
+  - its article's photograph on top, 16:9, inset in the card;
+  - **its skill on a badge over the photograph's corner**. This is the one place text sits on a photograph, which D256
+    ruled out: the badge is a solid `surface` pill with `ink` words and the skill's glyph, so its contrast is its own
+    fill's and never the photograph's;
+  - after the summary, its topic and an estimated reading time as chips (`features/library/reading-time.ts`: the
+    interface language's prose and the examples at 200 words a minute, never under one), and a decorative "Read →";
+  - no number: across a filter the taxonomy's numbering says nothing.
+- **The filter** (`components/library/LibraryFilter.tsx`, the library's only client component):
+  - The server renders every card, with `data-tags` of its skill and topic, and hands them in as `children`. So no
+    article reaches the client's JavaScript, as `apps/web/CLAUDE.md` requires. The filter sets `hidden` on the cards
+    the pressed pill does not match. A polite status says how many are shown.
+  - **The pressed pill is the URL's hash** (`#grammar`), not a query: the worker precaches `/en/library` by its exact
+    URL, and a hash never reaches it, so a filtered link opens offline and the page stays static. An empty or unknown
+    hash is All. The article breadcrumb's skill link is now `/library#reading` or `#writing`, which opens the index on
+    that skill, where D256's opened its section.
+  - Without JavaScript, or before hydration, every card shows, which is what All shows.
+  - The logic is `features/library/filter.ts`: the pills' order, `matches`, the hash both ways and each pill's count.
+- **Topics are content** (ADR 9's spirit, ADR 18): `LIBRARY_TOPICS` and a required `topic` on every `LibraryArticle` in
+  `@palier/domain`, one line in each article's JSON, and `docs/schemas/library-article.schema.json` regenerated. The
+  labels are messages. Each article has exactly one:
+  - comprehension: main idea, specific detail, inference, numerical and tabular detail;
+  - vocabulary: vocabulary in context, word choice, false friends and anglicisms;
+  - grammar: verb tense and mood, agreement, prepositions, pronouns, punctuation, sentence structure;
+  - structure: cohesion and reference, text structure, connectors;
+  - register: tone and intent, register and formality.
+- **The photographs, D256's way:** eighteen new Unsplash photographs, one per article, chosen to suggest each point without a word on them (a compass for the main idea, a magnifying glass for a detail, footprints for inference, an hourglass for tense, two matching eggs for agreement, a bridge for connectors, wax-sealed envelopes for register), quiet in detail so each fits 25 KB. Each was downloaded
+  once, cut to 900×600 WebP and committed, so `img-src 'self'` is unchanged, and each is a CSS background in
+  `library.css`, so the worker precaches it through the stylesheet and every card and article is whole offline. D256's
+  `reading.webp` and `writing.webp` are retired; `library.webp` stays.
+  - **Their weight:** 322 KB in all, against D256's 72 KB, all precached on install. `photos.test.ts` fails any
+    article's photograph over 25 KB. It is not the bank (D206), and it is the price of a photograph per card offline.
+  - An article's page shows its own photograph in its head, and its Read next cards show theirs, so its credit names
+    its own photographer, then its related articles' (`photosFor`). The index credits all nineteen.
+- **Messages:** `jumpLabel`, `articleCount`, `readingLede` and `writingLede` are gone. New in both languages:
+  `filterLabel`, `all`, `skillReading`, `skillWriting`, `topics.*`, `shown`, `minutes` and `readArticle`. The French is
+  the agent's.
+- **Tests added, none loosened:** `filter.test.ts` and `reading-time.test.ts` are new; `photos.test.ts` holds nineteen
+  files and rows, the new `photosFor` and the size cap; the domain's `library.test.ts` refuses an article with no topic
+  or an unknown one. `content.spec.ts`'s library test now asserts eighteen h2s, nineteen photographs and credits, the
+  Grammar pill pressing, the hash, six cards shown and the status, All restoring eighteen, `#reading` opening on eight,
+  and the breadcrumb opening the index on writing's ten, with an axe check on the filtered index too.
+
+### D258 — The translator's no-key card sits above the editor, and its French language labels are capitalised
+**Date:** 25 October 2026 · **Status:** accepted (human's request). Amends D252's layout only
+
+The human found two things on the translator.
+- **Without a key, the warning came too late.** D252 put PRD §14's no-key card below the translator's card, so a user
+  could type into the editor, see nothing happen, and find the reason only by scrolling past the panes. The card now
+  sits first, above the language choice and the panes. It is the same `NoKeyCard`, same copy, still inline and never a
+  modal or a blocked page (D108); the editor below it still works. With a key nothing moved.
+- **"anglais" and "français" read as a mistake on the radio control.** Lower case is right in running French, but as
+  labels on a segmented control beside "Détecter" they looked wrong. `translate.source_en` and `translate.source_fr`
+  are now "Anglais" and "Français". Only the radios read these two keys.
+- **Tests:** `translate.spec.ts`'s no-key test asserts the card's heading sits above the editor; its French test
+  asserts the two radios by their capitalised names.

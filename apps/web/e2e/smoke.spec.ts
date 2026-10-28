@@ -107,6 +107,61 @@ test("on a phone, the landing page's header folds its sections behind a menu but
   await expect(sections).toBeHidden();
 });
 
+test("on a phone, the app's header folds its destinations, sync and the language behind a menu button beside the gear (D267)", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/en/review");
+  const menu = page.getByRole("button", { name: "Menu" });
+  const destinations = page.getByRole("navigation", { name: "Primary" });
+  const gear = page.getByRole("banner").getByRole("link", { name: "Settings", exact: true });
+  // One row: the wordmark, the button and the gear, with the destinations and the language out of sight.
+  await expect(menu).toHaveAttribute("aria-expanded", "false");
+  await expect(destinations).toBeHidden();
+  await expect(page.getByRole("link", { name: "Français" })).toBeHidden();
+  await expect(gear).toBeVisible();
+  const [brandBox, menuBox, gearBox] = await Promise.all(
+    [page.locator(".app-header__brand"), menu, gear].map((element) => element.boundingBox()),
+  );
+  expect(Math.abs((menuBox?.y ?? 0) - (gearBox?.y ?? 1))).toBeLessThan(2);
+  expect(menuBox?.y ?? 0).toBeLessThan((brandBox?.y ?? 0) + (brandBox?.height ?? 0));
+  expect(menuBox?.x ?? 0).toBeLessThan(gearBox?.x ?? 0);
+
+  // Open, it holds the five destinations, the current one marked, then sync and the language; Escape closes it.
+  await menu.click();
+  await expect(menu).toHaveAttribute("aria-expanded", "true");
+  await expect(destinations.getByRole("link")).toHaveCount(5);
+  await expect(destinations.getByRole("link", { name: "Review" })).toHaveAttribute("aria-current", "page");
+  await expect(page.getByRole("link", { name: "Français" })).toBeVisible();
+  await axeClean(page);
+  await destinations.getByRole("link").first().focus();
+  await page.keyboard.press("Escape");
+  await expect(destinations).toBeHidden();
+  await expect(menu).toBeFocused();
+
+  // Following a destination closes it, though the header outlives the navigation.
+  await menu.click();
+  await destinations.getByRole("link", { name: "Progress" }).click();
+  await expect(page).toHaveURL(/\/en\/progress$/);
+  await expect(menu).toHaveAttribute("aria-expanded", "false");
+  await expect(destinations).toBeHidden();
+
+  // A navigation it did not start closes it too: open, then the browser's Back.
+  await menu.click();
+  await expect(menu).toHaveAttribute("aria-expanded", "true");
+  await page.goBack();
+  await expect(page).toHaveURL(/\/en\/review$/);
+  await expect(menu).toHaveAttribute("aria-expanded", "false");
+  await expect(destinations).toBeHidden();
+});
+
+test("on a wide screen, the app's header shows its destinations in the row and no menu button (D267)", async ({ page }) => {
+  await page.goto("/en/review");
+  await expect(page.getByRole("button", { name: "Menu" })).toBeHidden();
+  await expect(page.getByRole("navigation", { name: "Primary" }).getByRole("link")).toHaveCount(5);
+  await expect(page.getByRole("navigation", { name: "Primary" })).toBeVisible();
+});
+
 test("the landing page stays clean with an answer open and the sample question answered (D201)", async ({ page }) => {
   await page.goto("/en");
   // The first answer starts open; open another, so two disclosures are expanded.

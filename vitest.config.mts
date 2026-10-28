@@ -24,11 +24,12 @@ import { defineConfig } from "vitest/config";
 // absolute to be shared across all of them.
 const SETUP = fileURLToPath(new URL("./vitest.setup.mts", import.meta.url));
 
-// `@palier/ui` is the only package with unit-level DOM tests (its primitives are
-// React components); `apps/web` exercises the DOM through Playwright E2E. Its
-// chrome and the settings area also render to HTML in node (progress.md D265,
-// `apps/web/src/__tests__/render.tsx`), with no DOM. So ui alone runs in jsdom
-// and everything else stays in node.
+// `@palier/ui` runs in jsdom: its primitives are React components. `apps/web`
+// stays in node, and a component test that needs effects, clicks or a loaded
+// island opts into jsdom per file (`// @vitest-environment jsdom`, progress.md
+// D268, over `apps/web/src/__tests__/dom.tsx`); its chrome also renders to HTML
+// in node (D265, `render.tsx`). Every component has a test beside it, or a line
+// in `components/untested-components.json`, which may only shrink (D268).
 const workspaceProject = (name: string, root: string, environment: "node" | "jsdom" = "node") => ({
   extends: true,
   test: {

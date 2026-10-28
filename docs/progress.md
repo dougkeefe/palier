@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 27 October 2026 (one settings area behind a gear in the header, D264; next, D206's bank budget)
+**Last updated:** 28 October 2026 (each settings screen opens with links to its sections, D266, the app header folds into a menu on a phone, D267, and every component has a unit test or a place on a shrinking list, D268; next, D206's bank budget)
 **Current phase:** **1.0 is reached** (24 October 2026, D253): the human passed Gate O and Gate M and read bank v4 with no
 disagreement, so Phases 6 and 7 are complete. After 1.0, reading's library articles are built (D254), and D206's bank
 budget is next. Phase 3's product pilot still runs (Gate E, D97), and Phase 8, the English mirror, is the plan's next
@@ -101,6 +101,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 | `dougkeefe/dependabot-alerts-resolve-v2` | **The open Dependabot alerts**: three dev-only transitive packages refreshed within their parents' ranges, and Lighthouse's `zod` 3 dismissed as unreachable (D261). **E2E in three shards** (D262). | 26 October 2026 |
 | `dougkeefe/image-clickable-bars` | **The staircase is the result picker**: a skill's result is picked by tapping its step, Coco hops there, and the pill row is gone (D263). | 26 October 2026 |
 | `dougkeefe/settings-shared-menu` | **One settings area**: `/settings` lists levels, the key, your data and sync, each screen carries one menu, and a gear at the header's top right and one footer link lead there (D264). | 27 October 2026 |
+| `dougkeefe/settings-subsections-navigation` | **Each settings screen opens with "On this page"**: a pill row of links to its sections, each landing on its card (D266). **The app header folds into a menu below 1100px** (D267). **Every component has a unit test, or a line on a list that only shrinks** (D268). | 28 October 2026 |
 
 *(Merged rows are removed: this table tracks current work, and the session log is the permanent record. The rows
 removed up to 24 October 2026, the last of them the reading articles (#100), are listed in
@@ -131,6 +132,13 @@ and it costs a first visit on a phone the most.
 
 *Done:* a first visit's bank bytes under 400 KB gzipped, enforced by a test that fails on a deliberate breach, the
 offline journeys green, and R4's reach stated in the deviation.
+
+**For the human, from D267:** on a phone, open the menu beside the gear on any page in both languages, follow a
+destination, and say whether sync and the language belong in the panel or beside the gear.
+
+**For the human, from D266:** open each settings screen (`/en/settings/key`, `/data`, `/sync`, and `/study` once
+onboarded), on a phone too, and try each link in "On this page". Read the new French (`settings.sectionsLabel` and
+`settings.sections`), and say whether any label should simply repeat its card's title.
 
 **For the human, from D264:** open the gear at the header's top right, then each card on `/en/settings` and
 `/fr/settings`, on a phone too. Read the new French (`nav.settings`, `footer.settings` and the `settings` namespace, the
@@ -606,141 +614,9 @@ full.
 - **D253** — Gates O and M passed and bank v4 read: 1.0 · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d253--gates-o-and-m-passed-and-bank-v4-read-10)
 - **D254** — reading's library articles: eight, with excerpts in place of sentences to write · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d254--readings-library-articles-eight-with-excerpts-in-place-of-sentences-to-write)
 - **D255** — `progress.md` holds current state, and `progress-archive/` holds the record · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d255--progressmd-holds-current-state-and-progress-archive-holds-the-record)
-
-### D256 — the library as a browsable index and readable articles, with three photographs served from this origin
-**Date:** 24 October 2026 · **Status:** accepted (human request; the agent's design and choice of photographs, for the human's look). Amends D162's and D254's page shape
-
-The human asked for an easier, more visually appealing library, with royalty-free photographs credited, without losing
-the information hierarchy, accessibility or ease of navigation, and chose: both the index and the articles, the agent
-picks the photographs and shows screenshots, and a linked credit at the foot of the page. The index was one column of
-eighteen bold links, the article titles were not headings, and an article was a run of prose ending in a bulleted list.
-
-- **The index, on `.app-wide`:**
-  - The title, a line, and a way to each skill, beside the library's photograph. Each way is a pill with the skill's
-    glyph, name and count, linking to `#library-reading` or `#library-writing`.
-  - Each skill's section has its `SKILL_LOOK` mark, its name, its count and a line on what its articles hold (the old
-    intro's second sentence, split), with its photograph beside them from 600px. Its articles follow as cards in the
-    skill's fill, numbered in the taxonomy's order.
-  - The headings run h1, then h2 per skill, then **h3 per article**, so a screen reader can move from article to article.
-  - A card's link covers the card by `::after`, so the whole card answers a click while the link's name stays the
-    title alone.
-- **An article:**
-  - A breadcrumb (Library › its skill › its title, `aria-current="page"`) replaces "All articles". The skill's link
-    goes to its section on the index.
-  - The head sits beside the skill's photograph from 900px.
-  - **"On this page"** lists the sections, Examples and Read next. From 1000px it is sticky beside the prose; below
-    that it is a quiet panel above it. The DOM order is the same at every width.
-  - **The examples are white panels.**
-    - A writing example sets the sentence to write against the one it replaces. ✓ and ✗ in `correct` and `incorrect`
-      mark them, and the labels stay, so colour is never the only signal.
-    - A reading example is an excerpt in passage type (19px at 1.65) with a rule at its start.
-  - Read next uses the index's cards.
-  - The practise button sits in a deep panel and is still the page's only one.
-  - **Previous and next stay within the skill** (`adjacentArticles`). Neither wraps, and reading's last article never
-    runs on into writing.
-- **The photographs, the way D201 did it:**
-  - Three photos under the Unsplash License: Fang-Wei Lin's open book, Praise Judah's reader of a document and Marcos
-    Paulo Prado's hand writing in a notebook.
-  - Each was downloaded at 2400px and cut to WebP: 33, 22 and 17 KB, in `components/library/images/`.
-  - They are CSS backgrounds in `library.css`, so `img-src 'self'` is unchanged and the worker precaches them by
-    following the stylesheet. An article is whole offline, photograph included.
-  - They are decorative: `aria-hidden`, with no text over them. The index preloads its own, which is its largest paint.
-  - Each page credits the ones it shows, each name linked to its photo (`features/library/photos.ts`, `PhotoCredit`).
-    Unsplash asks for that, though its licence does not require it.
-  - `images/SOURCES.md` records each photo, and `photos.test.ts` holds the file, the row and the credit together.
-  - None repeats a landing photographer, and none shows anything official, any maple leaf or any red and white
-    (PRD §10.1).
-- **Contrast, by the gate's own pairs.** On a skill's fill only the inks and `primary` are held (D219), so a card's title
-  is `ink`, never `link`. A card's focus ring is drawn outside it, on the paper, where `accent` clears 3:1. No new token
-  and no new pair were needed.
-- **`components/library/library.css`:** the library's rules left `globals.css` for a sheet only its two pages import.
-  Every rule is scoped under `.app-library`, as `landing.css` is under `.landing`, since Next keeps a page's stylesheet
-  after a soft navigation. `motion.test.ts` reads it, and the hover lift applies only under
-  `prefers-reduced-motion: no-preference`.
-- **Messages:**
-  - `intro` is shorter, and `back` is gone.
-  - New in both languages: `jumpLabel`, `articleCount`, `readingLede`, `writingLede`, `breadcrumb`, `onThisPage`,
-    `siblings`, `previous`, `next`, `practiseTitle`, `photosBy` and `onUnsplash`.
-  - The French is the agent's.
-- **Tests added, none loosened:**
-  - `content.spec.ts`'s library test now also asserts eighteen h3s, three `aria-hidden` photographs and three credit
-    links to Unsplash on the index. On an article it asserts the breadcrumb's links, the one credit, next and back
-    again, and the breadcrumb's way to the skill's section. Its axe checks are the same four pages.
-  - `lib/library.test.ts` covers `skillOf`, and `adjacentArticles` at a skill's two ends and in its middle.
-  - `features/library/photos.test.ts` and `contents.test.ts` are new. The second covers "Read next", which the
-    contents list only when an article has related articles.
-- **For the human:** look at the photographs and the pages (the pull request has screenshots), and read the new French.
-
-### D257 — the library's index is one grid of cards under pills that filter by skill or topic, each article with its own photograph
-**Date:** 25 October 2026 · **Status:** accepted (human request and choices; the agent's design, topics and photographs, for the human's look). Amends D256's index, its photographs and its "no text over a photograph"
-
-The human asked for the library's index to keep its look but take the layout of a course catalogue they showed: tag pills
-at the top that filter the articles, one grid of cards each with its own royalty-free photograph, and no separate
-sections, since the tags do that. Asked, they chose: pills for both the skills and topics, each article's own photograph
-on its page too, and the index's photograph kept beside its title.
-- **The index:**
-  - The title and its line keep the library's photograph beside them. D256's pills to each skill's section, and the two
-    sections with their marks, counts, lines and photographs, are gone.
-  - Under them, a centred row of pills: All, Reading, Writing, then, after a rule, Comprehension, Vocabulary, Grammar,
-    Structure, Tone and register, each with its count. From 1,100px or so they sit on one row. One is pressed at a time.
-  - Then **one grid of all eighteen cards**, reading's eight first, each skill's in the taxonomy's order. The headings run
-    h1, then **h2 per article**, since no section heading is left between them.
-- **A card** keeps its skill's fill, the link covering it and the ring outside it, and gains:
-  - its article's photograph on top, 16:9, inset in the card;
-  - **its skill on a badge over the photograph's corner**. This is the one place text sits on a photograph, which D256
-    ruled out: the badge is a solid `surface` pill with `ink` words and the skill's glyph, so its contrast is its own
-    fill's and never the photograph's;
-  - after the summary, its topic and an estimated reading time as chips (`features/library/reading-time.ts`: the
-    interface language's prose and the examples at 200 words a minute, never under one), and a decorative "Read →";
-  - no number: across a filter the taxonomy's numbering says nothing.
-- **The filter** (`components/library/LibraryFilter.tsx`, the library's only client component):
-  - The server renders every card, with `data-tags` of its skill and topic, and hands them in as `children`. So no
-    article reaches the client's JavaScript, as `apps/web/CLAUDE.md` requires. The filter sets `hidden` on the cards
-    the pressed pill does not match. A polite status says how many are shown.
-  - **The pressed pill is the URL's hash** (`#grammar`), not a query: the worker precaches `/en/library` by its exact
-    URL, and a hash never reaches it, so a filtered link opens offline and the page stays static. An empty or unknown
-    hash is All. The article breadcrumb's skill link is now `/library#reading` or `#writing`, which opens the index on
-    that skill, where D256's opened its section.
-  - Without JavaScript, or before hydration, every card shows, which is what All shows.
-  - The logic is `features/library/filter.ts`: the pills' order, `matches`, the hash both ways and each pill's count.
-- **Topics are content** (ADR 9's spirit, ADR 18): `LIBRARY_TOPICS` and a required `topic` on every `LibraryArticle` in
-  `@palier/domain`, one line in each article's JSON, and `docs/schemas/library-article.schema.json` regenerated. The
-  labels are messages. Each article has exactly one:
-  - comprehension: main idea, specific detail, inference, numerical and tabular detail;
-  - vocabulary: vocabulary in context, word choice, false friends and anglicisms;
-  - grammar: verb tense and mood, agreement, prepositions, pronouns, punctuation, sentence structure;
-  - structure: cohesion and reference, text structure, connectors;
-  - register: tone and intent, register and formality.
-- **The photographs, D256's way:** eighteen new Unsplash photographs, one per article, chosen to suggest each point without a word on them (a compass for the main idea, a magnifying glass for a detail, footprints for inference, an hourglass for tense, two matching eggs for agreement, a bridge for connectors, wax-sealed envelopes for register), quiet in detail so each fits 25 KB. Each was downloaded
-  once, cut to 900×600 WebP and committed, so `img-src 'self'` is unchanged, and each is a CSS background in
-  `library.css`, so the worker precaches it through the stylesheet and every card and article is whole offline. D256's
-  `reading.webp` and `writing.webp` are retired; `library.webp` stays.
-  - **Their weight:** 322 KB in all, against D256's 72 KB, all precached on install. `photos.test.ts` fails any
-    article's photograph over 25 KB. It is not the bank (D206), and it is the price of a photograph per card offline.
-  - An article's page shows its own photograph in its head, and its Read next cards show theirs, so its credit names
-    its own photographer, then its related articles' (`photosFor`). The index credits all nineteen.
-- **Messages:** `jumpLabel`, `articleCount`, `readingLede` and `writingLede` are gone. New in both languages:
-  `filterLabel`, `all`, `skillReading`, `skillWriting`, `topics.*`, `shown`, `minutes` and `readArticle`. The French is
-  the agent's.
-- **Tests added, none loosened:** `filter.test.ts` and `reading-time.test.ts` are new; `photos.test.ts` holds nineteen
-  files and rows, the new `photosFor` and the size cap; the domain's `library.test.ts` refuses an article with no topic
-  or an unknown one. `content.spec.ts`'s library test now asserts eighteen h2s, nineteen photographs and credits, the
-  Grammar pill pressing, the hash, six cards shown and the status, All restoring eighteen, `#reading` opening on eight,
-  and the breadcrumb opening the index on writing's ten, with an axe check on the filtered index too.
-
-### D258 — The translator's no-key card sits above the editor, and its French language labels are capitalised
-**Date:** 25 October 2026 · **Status:** accepted (human's request). Amends D252's layout only
-
-The human found two things on the translator.
-- **Without a key, the warning came too late.** D252 put PRD §14's no-key card below the translator's card, so a user
-  could type into the editor, see nothing happen, and find the reason only by scrolling past the panes. The card now
-  sits first, above the language choice and the panes. It is the same `NoKeyCard`, same copy, still inline and never a
-  modal or a blocked page (D108); the editor below it still works. With a key nothing moved.
-- **"anglais" and "français" read as a mistake on the radio control.** Lower case is right in running French, but as
-  labels on a segmented control beside "Détecter" they looked wrong. `translate.source_en` and `translate.source_fr`
-  are now "Anglais" and "Français". Only the radios read these two keys.
-- **Tests:** `translate.spec.ts`'s no-key test asserts the card's heading sits above the editor; its French test
-  asserts the two radios by their capitalised names.
+- **D256** — the library as a browsable index and readable articles, with three photographs served from this origin · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d256--the-library-as-a-browsable-index-and-readable-articles-with-three-photographs-served-from-this-origin)
+- **D257** — the library's index is one grid of cards under pills that filter by skill or topic, each article with its own photograph · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d257--the-librarys-index-is-one-grid-of-cards-under-pills-that-filter-by-skill-or-topic-each-article-with-its-own-photograph)
+- **D258** — The translator's no-key card sits above the editor, and its French language labels are capitalised · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d258--the-translators-no-key-card-sits-above-the-editor-and-its-french-language-labels-are-capitalised)
 
 ### D259 — the SLE results a user holds are declared in onboarding and at `/settings/study`, and shape the plan: E leaves it, a result at the target keeps it sharp
 **Date:** 25 October 2026 · **Status:** accepted (human's request and three answers; agent's design). Builds PRD §8.1
@@ -953,9 +829,127 @@ Asked, the human chose unit tests for all seven over leaving §6.3 as it was.
 - **The rule for the rest of `apps/web` is unchanged:** decisions in `src/features/**`, journeys in Playwright. This adds a
   third place only for the chrome every page carries.
 
+### D266 — each settings screen opens with "On this page": a pill row of links to its sections, each landing on its card
+**Date:** 28 October 2026 · **Status:** accepted (human's request and choices; agent's design). Extends D264's settings area
+
+The human: each settings screen has subsections that should be reachable from the top of the screen. Asked, the human
+chose links at the top of each screen over links on the overview's cards, styled as a pill row like the settings menu.
+- **The list is data**, `features/settings/settings-sections.ts`'s `SETTINGS_SECTIONS`, keyed by `SETTINGS_ITEMS`' keys so
+  the two cannot drift, with `sectionId(screen, section)` the id both the link and its card read. Stable ids, never
+  `useId`'s, so a spec finds them too. A new card on a settings screen is an entry there and an id on the card.
+- **The row**, `components/settings/SettingsSections.tsx`, is a second `nav` landmark, named "On this page" / « Sur cette
+  page », apart from the menu's "Settings". Its links are plain fragments, so no `aria-current` and no router: each is a
+  place on this page. Smaller pills on the menu's track; wrapped on a phone, a rounded panel.
+- **It is rendered inside each island, first once loaded**, not by the server page: the cards exist only once the island
+  has loaded, and `/settings/study` without a profile shows one "set up" card, so a row drawn by the page would link to
+  nothing while loading and in that state. The cost is that the row arrives with the island, which `.app-island` already
+  makes room for.
+- **The sections:** levels (results, targets, goal), the key (the key's form, where it is kept, studio mode, spending, the
+  cap, the cost table), data (export, import, shared answers, recordings, delete) and sync (the switch, status, what syncs,
+  devices, add, join, the danger zone). Sync's unheaded card, the export reminder beside the danger zone, is not a section
+  of its own. `KeyEntry` is onboarding's too, so the key screen puts its id on a wrapper rather than a prop on the form.
+- **New:** `settings-sections.test.ts`, `SettingsSections.test.tsx` (D265's render helper), a journey in
+  `e2e/settings.spec.ts` (each screen's links, every target present once, the last link bringing its card into view, axe
+  clean), and two lines in `levels.spec.ts` (the study screen's links once onboarded; none before there is a profile).
+
+### D267 — below 1100px the app header is one row: the wordmark, a menu button and the gear, the destinations, sync and the language in its panel
+**Date:** 28 October 2026 · **Status:** accepted (human's request; agent's design). Amends D202's header on a narrow screen
+
+The human: on a phone the top-level menu should be a menu button, not the pill track of Today, Review and the rest, which
+wrapped the header to three rows (the wordmark; the five destinations on two lines; sync, the language and the gear).
+- **The landing header's disclosure, shared** (D232): `LandingMenu`'s body is now `components/HeaderMenu.tsx`, taking its
+  label, panel id and classes, and `LandingMenu` is a wrapper. `menuOpenAfter` moves from `features/landing/landing.ts`
+  to `features/nav/menu.ts`, its four tests with it, unchanged. A followed link closes the menu, which now matters for a
+  second reason: the app header outlives a soft navigation. For the same reason a navigation the menu did not start, the
+  browser's Back for one, closes it too: `HeaderMenu` reads next-intl's pathname and closes on a change (a fifth event,
+  `navigate`), adjusted while rendering so the new page never paints under the panel. Found by candid-review.
+- **What folds:** the destinations, the sync status and the language. The gear stays in the row, rightmost (D264), with
+  the button beside it, so the order on screen is the focus order: wordmark, button, the open panel, gear. Sync and the
+  language would not fit beside them in French at 390px (about 425px), and showing sync as its dot alone would say its
+  state by colour only (WCAG 1.4.1). Each is rendered once: from 1100px the panel is `display: contents`, so the row is
+  D202's, with the nav's auto margins doing what `space-between` did.
+- **1100px, not the landing header's 1000px:** measured, the French row wraps below 1,030px with sync on, and "Synchro
+  désactivée" is wider still.
+- **The button is `@palier/ui`'s `pl-icon-btn`**, as the gear is, white while open as the gear is inside settings. The
+  panel's colours are tokens; its shadow mixes `--ink`.
+- **New:** `menu.test.ts` (moved), a `Header.test.tsx` case (the button collapsed and controlling `app-menu`, the panel
+  holding the five destinations, sync and the language, the gear outside it), and two `smoke.spec.ts` journeys: at 390px
+  the row, the panel with the current page marked, axe, Escape back onto the button, and a followed destination closing
+  it, then Back with it open closing it (without the fix, it stayed open); at 1280px no button and the five destinations
+  in the row.
+
+### D268 — every component has a unit test beside it, held by a ratchet; `apps/web`'s component tests may run in jsdom
+**Date:** 28 October 2026 · **Status:** accepted (human's choices). Amends D265 ("the rule for the rest of `apps/web` is
+unchanged") and `implementation-plan.md` §6.3's "rendering is covered by E2E" for `apps/web`'s components
+
+candid-ship's test map found nine changed components with no unit test: `HeaderMenu`, `LandingMenu` and the settings
+islands (`StudySettings`, `KeySettings`, `SpendSettings`, `DataSettings`, `TelemetrySettings`, `OralStorageSettings`,
+`SyncSettings`). E2E drove each, and no gate asked for more: §6.3 leaves rendering to Playwright, the coverage thresholds
+are glob-keyed with no entry for `apps/web/src/components`, and `CLAUDE.md`'s "every new branch gets a unit test" is met by
+a change that only adds ids. The human asked for the tests, and for a check that keeps it from happening again. Asked,
+they chose jsdom with Testing Library over D265's node rendering, and a ratchet over a coverage threshold or a CI map of
+changed files.
+- **jsdom, per file:** the `web` project stays in node; a component test opts in with `// @vitest-environment jsdom`.
+  `jsdom` 30.1.3 and `@testing-library/react` 16.3.3 join `apps/web`'s devDependencies at `@palier/ui`'s pinned versions,
+  so the lockfile gains six lines and no package. D265's node rendering could not run an effect or a click: `SpendSettings`
+  draws its cards only once the ledger is read, `StudySettings` its form only once the profile is, and `HeaderMenu`'s
+  behaviour is Escape, taps, focus and Back.
+- **`src/__tests__/dom.tsx`'s `renderIsland`** renders through the real messages and the real `ContainerProvider` over the
+  hermetic graph, so a test sees the island as it loads. `StudySettings`' test builds the hermetic container itself, to
+  store a profile first.
+- **The nine tests** assert behaviour: each screen's "On this page" links match its cards' ids in order, and each card
+  holds its heading; the study screen shows no links before there is a profile; sharing answers turns on; a cap is set
+  and removed; the menu's open, Escape back onto the button, a followed link, a tap inside, a tap or focus outside, and a
+  page change. **Proven to bite:** a spend card without its id failed two; the menu ignoring a page change failed one.
+- **The ratchet**, `components/components-tested.test.ts`: every `.tsx` under `src/components/` has a `.test.tsx` beside
+  it, or a line in `components/untested-components.json`, the 61 of 76 untested when it began. A new component without a
+  test fails it, and so does an entry that has gained a test or is gone, so the list only shrinks. **Proven to bite:** a
+  new untested component, `HeaderMenu`'s test removed, and a listed component given a test each failed it.
+- **Not held, and said so:** a test's quality (the gate counts a file, not what it asserts); `src/app/**`'s pages and
+  `src/features/**` and `src/lib/**`, which have no coverage threshold either. The thresholds stay glob-keyed (D9), since one
+  on components would fail until all 61 were backfilled.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 28 October 2026 — `dougkeefe/settings-subsections-navigation` (links to each settings screen's sections, the app header's menu on a phone, and a test for every component; D266–D268)
+
+Not *Next, decided*, which is unchanged (D206). The human asked for each settings screen's subsections to be reachable from
+the top of the screen, and chose a pill row on each screen; then for the header's destinations to fold behind a menu
+button on a phone.
+- **Web:** `features/settings/settings-sections.ts`, `components/settings/SettingsSections.tsx`, an id on every settings
+  card and the row first in each of the four islands, `.app-settings-sections` in `globals.css`, `settings.sectionsLabel`
+  and `settings.sections` in both languages.
+- **Tests:** `settings-sections.test.ts`, `SettingsSections.test.tsx`, a journey in `e2e/settings.spec.ts`, two checks in
+  `levels.spec.ts`.
+- **Then the header (D267):** `HeaderMenu.tsx` from `LandingMenu`'s body, `features/nav/menu.ts` from `landing.ts`, the
+  header's panel and gear, `nav.menu` in both languages, the narrow-screen header in `globals.css`; a `Header.test.tsx`
+  case and two `smoke.spec.ts` journeys.
+- **Then the tests (D268), from candid-ship's test map:** `jsdom` and `@testing-library/react` in `apps/web`'s
+  devDependencies, `src/__tests__/dom.tsx`, unit tests for the nine components, and the ratchet,
+  `components/components-tested.test.ts` over `components/untested-components.json`; the `vitest.config.mts` note.
+- **Docs:** D266, D267, D268; D256, D257, D258 and the 24 October entry recording 1.0 are archived (rule 8);
+  `apps/web/CLAUDE.md`.
+
+**Verified:**
+- `pnpm verify` exit 0: check-types, lint and boundaries clean; `pnpm test` passed 301 files, 4,735 tests (8 todo).
+- The hermetic chromium project, through a temporary, uncommitted config on port 3400 (another project's dev server held
+  3000): `settings` and `levels`, 6 of 6; then `content`, `journeys`, `oral`, `key`, `sync` and `key-leak`, which drive the
+  settings screens, 50 of 51. The one failure, the titles test, timed out on cold compiles because `--no-deps` skipped
+  the warmup; with the warmup it passed.
+- In the hermetic dev server in Chrome, at 1280px and 390px: the row under each screen's title, "Monthly cap" landing on
+  its card, and the French sync row wrapping as a panel.
+- For D267, through the same temporary config with the warmup: `smoke`, `settings`, `translate`, `key`, `levels` and
+  `content`, 52 of 52. In the hermetic dev server: the header one row from 320px to 1280px in both languages, with no
+  horizontal overflow at 320px; the panel open at 390px in both; 1280px unchanged from D202's.
+- After D267, `pnpm verify` exit 0 again: 302 files, 4,736 tests (8 todo).
+- candid-loop (auto): one finding, the menu left open by a navigation it did not start, fixed. `smoke` and `settings`,
+  22 of 22; the new Back step failed with the fix removed and passed with it. `pnpm verify` exit 0: 302 files, 4,737 tests (8 todo).
+- For D268: `pnpm verify` exit 0, 312 files, 4,765 tests (8 todo), then `pnpm test` again, the same. The nine new tests and
+  the ratchet each failed on a deliberate break (above, in D268) and passed restored. Under the full suite's load three
+  island tests first timed out at Testing Library's one-second wait; `dom.tsx` sets ten.
+- Not run: the `offline` project, Lighthouse and the live smoke.
 
 ### 27 October 2026 — `dougkeefe/settings-shared-menu` (one settings area, a gear in the header; D264)
 
@@ -1199,18 +1193,6 @@ archive, keeping everything it records.
   `/library/inference` included, zero violations), `offline.spec.ts`, `exam-offline.spec.ts` and
   `telemetry-offline.spec.ts`: 17 of 17.
 - Not run: Lighthouse, the rest of the medium lane and the live smoke. CI runs the medium lane on the pull request.
-
-### 24 October 2026 — `dougkeefe/palier-reading-comprehension-add` (1.0 recorded: Gates O and M passed, bank v4 read; D253)
-
-The human asked about the library's "Articles on reading comprehension come after 1.0", and then reported the read of bank v4,
-Gate O and Gate M done. This commit changes documents only.
-- **D253:** the three recorded as passed with no finding; ADR 24 stands.
-- **Ticked:** Phase 6's Gate O and exit criteria 3 and 5, Phase 7's Gate M and exit criteria 1 and 3, and R1, R2, R8 and
-  R13 in the requirement table. The status table reads Phase 6 complete and Phase 7 complete, 1.0.
-- **In flight:** the rows merged as #88–#99 removed; this branch's row added.
-- **Next, decided:** reading's library articles (D254), claimed by this branch.
-
-**Verified:** documents only, so no command proves this commit; the next commit on the branch runs `pnpm verify`.
 
 Older entries, newest first: [October 2026](progress-archive/sessions-2026-10.md) ·
 [September 2026](progress-archive/sessions-2026-09.md).

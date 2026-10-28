@@ -5,12 +5,14 @@ import { Button, Callout, Card } from "@palier/ui";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
+import { sectionId } from "../../features/settings/settings-sections";
 import { changed, testDateFrom } from "../../features/settings/study-view";
 import { Link } from "../../i18n/navigation";
 import { DAILY_GOALS, type StudyProfile, readStudyProfile, writeStudyProfile } from "../../lib/study";
 import { useContainer } from "../ContainerProvider";
 import { NonAffiliation } from "../NonAffiliation";
 import { ResultPicker, TargetPicker } from "../study/LevelPickers";
+import { SettingsSections } from "./SettingsSections";
 
 type Loaded =
   | { readonly status: "loading" }
@@ -92,9 +94,10 @@ export function StudySettings() {
         void save();
       }}
     >
+      <SettingsSections screen="levels" />
       <p>{t("intro")}</p>
 
-      <Card>
+      <Card id={sectionId("levels", "results")}>
         <h2>{t("resultsTitle")}</h2>
         <p className="app-muted">{t("resultsHint")}</p>
         <div className="app-levels">
@@ -112,7 +115,7 @@ export function StudySettings() {
         </div>
       </Card>
 
-      <Card>
+      <Card id={sectionId("levels", "targets")}>
         <h2>{t("targetsTitle")}</h2>
         <p className="app-muted">{t("targetsHint")}</p>
         <div className="app-stack">
@@ -127,7 +130,7 @@ export function StudySettings() {
         </div>
       </Card>
 
-      <Card>
+      <Card id={sectionId("levels", "goal")}>
         <h2>{t("goalTitle")}</h2>
         <fieldset className="app-segmented">
           <legend className="app-segmented__legend">{tStart("goalHeading")}</legend>

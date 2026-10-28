@@ -8,6 +8,7 @@
     "brand": "Palier",
     "about": "À propos",
     "primary": "Principale",
+    "menu": "Menu",
     "home": "Aujourd’hui",
     "review": "Révision",
     "oral": "Pratique orale",
@@ -360,6 +361,7 @@
     "title": "Paramètres",
     "intro": "Tout ce que vous réglez dans Palier, au même endroit.",
     "navLabel": "Paramètres",
+    "sectionsLabel": "Sur cette page",
     "items": {
       "levels": {
         "name": "Vos niveaux",
@@ -376,6 +378,37 @@
       "sync": {
         "name": "Synchronisation",
         "description": "Activer ou désactiver la synchronisation, relier un autre appareil par un code court et supprimer la copie sur notre serveur."
+      }
+    },
+    "sections": {
+      "levels": {
+        "results": "Résultats actuels",
+        "targets": "Cibles",
+        "goal": "Objectif quotidien"
+      },
+      "key": {
+        "entry": "Votre clé",
+        "where": "Où elle est conservée",
+        "realtime": "Mode studio",
+        "spend": "Dépenses",
+        "cap": "Plafond mensuel",
+        "features": "Coût par fonction"
+      },
+      "data": {
+        "export": "Exporter",
+        "import": "Importer",
+        "telemetry": "Réponses partagées",
+        "oral": "Enregistrements",
+        "delete": "Tout supprimer"
+      },
+      "sync": {
+        "switch": "Activer ou désactiver",
+        "status": "État",
+        "what": "Ce qui est synchronisé",
+        "devices": "Vos appareils",
+        "add": "Ajouter un appareil",
+        "join": "Utiliser un code",
+        "danger": "Zone à risque"
       }
     }
   },

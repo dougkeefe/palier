@@ -102,14 +102,26 @@ body {
 }
 
 /* ------------------------------------------------------------------ header */
-/* The wordmark, the destinations on a quiet pill track, then sync and the language (D202). */
+/*
+ * The wordmark, the destinations on a quiet pill track, then sync, the language and the gear (D202, D264). The
+ * destinations, sync and the language sit in `HeaderMenu`'s panel, which is `display: contents` here, so they are the
+ * row's own items; the nav's auto margins centre it between the wordmark and the tools.
+ */
 .app-header {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 12px 24px;
+  gap: 12px;
   padding: 16px clamp(20px, 4vw, 56px);
+}
+
+.app-header__panel {
+  display: contents;
+}
+
+.app-header .app-header__menu-button {
+  display: none;
 }
 
 .app-header__brand {
@@ -131,6 +143,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 2px;
+  margin-inline: auto;
   padding: 5px;
   border-radius: 999px;
   background: var(--surface-quiet);
@@ -145,11 +158,80 @@ body {
 }
 
 /*
- * Header controls (links, toggle, status), and the settings menu's links (D264). Every interactive target clears the
- * 24x24 CSS px floor (WCAG 2.5.8) via min-height/min-width.
+ * Below 1100px the header is one row: the wordmark, then the menu button and the gear at the right (D267). The French
+ * row needs about 1,060px with sync off, so the landing header's 1000px would wrap it. The button opens the panel under
+ * the header: the destinations as full-width rows, then sync and the language. It lies over the page, so a tap outside
+ * closes it.
+ */
+@media (max-width: 1099.98px) {
+  .app-header {
+    position: relative;
+    flex-wrap: nowrap;
+  }
+
+  /* `@palier/ui`'s icon target, as the gear is, and a white disc while open, as the gear is inside settings. */
+  .app-header .app-header__menu-button {
+    display: inline-flex;
+    margin-left: auto;
+  }
+
+  .app-header__menu-button[aria-expanded="true"] {
+    background-color: var(--surface);
+  }
+
+  .app-header__panel {
+    display: none;
+  }
+
+  .app-header__panel[data-open] {
+    position: absolute;
+    top: calc(100% - 8px);
+    left: clamp(20px, 4vw, 56px);
+    right: clamp(20px, 4vw, 56px);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 24px;
+    background: var(--surface);
+    box-shadow: 0 16px 40px color-mix(in srgb, var(--ink) 18%, transparent);
+  }
+
+  .app-header__panel .app-header__nav {
+    flex-direction: column;
+    margin-inline: 0;
+    padding: 0;
+    border-radius: 0;
+    background: none;
+    font-size: 1.0625rem;
+  }
+
+  .app-header__panel .app-header__link {
+    justify-content: flex-start;
+    min-height: 48px;
+  }
+
+  /* On the panel's white, hover and the page you are on take the quiet fill; the page you are on keeps its weight. */
+  .app-header__panel .app-header__link:hover,
+  .app-header__panel .app-header__link[aria-current="page"] {
+    background: var(--surface-quiet);
+  }
+
+  .app-header__panel .app-header__tools {
+    justify-content: space-between;
+    padding: 12px 6px 0;
+    border-top: 1px solid var(--surface-quiet);
+  }
+}
+
+/*
+ * Header controls (links, toggle, status), the settings menu's links (D264) and a settings screen's section links (D266).
+ * Every interactive target clears the 24x24 CSS px floor (WCAG 2.5.8) via min-height/min-width.
  */
 .app-header__link,
 .app-settings-nav__link,
+.app-settings-sections__link,
 .app-lang-toggle {
   display: inline-flex;
   align-items: center;
@@ -168,7 +250,8 @@ body {
 }
 
 .app-header__link:hover,
-.app-settings-nav__link:hover {
+.app-settings-nav__link:hover,
+.app-settings-sections__link:hover {
   color: var(--ink);
   background: color-mix(in srgb, var(--surface) 55%, transparent);
 }
@@ -242,6 +325,32 @@ body {
   border-radius: 999px;
   background: var(--surface-quiet);
   font-size: 0.9375rem;
+}
+
+/*
+ * "On this page" at the top of a settings screen (D266): the menu's track, quieter and smaller, since it moves within the
+ * page rather than between pages. A section it jumps to stops short of the viewport's edge.
+ */
+.app-settings-sections {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  width: fit-content;
+  max-width: 100%;
+  padding: 4px;
+  /* A pill on one line; wrapped on a phone, a rounded panel rather than a stretched stadium. */
+  border-radius: 20px;
+  background: var(--surface-quiet);
+  font-size: 0.875rem;
+}
+
+.app-settings-sections__link {
+  min-height: 2rem;
+  padding: 0 12px;
+}
+
+[id^="settings-"] {
+  scroll-margin-top: 1rem;
 }
 
 /* The overview's cards, one per settings screen, two to a row where there is room. */

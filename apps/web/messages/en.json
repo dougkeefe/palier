@@ -8,6 +8,7 @@
     "brand": "Palier",
     "about": "About",
     "primary": "Primary",
+    "menu": "Menu",
     "home": "Today",
     "review": "Review",
     "oral": "Oral practice",
@@ -360,6 +361,7 @@
     "title": "Settings",
     "intro": "What you set for Palier, in one place.",
     "navLabel": "Settings",
+    "sectionsLabel": "On this page",
     "items": {
       "levels": {
         "name": "Your levels",
@@ -376,6 +378,37 @@
       "sync": {
         "name": "Sync",
         "description": "Turn sync on or off, link another device by a short code, and delete the copy on our server."
+      }
+    },
+    "sections": {
+      "levels": {
+        "results": "Current results",
+        "targets": "Targets",
+        "goal": "Daily goal"
+      },
+      "key": {
+        "entry": "Your key",
+        "where": "Where it is kept",
+        "realtime": "Studio mode",
+        "spend": "Spending",
+        "cap": "Monthly cap",
+        "features": "Cost per feature"
+      },
+      "data": {
+        "export": "Export",
+        "import": "Import",
+        "telemetry": "Shared answers",
+        "oral": "Recordings",
+        "delete": "Delete everything"
+      },
+      "sync": {
+        "switch": "On or off",
+        "status": "Status",
+        "what": "What syncs",
+        "devices": "Your devices",
+        "add": "Add a device",
+        "join": "Use a code",
+        "danger": "Danger zone"
       }
     }
   },

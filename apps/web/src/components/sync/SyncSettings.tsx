@@ -5,12 +5,14 @@ import { Button, Callout, Card, Toast } from "@palier/ui";
 import { useTranslations } from "next-intl";
 import { useEffect, useId, useRef, useState } from "react";
 
+import { sectionId } from "../../features/settings/settings-sections";
 import { codeLapsesAt, joinFailure, pairCodeView, statusLine } from "../../features/sync/sync-view";
 import { Link } from "../../i18n/navigation";
 import { deviceLabel } from "../../lib/device-label";
 import type { Container } from "../../lib/container";
 import { useContainer } from "../ContainerProvider";
 import { ExportButton } from "../data/ExportButton";
+import { SettingsSections } from "../settings/SettingsSections";
 import { useSync } from "./SyncRunner";
 
 type JoinState =
@@ -177,9 +179,10 @@ export function SyncSettings() {
 
   return (
     <div className="app-stack">
+      <SettingsSections screen="sync" />
       <p>{t("intro")}</p>
 
-      <Card>
+      <Card id={sectionId("sync", "switch")}>
         <label className="app-switch" htmlFor={`${id}-switch`}>
           <input
             id={`${id}-switch`}
@@ -220,7 +223,7 @@ export function SyncSettings() {
         {offOffer === "deleted" ? <Toast tone="info">{t("offDeleted")}</Toast> : null}
       </Card>
 
-      <Card>
+      <Card id={sectionId("sync", "status")}>
         <h2>{t("statusTitle")}</h2>
         <p role="status" aria-busy={sync.busy}>
           {line === "statusSynced" && sync.view.lastSyncedAt !== null
@@ -235,7 +238,7 @@ export function SyncSettings() {
         {problem ? <Toast tone="incorrect">{t("unavailable")}</Toast> : null}
       </Card>
 
-      <Card>
+      <Card id={sectionId("sync", "what")}>
         <h2>{t("whatTitle")}</h2>
         <div className="app-columns">
           <div>
@@ -261,7 +264,7 @@ export function SyncSettings() {
         </div>
       </Card>
 
-      <Card>
+      <Card id={sectionId("sync", "devices")}>
         <h2>{t("devicesTitle")}</h2>
         {devices.length === 0 ? (
           <p className="app-muted">{t("devicesNone")}</p>
@@ -318,7 +321,7 @@ export function SyncSettings() {
         )}
       </Card>
 
-      <Card>
+      <Card id={sectionId("sync", "add")}>
         <h2>{t("addTitle")}</h2>
         <p>{t("addBody")}</p>
         <div className="app-actions">
@@ -359,7 +362,7 @@ export function SyncSettings() {
         ) : null}
       </Card>
 
-      <Card>
+      <Card id={sectionId("sync", "join")}>
         <h2>{t("joinTitle")}</h2>
         <form
           className="app-stack"
@@ -399,7 +402,7 @@ export function SyncSettings() {
         <ExportButton variant="secondary" />
       </Card>
 
-      <Card>
+      <Card id={sectionId("sync", "danger")}>
         <h2>{t("dangerTitle")}</h2>
         {deleteStep === "deleted" ? (
           <div className="app-stack">

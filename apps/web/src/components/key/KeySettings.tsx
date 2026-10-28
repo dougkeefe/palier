@@ -5,9 +5,11 @@ import { useTranslations } from "next-intl";
 import { useSyncExternalStore } from "react";
 
 import { returnAfterKey } from "../../features/key/key-view";
+import { sectionId } from "../../features/settings/settings-sections";
 import { Link } from "../../i18n/navigation";
 import { REALTIME_ROUTE_SOURCE_URL } from "../../lib/report";
 import { useContainer } from "../ContainerProvider";
+import { SettingsSections } from "../settings/SettingsSections";
 import { KeyEntry, useKeyEntry } from "./KeyEntry";
 import { RealtimeEndpointSettings } from "./RealtimeEndpointSettings";
 import { SpendSettings } from "./SpendSettings";
@@ -43,21 +45,25 @@ export function KeySettings() {
 
   return (
     <div className="app-stack">
+      <SettingsSections screen="key" />
       <p>{t("intro")}</p>
 
-      <KeyEntry
-        entry={entry}
-        heading="h2"
-        savedExtra={
-          back === null ? null : (
-            <Link href={back} className="pl-btn pl-btn--primary pl-focusable">
-              {t("continueToDiagnostic")}
-            </Link>
-          )
-        }
-      />
+      {/* `KeyEntry` is onboarding's too, so its section's id is on a wrapper here rather than a prop there. */}
+      <div id={sectionId("key", "entry")}>
+        <KeyEntry
+          entry={entry}
+          heading="h2"
+          savedExtra={
+            back === null ? null : (
+              <Link href={back} className="pl-btn pl-btn--primary pl-focusable">
+                {t("continueToDiagnostic")}
+              </Link>
+            )
+          }
+        />
+      </div>
 
-      <Card>
+      <Card id={sectionId("key", "where")}>
         <h2>{t("whereTitle")}</h2>
         <p>{t("whereStored")}</p>
         <p>{t("whereNever")}</p>
@@ -67,7 +73,7 @@ export function KeySettings() {
         </Link>
       </Card>
 
-      <Card>
+      <Card id={sectionId("key", "realtime")}>
         <h2>{t("realtimeTitle")}</h2>
         <p>{t("realtimeNote")}</p>
         <a href={REALTIME_ROUTE_SOURCE_URL} className="app-link pl-focusable" rel="noreferrer">
