@@ -485,6 +485,11 @@ import every package; holds the concrete-adapter wiring nothing else may name.
 
 ## Gates this app owns
 
+- **The chrome and the settings area have unit tests in node** (D265): `Header`, `Footer`, `LandingFooter`,
+  `SettingsLink`, `SettingsNav` and `/settings`'s page and layout render to HTML through `src/__tests__/render.tsx` (the
+  real messages; `fakeNavigation` in place of `src/i18n/navigation`, which needs Next's router), and each test asserts what
+  the component does: where a link leads, what is current, what is left out. A screen's decisions still go in
+  `src/features/**` and its journeys in Playwright; a test that only shows a component rendered is not one of these.
 - Fast lane: `docs/progress.md`'s bounds and its archive's integrity (`src/docs/progress.test.ts`, D255: `docs/` is no
   workspace, so its one test lives here, reading by file URL), i18n key parity (`messages.test.ts`), container wiring test — including the
   production graph over `fake-indexeddb` planning a day from the committed bank, and one sync

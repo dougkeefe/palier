@@ -605,31 +605,7 @@ full.
 - **D252** — The translator's explanation sits in the card, under the panes; the running total and the privacy line below it · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d252--the-translators-explanation-sits-in-the-card-under-the-panes-the-running-total-and-the-privacy-line-below-it)
 - **D253** — Gates O and M passed and bank v4 read: 1.0 · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d253--gates-o-and-m-passed-and-bank-v4-read-10)
 - **D254** — reading's library articles: eight, with excerpts in place of sentences to write · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d254--readings-library-articles-eight-with-excerpts-in-place-of-sentences-to-write)
-
-### D255 — `progress.md` holds current state, and `progress-archive/` holds the record
-**Date:** 24 October 2026 · **Status:** accepted (human request); amends the working agreement's rules 1, 4 and 7 and adds rule 8
-
-- **Why:** the file was 12,537 lines and 970 KB, about 604 KB of deviations and 283 KB of session log, so no read could
-  hold it, and rule 1's "both are short" had stopped being true. It grew by about 10 KB a slice and nothing bounded it.
-- **What moved, verbatim:** D1 to D245 into `docs/progress-archive/deviations-D000-D099.md`, `-D100-D199.md` and
-  `-D200-D299.md`, a file per hundred; 118 session entries into `sessions-2026-09.md` and `sessions-2026-10.md`, a file per
-  month; and into `history.md`, the long *Current phase* narrative, the merged rows *In flight* had listed, and the
-  checklists of Phases 0, 1, 2, 4, 5, 6 and 7. Each was cut at its heading by a script and written unchanged, and a
-  check compared every block before and after (session log).
-- **What stays:** the status table, *In flight*, *Next, decided*, the checklists of the two phases still open (3 and 8),
-  the requirement table, the newest ten deviations and the newest ten session entries in full, and **an index line for
-  every archived deviation**. About 1,070 references in code and documents say `progress.md D###`, and each still
-  resolves through its index line, so none was rewritten.
-- ***Next, decided* was tidied, not redirected:** its slice (D206) is unchanged. The human items left by Phase 7's
-  slices are one list, and the ones marked done, the closed gates and §12.1's trademark check (done at Gate M, D253) are
-  gone from it. Their record is in the deviations and the session log.
-- **Held by a test, not a habit:** `apps/web/src/docs/progress.test.ts`, in the fast lane, fails when the live file holds
-  more than ten deviations or ten session entries, or passes 1,200 lines outside the index; when a deviation is missing,
-  duplicated, misfiled or unindexed, or its index line's title, status or file disagrees with the entry; and when a
-  session entry is in the wrong month's file or out of order. `docs/` is no workspace, so it lives in `apps/web`, which
-  already tests `selfhost/` by file URL. Rule 8 and `progress-archive/README.md` give the rotation.
-- **Not done:** no entry was edited, and none was summarised in place of its text. An archived deviation's status is
-  still marked in place when it is resolved, as before, with its index line changed to match.
+- **D255** — `progress.md` holds current state, and `progress-archive/` holds the record · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d255--progressmd-holds-current-state-and-progress-archive-holds-the-record)
 
 ### D256 — the library as a browsable index and readable articles, with three photographs served from this origin
 **Date:** 24 October 2026 · **Status:** accepted (human request; the agent's design and choice of photographs, for the human's look). Amends D162's and D254's page shape
@@ -958,6 +934,25 @@ link in place of the four.
   `routes.json`, `csp-production.spec.ts`'s `PAGES` and the titles test. Lighthouse's list is unchanged: the overview is
   a static page lighter than `/en/settings/key`, which it measures.
 
+### D265 — the chrome and the settings area have unit tests in node, rendered to HTML, beside their E2E
+**Date:** 27 October 2026 · **Status:** accepted (human's choice); amends `implementation-plan.md` §6.3's "rendering is
+covered by E2E" for `apps/web`'s chrome, and `vitest.config.mts`'s note that `apps/web` tests the DOM only through Playwright
+
+The human asked for this branch to ship at candid-ship's HIGH confidence. Its gate counts a changed file as tested only
+when a test file is named for it or imports it, and Playwright cannot import a component, so `Header`, `Footer`,
+`LandingFooter`, `SettingsLink`, `SettingsNav` and `/settings`'s page and layout were "untested" though E2E drove each.
+Asked, the human chose unit tests for all seven over leaving §6.3 as it was.
+- **How:** `src/__tests__/render.tsx` renders through the real messages with `react-dom/server`, or `react-dom/static`'s
+  `prerenderToNodeStream` for a page that awaits its `params`, in the `web` project's node environment: no jsdom, and no
+  new dependency. `fakeNavigation` stands in for `src/i18n/navigation`, which needs Next's router; a test also stubs what
+  is not its subject (the sync status, the language toggle, the shortcut sheet, `next-intl/server`).
+- **What they assert is behaviour, not that something rendered**, which is §6.3's objection: the gear's address, name and
+  current state; the menu absent on the overview and marking one screen; the header's order; each footer's one settings
+  link and no direct one; the overview's cards in the menu's order, and its title in both languages. Breaking the header
+  or the footer failed four of them.
+- **The rule for the rest of `apps/web` is unchanged:** decisions in `src/features/**`, journeys in Playwright. This adds a
+  third place only for the chrome every page carries.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
@@ -974,6 +969,8 @@ a gear at the top right and a link in the footer.
   six specs that used the footer's links, `/settings` in the CSP pages and the titles test.
 - **Docs:** D264; D254 and the 24 October entry for the translator's explanation are archived (rule 8); PRD §7;
   `apps/web/CLAUDE.md`.
+- **Then, for candid-ship's HIGH confidence (D265):** unit tests for the chrome and the settings area over
+  `src/__tests__/render.tsx`, the `vitest.config.mts` note and `apps/web/CLAUDE.md`'s gates; D255 archived (rule 8).
 
 **Verified:**
 - `pnpm verify` exit 0: check-types, lint and boundaries clean; `pnpm test` passed 292 files, 4,701 tests (8 todo).
