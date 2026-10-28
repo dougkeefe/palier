@@ -983,6 +983,10 @@ a gear at the top right and a link in the footer.
   overview's cards, the menu on `/fr/settings/key`, and the footer's one link. **Found, not caused here:** at 390px
   `/fr/settings/key` and `/fr/settings/data` are 10–14px wider than the screen. Their French content widens the section,
   and the overflow is the same with the menu removed from the page. Left for its own fix.
+- For D265: `pnpm verify` exit 0, 299 files and 4,728 tests (8 todo), the 27 new tests among them. **Proven to bite:**
+  with the gear removed from `Header` and the footer's link pointed at `/settings/data`, four of the six header and
+  footer tests failed; restored, they passed. The landing footer's journey (`settings.spec.ts`) and `smoke.spec.ts`
+  passed, 19 of 19, through the same temporary config.
 - Not run: the rest of the `offline` project, Lighthouse and the live smoke.
 
 ### 26 October 2026 — `dougkeefe/image-clickable-bars` (the staircase is the result picker; D263)
