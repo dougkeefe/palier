@@ -26,4 +26,14 @@ describe("Header (D202, D264)", () => {
     const hrefs = links(markup).map(({ href }) => href);
     expect(hrefs).toEqual(["/", "/home", "/review", "/practice/oral", "/progress", "/practice/writing/translate", "/settings"]);
   });
+
+  it("folds the destinations, the sync status and the language behind a collapsed menu button, and leaves the gear out (D267)", () => {
+    const markup = html(<Header />);
+    expect(markup).toMatch(/<button[^>]*aria-label="Menu"[^>]*aria-expanded="false"[^>]*aria-controls="app-menu"/);
+    const panel = /<div id="app-menu" class="app-header__panel">(.*?)<\/div><div class="app-header__tools">/s.exec(markup)?.[1] ?? "";
+    expect(links(panel).map(({ href }) => href)).toEqual(["/home", "/review", "/practice/oral", "/progress", "/practice/writing/translate"]);
+    expect(panel).toContain("sync-status");
+    expect(panel).toContain("language-toggle");
+    expect(panel).not.toContain('aria-label="Settings"');
+  });
 });

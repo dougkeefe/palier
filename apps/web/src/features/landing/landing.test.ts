@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 
 import {
   explainerLanguage,
-  menuOpenAfter,
   SAMPLE_ANSWER,
   SAMPLE_OPTIONS,
   sampleFeedback,
@@ -70,27 +69,5 @@ describe("sampleOptionState", () => {
 
   it("marks the wrong pick and still shows the right answer", () => {
     expect(SAMPLE_OPTIONS.map((o) => sampleOptionState(o, "c"))).toEqual(["correct", "plain", "incorrect", "plain"]);
-  });
-});
-
-describe("menuOpenAfter", () => {
-  it("opens a closed menu, and closes an open one, when the button is pressed", () => {
-    expect(menuOpenAfter(false, "toggle")).toBe(true);
-    expect(menuOpenAfter(true, "toggle")).toBe(false);
-  });
-
-  it("closes on Escape, and stays closed", () => {
-    expect(menuOpenAfter(true, "escape")).toBe(false);
-    expect(menuOpenAfter(false, "escape")).toBe(false);
-  });
-
-  it("closes once a section link is followed, so the section is not under the menu", () => {
-    expect(menuOpenAfter(true, "follow")).toBe(false);
-    expect(menuOpenAfter(false, "follow")).toBe(false);
-  });
-
-  it("closes when focus or a tap lands outside it, so it is never left over the page", () => {
-    expect(menuOpenAfter(true, "leave")).toBe(false);
-    expect(menuOpenAfter(false, "leave")).toBe(false);
   });
 });

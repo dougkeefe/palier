@@ -7,6 +7,7 @@ import { useEffect, useId, useState } from "react";
 
 import { OPENAI_LIMITS } from "../../features/key/openai-links";
 import { capNotice, capShare, estimateText, moneyText, parseCap } from "../../features/key/spend-view";
+import { sectionId } from "../../features/settings/settings-sections";
 import { useContainer } from "../ContainerProvider";
 
 type CapChange = "none" | "capSaved" | "capRemoved" | "capBlank" | "capNotNumber" | "capNotPositive" | "capFailed";
@@ -73,7 +74,7 @@ export function SpendSettings() {
 
   return (
     <>
-      <Card>
+      <Card id={sectionId("key", "spend")}>
         <h2>{t("spendTitle")}</h2>
         <div className="app-stack">
           <p>{t("spendIntro")}</p>
@@ -97,7 +98,7 @@ export function SpendSettings() {
         </div>
       </Card>
 
-      <Card>
+      <Card id={sectionId("key", "cap")}>
         <h2>{t("capTitle")}</h2>
         <div className="app-stack">
           <p>{t("capIntro")}</p>
@@ -150,7 +151,7 @@ export function SpendSettings() {
         </div>
       </Card>
 
-      <Card>
+      <Card id={sectionId("key", "features")}>
         <h2>{t("featuresTitle")}</h2>
         <div className="app-stack">
           <p>{t("featuresIntro")}</p>

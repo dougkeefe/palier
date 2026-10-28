@@ -6,6 +6,7 @@ import { useFormatter, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 import { recordingsMegabytes } from "../../features/oral/practice-view";
+import { sectionId } from "../../features/settings/settings-sections";
 import { useContainer } from "../ContainerProvider";
 
 /**
@@ -45,7 +46,7 @@ export function OralStorageSettings({ refresh = 0 }: { refresh?: number }) {
   };
 
   return (
-    <Card>
+    <Card id={sectionId("data", "oral")}>
       <h2>{t("oralTitle")}</h2>
       <div className="app-stack">
         <p>{t("oralNote")}</p>

@@ -5,8 +5,10 @@ import { Button, Callout, Card, Toast } from "@palier/ui";
 import { useTranslations } from "next-intl";
 import { useEffect, useId, useRef, useState } from "react";
 
+import { sectionId } from "../../features/settings/settings-sections";
 import { Link } from "../../i18n/navigation";
 import { useContainer } from "../ContainerProvider";
+import { SettingsSections } from "../settings/SettingsSections";
 import { ExportButton } from "./ExportButton";
 import { OralStorageSettings } from "./OralStorageSettings";
 import { TelemetrySettings } from "./TelemetrySettings";
@@ -56,15 +58,16 @@ export function DataSettings() {
 
   return (
     <div className="app-stack">
+      <SettingsSections screen="data" />
       <p>{t("intro")}</p>
       <Callout tone="info">{t("noRecovery")}</Callout>
 
-      <Card>
+      <Card id={sectionId("data", "export")}>
         <h2>{t("exportTitle")}</h2>
         <ExportButton />
       </Card>
 
-      <Card>
+      <Card id={sectionId("data", "import")}>
         <h2>{t("importTitle")}</h2>
         <form
           className="app-stack"
@@ -109,7 +112,7 @@ export function DataSettings() {
 
       <OralStorageSettings refresh={deleteStep === "deleted" ? 1 : 0} />
 
-      <Card>
+      <Card id={sectionId("data", "delete")}>
         <h2>{t("deleteTitle")}</h2>
         {deleteStep === "deleted" ? (
           <div className="app-stack">

@@ -3,6 +3,18 @@
 Newest first. Moved verbatim from `docs/progress.md` on 24 October 2026 (D255). Its index there points here. The rules are
 `progress.md`'s: never edit a session entry, and mark a deviation resolved in place, updating its index line too.
 
+### 24 October 2026 — `dougkeefe/palier-reading-comprehension-add` (1.0 recorded: Gates O and M passed, bank v4 read; D253)
+
+The human asked about the library's "Articles on reading comprehension come after 1.0", and then reported the read of bank v4,
+Gate O and Gate M done. This commit changes documents only.
+- **D253:** the three recorded as passed with no finding; ADR 24 stands.
+- **Ticked:** Phase 6's Gate O and exit criteria 3 and 5, Phase 7's Gate M and exit criteria 1 and 3, and R1, R2, R8 and
+  R13 in the requirement table. The status table reads Phase 6 complete and Phase 7 complete, 1.0.
+- **In flight:** the rows merged as #88–#99 removed; this branch's row added.
+- **Next, decided:** reading's library articles (D254), claimed by this branch.
+
+**Verified:** documents only, so no command proves this commit; the next commit on the branch runs `pnpm verify`.
+
 ### 24 October 2026 — `dougkeefe/translate-page-output-order` (the translator's explanation in the card; D252)
 
 Not *Next, decided*, which is unchanged (Gate O): a human-requested detour. The human asked for the explanation to sit

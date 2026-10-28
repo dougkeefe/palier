@@ -28,7 +28,10 @@ import every package; holds the concrete-adapter wiring nothing else may name.
 - **The app as designed** (D202, `docs/Palier landing page/Palier App.dc.html`): the landing page's teal on warm paper
   and Source Serif 4, light only. The header is the wordmark, the destinations on a quiet pill track (`HeaderNav`, a
   client component that marks the current page `aria-current="page"` from `features/nav/nav.ts`), then sync, the
-  language and, rightmost, the settings gear (`SettingsLink`, D264). The footer is deep teal with the giant wordmark, drawn by `::before` from a `data-` attribute. `.app-main`
+  language and, rightmost, the settings gear (`SettingsLink`, D264). **Below 1100px the destinations, sync and the
+  language fold behind a menu button beside the gear** (D267): `components/HeaderMenu.tsx`, the landing menu's disclosure
+  made shared, over a panel that is `display: contents` from 1100px, so each is rendered once. The breakpoint is the
+  French row's width with sync off, not the landing header's 1000px. The footer is deep teal with the giant wordmark, drawn by `::before` from a `data-` attribute. `.app-main`
   is 760px, and a page whose section carries `.app-wide` (today, the translator, the library) takes 1160px. Every colour in `globals.css` is a token.
   **Today** (D214–D219) is the dashboard design (D219): a deep hero with the week's answers and the three skills as cards,
   each a link to its practice with today's plan done (`features/home/today-view.ts`, over the container's
@@ -53,8 +56,8 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     except `/` (`features/landing/landing.ts`'s `showsAppChrome`, on next-intl's pathname). There the page renders its own
     `LandingHeader`, `main#main` and `LandingFooter`.
   - **Below 1000px the landing header folds behind a menu button** at the top right (D232): `LandingMenu.tsx`, a
-    disclosure (never an ARIA menu) around the server-rendered nav and actions, deciding through `landing.ts`'s
-    `menuOpenAfter`. At 1000px and up its panel is `display: contents`, so the header is D201's. Keep one `nav` landmark:
+    disclosure (never an ARIA menu) around the server-rendered nav and actions: `HeaderMenu` since D267, deciding through
+    `features/nav/menu.ts`'s `menuOpenAfter`. At 1000px and up its panel is `display: contents`, so the header is D201's. Keep one `nav` landmark:
     never render the sections twice, one copy per width.
   - The landing footer must keep what the app's promises: `NonAffiliation`, the settings link (D264), about,
     privacy, the library and `ShortcutSheet`.
@@ -93,7 +96,11 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   and the footer's one "Settings" link. `app/[locale]/settings/layout.tsx` puts `components/settings/SettingsNav.tsx`, the
   one menu, above every screen under it, and the overview leaves it out, its cards being the menu. **A new settings screen
   is an entry in `features/settings/settings-nav.ts`'s `SETTINGS_ITEMS`**, never a new footer link. A spec reaches a
-  screen through `e2e/helpers.ts`'s `openSettings`.
+  screen through `e2e/helpers.ts`'s `openSettings`. **Each screen opens with "On this page"** (D266,
+  `components/settings/SettingsSections.tsx`), a smaller pill row of fragment links to its cards, rendered first inside
+  the island once it has loaded, never by the page, so no link points at a card not yet drawn. **A new card on a settings
+  screen is an entry in `features/settings/settings-sections.ts`'s `SETTINGS_SECTIONS` and `id={sectionId(…)}` on the
+  card.**
 - **`public/content/` and `public/sw.js` are generated, gitignored and never edited.** `public/media/` is committed
   (the explainer videos, D220 and D230) and is never precached.
   `scripts/prepare-public.mjs` runs before `dev` and `build`: it copies `content/bank/` and

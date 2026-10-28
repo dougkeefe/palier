@@ -44,6 +44,29 @@ test("the gear and the footer's link lead to the overview, and its cards and men
   await axeClean(page);
 });
 
+test("each settings screen opens with a link to each of its sections, and each lands on its card (D266)", async ({ page }) => {
+  for (const [path, sections] of [
+    ["/en/settings/key", ["Your key", "Where it is kept", "Studio mode", "Spending", "Monthly cap", "Cost per feature"]],
+    ["/en/settings/data", ["Export", "Import", "Shared answers", "Recordings", "Delete everything"]],
+    ["/en/settings/sync", ["On or off", "Status", "What syncs", "Your devices", "Add a device", "Use a code", "Danger zone"]],
+  ] as const) {
+    await page.goto(path);
+    const onThisPage = page.getByRole("navigation", { name: "On this page" });
+    await expect(onThisPage.getByRole("link")).toHaveText([...sections]);
+    // Every link has its card on the page, once.
+    for (const href of await onThisPage.getByRole("link").evaluateAll((all) => all.map((a) => a.getAttribute("href")))) {
+      await expect(page.locator(`[id="${String(href).slice(1)}"]`)).toHaveCount(1);
+    }
+    // The last section is furthest down: its link brings its card into view and names it in the address.
+    const last = onThisPage.getByRole("link").last();
+    const target = page.locator(`[id="${String(await last.getAttribute("href")).slice(1)}"]`);
+    await last.click();
+    await expect(page).toHaveURL(new RegExp(`${path}#settings-`));
+    await expect(target).toBeInViewport();
+  }
+  await axeClean(page);
+});
+
 test("the French settings area is named in French and clean", async ({ page }) => {
   await page.goto("/fr/about");
   await page.locator(".app-header__tools").getByRole("link", { name: "Paramètres", exact: true }).click();

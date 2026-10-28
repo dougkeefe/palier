@@ -32,6 +32,12 @@ test("results declared in onboarding shape today, and the study settings change 
   await openSettings(page, "Your levels");
   await expect(page).toHaveURL(/\/en\/settings\/study$/);
   await expect(page.getByRole("heading", { level: 1, name: "Your levels and goals" })).toBeVisible();
+  // With a profile, the screen opens with a link to each of its cards (D266).
+  const onThisPage = page.getByRole("navigation", { name: "On this page" });
+  await expect(onThisPage.getByRole("link")).toHaveText(["Current results", "Targets", "Daily goal"]);
+  await onThisPage.getByRole("link", { name: "Daily goal" }).click();
+  await expect(page).toHaveURL(/\/en\/settings\/study#settings-levels-goal$/);
+  await expect(page.getByRole("heading", { level: 2, name: "Your daily goal" })).toBeInViewport();
   // The staircase is the picker (D263): its E is checked, and its caption says it in words.
   await expect(page.getByRole("group", { name: "Reading", exact: true }).getByRole("radio", { name: "E", exact: true })).toBeChecked();
   await expect(page.getByText("Reading: you hold E, the exemption. Nothing left to study here.")).toBeVisible();
@@ -56,6 +62,8 @@ test("the study settings offer onboarding before there is a profile, and the res
   await page.goto("/fr/settings/study");
   await expect(page.getByRole("heading", { level: 1, name: "Vos niveaux et vos objectifs" })).toBeVisible();
   await expect(page.getByRole("link", { name: "Préparer votre pratique" })).toBeVisible();
+  // No profile, no cards, so no links to them (D266).
+  await expect(page.getByRole("navigation", { name: "Sur cette page" })).toHaveCount(0);
   await axeClean(page);
 
   await page.goto("/fr/start");

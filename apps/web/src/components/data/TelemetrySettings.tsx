@@ -5,6 +5,7 @@ import { Button, Card, Toast } from "@palier/ui";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
+import { sectionId } from "../../features/settings/settings-sections";
 import { TelemetryDisclosure } from "../exam/TelemetryDisclosure";
 import { useContainer } from "../ContainerProvider";
 
@@ -46,7 +47,7 @@ export function TelemetrySettings() {
   };
 
   return (
-    <Card>
+    <Card id={sectionId("data", "telemetry")}>
       <h2>{t("settingsTitle")}</h2>
       <div className="app-stack">
         <p>{consent === null ? " " : sharing ? t("settingsOn") : t("settingsOff")}</p>
