@@ -953,8 +953,8 @@ link in place of the four.
   "Your levels" in the footer (`journeys`, `key`, `key-leak`, `sync`, `content`, `levels`) now go through `helpers.ts`'s
   `openSettings`: the footer's "Settings", then the card. `key.spec.ts` moves between the key and data screens by the
   menu. `footer.levels`, `footer.yourData`, `footer.sync` and `footer.key` are gone, read by nothing.
-- **New:** `settings-nav.test.ts`; `gear` in the glyph registry's test; `e2e/settings.spec.ts` (the gear and the footer
-  to the overview, each card to its screen with the menu marking it, axe on both, in both languages); `/settings` in
+- **New:** `settings-nav.test.ts`; `gear` in the glyph registry's test; `e2e/settings.spec.ts` (the gear, the footer and
+  the landing footer to the overview, each card to its screen with the menu marking it, axe on both, in both languages); `/settings` in
   `routes.json`, `csp-production.spec.ts`'s `PAGES` and the titles test. Lighthouse's list is unchanged: the overview is
   a static page lighter than `/en/settings/key`, which it measures.
 

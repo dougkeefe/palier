@@ -4,8 +4,8 @@ import { axeClean } from "./helpers";
 
 /**
  * The settings area (progress.md D264): the header's gear and the footer's link both lead to the overview, whose cards
- * open each settings screen, and every screen carries the same menu with the one you are on marked. Neither test holds
- * state, so each may start with `page.goto`.
+ * open each settings screen, and every screen carries the same menu with the one you are on marked. The landing page's
+ * own footer leads there too. No test holds state, so each may start with `page.goto`.
  */
 
 test("the gear and the footer's link lead to the overview, and its cards and menu move between the screens", async ({ page }) => {
@@ -55,4 +55,11 @@ test("the French settings area is named in French and clean", async ({ page }) =
     "page",
   );
   await axeClean(page);
+});
+
+test("the landing page's own footer leads to the overview too (D264)", async ({ page }) => {
+  await page.goto("/en");
+  await page.getByRole("contentinfo").getByRole("link", { name: "Settings", exact: true }).click();
+  await expect(page).toHaveURL(/\/en\/settings$/);
+  await expect(page.getByRole("heading", { level: 1, name: "Settings" })).toBeVisible();
 });
