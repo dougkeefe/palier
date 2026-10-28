@@ -305,3 +305,13 @@ export const getOralReport = async (page: Page, { onState = async () => undefine
 export const expectStatementInMain = async (page: Page, words = "not affiliated") => {
   await expect(page.locator("main .app-nonaffiliation").first()).toContainText(words);
 };
+
+/**
+ * Open a settings screen the way a user does from any page (progress.md D264): the footer's "Settings" link, then the
+ * screen's card on the overview. Scoped to the footer, since the header's gear has the same name.
+ */
+export const openSettings = async (page: Page, name: string) => {
+  await page.getByRole("contentinfo").getByRole("link", { name: "Settings", exact: true }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "Settings" })).toBeVisible();
+  await page.getByRole("main").getByRole("link", { name, exact: true }).click();
+};

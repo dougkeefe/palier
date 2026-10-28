@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 
+import { SETTINGS_HREF } from "../../features/settings/settings-nav";
 import { Link } from "../../i18n/navigation";
 import { NonAffiliation } from "../NonAffiliation";
 import { ShortcutSheet } from "../ShortcutSheet";
@@ -8,8 +9,9 @@ const REPOSITORY = "https://github.com/dougkeefe/palier";
 
 /**
  * The landing page's own footer, as designed (D201). It keeps everything the app's footer
- * promises on every page: the R5 statement through `NonAffiliation`, the data, sync and key
- * links one step away (R11, R12, R14), the library, about and privacy, and the shortcut sheet.
+ * promises on every page: the R5 statement through `NonAffiliation`, the link to the settings
+ * area, where the data, sync and key are (R11, R12, R14; D264), the library, about and privacy,
+ * and the shortcut sheet.
  */
 export function LandingFooter() {
   const t = useTranslations("landing");
@@ -37,14 +39,8 @@ export function LandingFooter() {
         </div>
         <div className="landing-footer__column">
           <h2 className="landing-footer__heading">{t("footer.yourDevice")}</h2>
-          <Link href="/settings/data" className="landing-footer__link pl-focusable">
-            {app("yourData")}
-          </Link>
-          <Link href="/settings/sync" className="landing-footer__link pl-focusable">
-            {app("sync")}
-          </Link>
-          <Link href="/settings/key" className="landing-footer__link pl-focusable">
-            {app("key")}
+          <Link href={SETTINGS_HREF} className="landing-footer__link pl-focusable">
+            {app("settings")}
           </Link>
         </div>
         <div className="landing-footer__column">

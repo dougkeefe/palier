@@ -5,6 +5,7 @@ import {
   generateAndPractise,
   getOralReport,
   onboard,
+  openSettings as openSettingsScreen,
   practiseSpeaking,
   runDiagnosticByKeyboard,
   talkInStudio,
@@ -53,7 +54,7 @@ import {
  */
 
 const openSettings = async (page: Page, name: string, heading: string) => {
-  await page.getByRole("link", { name, exact: true }).click();
+  await openSettingsScreen(page, name);
   await expect(page.getByRole("heading", { level: 1, name: heading })).toBeVisible();
 };
 

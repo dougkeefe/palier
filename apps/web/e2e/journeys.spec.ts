@@ -6,6 +6,7 @@ import {
   drillThroughByKeyboard,
   expectStatementInMain,
   onboard,
+  openSettings,
   runDiagnosticByKeyboard,
   setSize,
 } from "./helpers";
@@ -209,7 +210,7 @@ test("journey 6: export, delete everything, import, and the same progress is bac
   await expect(answeredLine).toHaveText(`${answered} items answered`);
 
   // Export.
-  await page.getByRole("link", { name: "Your data" }).click();
+  await openSettings(page, "Your data");
   const [download] = await Promise.all([
     page.waitForEvent("download"),
     page.getByRole("button", { name: "Download everything (JSON)" }).click(),
@@ -230,7 +231,7 @@ test("journey 6: export, delete everything, import, and the same progress is bac
   await expect(page).toHaveURL(/\/en\/start$/);
 
   // Import the file, and the same progress is back.
-  await page.getByRole("link", { name: "Your data" }).click();
+  await openSettings(page, "Your data");
   await page.getByLabel("Choose an export file").setInputFiles(file);
   await page.getByRole("button", { name: "Import" }).click();
   await expect(page.getByRole("status").filter({ hasText: `Imported ${answered} answers` })).toBeVisible();
@@ -244,7 +245,7 @@ test("journey 6: export, delete everything, import, and the same progress is bac
 
 test("an import of a file that is not an export changes nothing and says so", async ({ page }, testInfo) => {
   await onboard(page, "skip");
-  await page.getByRole("link", { name: "Your data" }).click();
+  await openSettings(page, "Your data");
   const bad = testInfo.outputPath("not-an-export.json");
   await (await import("node:fs/promises")).writeFile(bad, '{"hello":"world"}');
   await page.getByLabel("Choose an export file").setInputFiles(bad);
@@ -286,6 +287,8 @@ test("every feedback panel can report its item, as a prefilled GitHub issue (§1
 test("every page is titled for its purpose, ahead of the product name (WCAG 2.4.2)", async ({ page }) => {
   for (const [path, title] of [
     ["/en/review", "Review · Palier"],
+    ["/en/settings", "Settings · Palier"],
+    ["/fr/settings", "Paramètres · Palier"],
     ["/en/settings/data", "Your data · Palier"],
     ["/fr/progress", "Progrès · Palier"],
     ["/en/practice/writing", "Written expression · Palier"],

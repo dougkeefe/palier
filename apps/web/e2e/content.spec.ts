@@ -1,6 +1,6 @@
 import { expect, type Page, test } from "@playwright/test";
 
-import { axeClean, drillThroughByKeyboard, expectStatementInMain, onboard } from "./helpers";
+import { axeClean, drillThroughByKeyboard, expectStatementInMain, onboard, openSettings } from "./helpers";
 
 /**
  * Phase 7 Slice 3 (progress.md D145): the about page and the privacy notice, the statement
@@ -95,7 +95,7 @@ test("? opens the shortcut sheet from anywhere, Escape closes it, and focus goes
 
 test("a ? typed into a field stays in the field", async ({ page }) => {
   await onboard(page, "skip");
-  await page.getByRole("link", { name: "Sync", exact: true }).click();
+  await openSettings(page, "Sync");
   await page.getByLabel("Code").fill("");
   await page.getByLabel("Code").press("?");
   await expect(page.getByLabel("Code")).toHaveValue("?");

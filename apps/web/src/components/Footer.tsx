@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 
+import { SETTINGS_HREF } from "../features/settings/settings-nav";
 import { Link } from "../i18n/navigation";
 import { NonAffiliation } from "./NonAffiliation";
 import { ShortcutSheet } from "./ShortcutSheet";
@@ -7,10 +8,10 @@ import { ShortcutSheet } from "./ShortcutSheet";
 /**
  * The site footer, on every page. It carries the persistent, unmissable
  * non-affiliation statement required from day one (R5, product-requirements.md
- * §2: "in the footer of every page"), and the links to your levels and goals (D259), the data pane, the sync settings and
- * the key settings, then the library (D162), the about page and the privacy notice (progress.md D145), so export, delete, the sync switch and the key are one step from anywhere
- * [R11, R12, R14] and always in the same place (WCAG 3.2.6). Deep teal, with the giant wordmark cropped at the
- * bottom, as designed (progress.md D202).
+ * §2: "in the footer of every page"), and the link to the settings area (D264), where your levels and goals, the key,
+ * export, import, delete and the sync switch are [R11, R12, R14], then the library (D162), the about page and the
+ * privacy notice (progress.md D145), always in the same place (WCAG 3.2.6). Deep teal, with the giant wordmark cropped
+ * at the bottom, as designed (progress.md D202).
  */
 export function Footer() {
   const t = useTranslations("footer");
@@ -22,17 +23,8 @@ export function Footer() {
         <NonAffiliation variant="footer" />
         {/* A <div>, not a <p>: the shortcut sheet's dialog, with its headings, is inside it. */}
         <div className="app-footer__links">
-          <Link href="/settings/study" className="app-link pl-focusable">
-            {t("levels")}
-          </Link>
-          <Link href="/settings/data" className="app-link pl-focusable">
-            {t("yourData")}
-          </Link>
-          <Link href="/settings/sync" className="app-link pl-focusable">
-            {t("sync")}
-          </Link>
-          <Link href="/settings/key" className="app-link pl-focusable">
-            {t("key")}
+          <Link href={SETTINGS_HREF} className="app-link pl-focusable">
+            {t("settings")}
           </Link>
           <Link href="/library" className="app-link pl-focusable">
             {t("library")}

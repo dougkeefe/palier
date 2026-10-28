@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 26 October 2026 (the staircase is the result picker, D263; next, D206's bank budget)
+**Last updated:** 27 October 2026 (one settings area behind a gear in the header, D264; next, D206's bank budget)
 **Current phase:** **1.0 is reached** (24 October 2026, D253): the human passed Gate O and Gate M and read bank v4 with no
 disagreement, so Phases 6 and 7 are complete. After 1.0, reading's library articles are built (D254), and D206's bank
 budget is next. Phase 3's product pilot still runs (Gate E, D97), and Phase 8, the English mirror, is the plan's next
@@ -100,6 +100,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 | --- | --- | --- |
 | `dougkeefe/dependabot-alerts-resolve-v2` | **The open Dependabot alerts**: three dev-only transitive packages refreshed within their parents' ranges, and Lighthouse's `zod` 3 dismissed as unreachable (D261). **E2E in three shards** (D262). | 26 October 2026 |
 | `dougkeefe/image-clickable-bars` | **The staircase is the result picker**: a skill's result is picked by tapping its step, Coco hops there, and the pill row is gone (D263). | 26 October 2026 |
+| `dougkeefe/settings-shared-menu` | **One settings area**: `/settings` lists levels, the key, your data and sync, each screen carries one menu, and a gear at the header's top right and one footer link lead there (D264). | 27 October 2026 |
 
 *(Merged rows are removed: this table tracks current work, and the session log is the permanent record. The rows
 removed up to 24 October 2026, the last of them the reading articles (#100), are listed in
@@ -130,6 +131,11 @@ and it costs a first visit on a phone the most.
 
 *Done:* a first visit's bank bytes under 400 KB gzipped, enforced by a test that fails on a deliberate breach, the
 offline journeys green, and R4's reach stated in the deviation.
+
+**For the human, from D264:** open the gear at the header's top right, then each card on `/en/settings` and
+`/fr/settings`, on a phone too. Read the new French (`nav.settings`, `footer.settings` and the `settings` namespace, the
+cards' descriptions especially), and say whether two steps to export, delete and the key is acceptable, or whether any
+of the four deserves its direct footer link back.
 
 **For the human, from D259:** go through onboarding declaring a result in each skill (`/en/start`, then `/fr/start`), then
 open Today and `/settings/study`, on a phone too. Read the new French (`start.targetPerSkill` to `start.placementNothing`,
@@ -598,66 +604,8 @@ full.
 - **D251** — The translator translates on a pause, Google Translate's way, on a page wide enough for two panes · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d251--the-translator-translates-on-a-pause-google-translates-way-on-a-page-wide-enough-for-two-panes)
 - **D252** — The translator's explanation sits in the card, under the panes; the running total and the privacy line below it · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d252--the-translators-explanation-sits-in-the-card-under-the-panes-the-running-total-and-the-privacy-line-below-it)
 - **D253** — Gates O and M passed and bank v4 read: 1.0 · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d253--gates-o-and-m-passed-and-bank-v4-read-10)
-
-### D254 — reading's library articles: eight, with excerpts in place of sentences to write
-**Date:** 24 October 2026 · **Status:** accepted (agent), Gate K's "after 1.0" (D145) now that 1.0 is reached (D253); the
-human asked about the library's "Articles on reading comprehension come after 1.0." Amends D162's "one article per
-written-expression sub-skill"; `architecture.md` §5's tree and PRD §8's `/library` row amended in place
-
-- **One article per reading sub-skill, eight**, at `content/library/<subSkill>.json`, beside writing's ten. Each has a
-  bilingual title and summary, two sections of two paragraphs on what to look for and the traps in the options, and three
-  **original** excerpts in federal administrative French, each with what to notice. They are the agent's drafts, French
-  included, written from how bank v4's reading items test each sub-skill; they are the human's to read (*Next, decided*).
-- **The article's shape follows its sub-skill.** `LibraryArticle` is now a union: `WritingLibraryArticle` keeps
-  `{ avoid?, write, why }` examples, and `ReadingLibraryArticle` takes `LibraryExcerpt`, `{ excerpt, why }`. "Instead
-  of / Write" means nothing for a reading point, and a reading article cannot pass with sentences to write, nor relate to
-  a writing article. The schema is a `z.discriminatedUnion` on `subSkill`, so a mismatch is reported at its own path
-  (`3.examples.0…`), not as one "invalid input".
-- **`parseLibrary` requires one article per `LIBRARY_SUB_SKILLS`** (reading's eight, then writing's ten), and an oral
-  sub-skill is refused. `articleHref` answers for reading too, so **a reading item's explanation now links its article**,
-  in the drill (a new tab) and the exam review, through the existing `ArticleLink`, with no change to either screen.
-- **The web:** `/library` lists reading first, then writing, each under its heading, and `library.readingLater` is gone.
-  A reading article's excerpts are tagged "Read" / « Lisez » with the article's `lang`, and its button leads to
-  `/practice/reading`. `skillHeading` became `writingHeading` beside `readingHeading`; `intro` names both skills. The eight
-  routes joined `routes.json` (so the warmup visits them) and the precache, by file name, with no script change.
-- **A content bar for reading:** at least three excerpts per article, beside writing's four sentences to write.
-  Excerpts are longer, and three cover each sub-skill's traps.
-- **Tests whose premise changed, said here as D207 did:**
-  - `links.test.ts`'s "links a reading sub-skill nowhere, since reading's articles come after 1.0" now holds that every
-    reading sub-skill links to an article, and that an oral one links nowhere.
-  - `lib/library.test.ts` counted ten articles; `library-content.test.ts` counted `WRITING_SUB_SKILLS` files and required
-    four `avoid` examples of every article; `library.test.ts` built writing articles only. Each now covers both skills.
-  - `content.spec.ts`'s library test counted ten entries and probed `/en/library/main-idea` as a 404. It counts eighteen,
-    and probes an oral sub-skill, `/en/library/fluency-and-hesitation`. A reading drill's journey into its article is new.
-- **Lighthouse's list is unchanged** (19 URLs): a reading article is the same server template as `/fr/library/agreement`,
-  which it already measures, and a 20th URL adds five runs to the medium lane. `csp-production.spec.ts` gained
-  `/library/inference`, which costs one page load.
-- **The bank grows by nothing**; the precache gains eight article pages in each locale.
-
-### D255 — `progress.md` holds current state, and `progress-archive/` holds the record
-**Date:** 24 October 2026 · **Status:** accepted (human request); amends the working agreement's rules 1, 4 and 7 and adds rule 8
-
-- **Why:** the file was 12,537 lines and 970 KB, about 604 KB of deviations and 283 KB of session log, so no read could
-  hold it, and rule 1's "both are short" had stopped being true. It grew by about 10 KB a slice and nothing bounded it.
-- **What moved, verbatim:** D1 to D245 into `docs/progress-archive/deviations-D000-D099.md`, `-D100-D199.md` and
-  `-D200-D299.md`, a file per hundred; 118 session entries into `sessions-2026-09.md` and `sessions-2026-10.md`, a file per
-  month; and into `history.md`, the long *Current phase* narrative, the merged rows *In flight* had listed, and the
-  checklists of Phases 0, 1, 2, 4, 5, 6 and 7. Each was cut at its heading by a script and written unchanged, and a
-  check compared every block before and after (session log).
-- **What stays:** the status table, *In flight*, *Next, decided*, the checklists of the two phases still open (3 and 8),
-  the requirement table, the newest ten deviations and the newest ten session entries in full, and **an index line for
-  every archived deviation**. About 1,070 references in code and documents say `progress.md D###`, and each still
-  resolves through its index line, so none was rewritten.
-- ***Next, decided* was tidied, not redirected:** its slice (D206) is unchanged. The human items left by Phase 7's
-  slices are one list, and the ones marked done, the closed gates and §12.1's trademark check (done at Gate M, D253) are
-  gone from it. Their record is in the deviations and the session log.
-- **Held by a test, not a habit:** `apps/web/src/docs/progress.test.ts`, in the fast lane, fails when the live file holds
-  more than ten deviations or ten session entries, or passes 1,200 lines outside the index; when a deviation is missing,
-  duplicated, misfiled or unindexed, or its index line's title, status or file disagrees with the entry; and when a
-  session entry is in the wrong month's file or out of order. `docs/` is no workspace, so it lives in `apps/web`, which
-  already tests `selfhost/` by file URL. Rule 8 and `progress-archive/README.md` give the rotation.
-- **Not done:** no entry was edited, and none was summarised in place of its text. An archived deviation's status is
-  still marked in place when it is resolved, as before, with its index line changed to match.
+- **D254** — reading's library articles: eight, with excerpts in place of sentences to write · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d254--readings-library-articles-eight-with-excerpts-in-place-of-sentences-to-write)
+- **D255** — `progress.md` holds current state, and `progress-archive/` holds the record · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d255--progressmd-holds-current-state-and-progress-archive-holds-the-record)
 
 ### D256 — the library as a browsable index and readable articles, with three photographs served from this origin
 **Date:** 24 October 2026 · **Status:** accepted (human request; the agent's design and choice of photographs, for the human's look). Amends D162's and D254's page shape
@@ -955,9 +903,91 @@ should be the control, "a much more whimsical user experience". Asked, the human
   image named by its sentence. The stair is now a radio group, so it checks the group's E and finds the sentence as the
   caption. Today's read-only stair is still found as an image, unchanged.
 
+### D264 — one settings area: the header's gear and the footer's one link lead to `/settings`, whose screens share a menu
+**Date:** 27 October 2026 · **Status:** accepted (human's request and choices; agent's design). Amends D201's landing
+footer ("the data, sync and key links") and the app footer's link to each settings screen; PRD §7's tree amended in place
+
+The human: the API key, the current levels, Your data and Sync are all settings, and should be one menu area, reached by
+a gear at the top right and a link in the footer. Asked, the human chose a settings page over a drop-down, and one footer
+link in place of the four.
+- **`/settings` is the overview**, a static page with no island: a card for each screen, saying what it holds. Every
+  screen keeps its address, so `NoKeyCard`'s `?next=diagnostic`, the privacy notice's links and every spec's `page.goto`
+  are unchanged.
+- **Every screen under it carries one menu** (`app/[locale]/settings/layout.tsx`, `components/settings/SettingsNav.tsx`)
+  on the header's pill track, the screen you are on `aria-current="page"`; the key's guide marks the key. The overview
+  leaves it out: its cards are the menu, and two links of each name would make every name ambiguous. The list is
+  `features/settings/settings-nav.ts`'s `SETTINGS_ITEMS`, so a new settings screen is an entry there.
+- **The header's gear** is the rightmost tool, after sync and the language: `@palier/ui`'s new `gear` glyph in a link
+  with `pl-icon-btn`'s 44px target, named and titled "Settings" / « Paramètres », and the white pill inside the area.
+  A link, not `IconButton`, which is a `<button>`. The focus order the smoke test holds (skip link, brand, nav) is
+  unchanged.
+- **The footer's four links are one, "Settings"**, and so is the landing footer's "Your device" column. Export, delete,
+  the sync switch and the key were one step from any page; they are now two. R11 asks for export, import and delete
+  "each in one action", which still holds on `/settings/data`, and WCAG 3.2.6 holds, since the gear and the link sit in
+  the same place on every page. The header's sync status still links straight to `/settings/sync` (PRD §8.11).
+- **Tests whose premise changed**, said here as D263 did: the specs that clicked "Your data", "Your API key", "Sync" or
+  "Your levels" in the footer (`journeys`, `key`, `key-leak`, `sync`, `content`, `levels`) now go through `helpers.ts`'s
+  `openSettings`: the footer's "Settings", then the card. `key.spec.ts` moves between the key and data screens by the
+  menu. `footer.levels`, `footer.yourData`, `footer.sync` and `footer.key` are gone, read by nothing.
+- **New:** `settings-nav.test.ts`; `gear` in the glyph registry's test; `e2e/settings.spec.ts` (the gear, the footer and
+  the landing footer to the overview, each card to its screen with the menu marking it, axe on both, in both languages); `/settings` in
+  `routes.json`, `csp-production.spec.ts`'s `PAGES` and the titles test. Lighthouse's list is unchanged: the overview is
+  a static page lighter than `/en/settings/key`, which it measures.
+
+### D265 — the chrome and the settings area have unit tests in node, rendered to HTML, beside their E2E
+**Date:** 27 October 2026 · **Status:** accepted (human's choice); amends `implementation-plan.md` §6.3's "rendering is
+covered by E2E" for `apps/web`'s chrome, and `vitest.config.mts`'s note that `apps/web` tests the DOM only through Playwright
+
+The human asked for this branch to ship at candid-ship's HIGH confidence. Its gate counts a changed file as tested only
+when a test file is named for it or imports it, and Playwright cannot import a component, so `Header`, `Footer`,
+`LandingFooter`, `SettingsLink`, `SettingsNav` and `/settings`'s page and layout were "untested" though E2E drove each.
+Asked, the human chose unit tests for all seven over leaving §6.3 as it was.
+- **How:** `src/__tests__/render.tsx` renders through the real messages with `react-dom/server`, or `react-dom/static`'s
+  `prerenderToNodeStream` for a page that awaits its `params`, in the `web` project's node environment: no jsdom, and no
+  new dependency. `fakeNavigation` stands in for `src/i18n/navigation`, which needs Next's router; a test also stubs what
+  is not its subject (the sync status, the language toggle, the shortcut sheet, `next-intl/server`).
+- **What they assert is behaviour, not that something rendered**, which is §6.3's objection: the gear's address, name and
+  current state; the menu absent on the overview and marking one screen; the header's order; each footer's one settings
+  link and no direct one; the overview's cards in the menu's order, and its title in both languages. Breaking the header
+  or the footer failed four of them.
+- **The rule for the rest of `apps/web` is unchanged:** decisions in `src/features/**`, journeys in Playwright. This adds a
+  third place only for the chrome every page carries.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 27 October 2026 — `dougkeefe/settings-shared-menu` (one settings area, a gear in the header; D264)
+
+Not *Next, decided*, which is unchanged (D206). The human asked for the settings-like screens to be one area, reached by
+a gear at the top right and a link in the footer.
+- **UI:** the `gear` glyph.
+- **Web:** `/settings` and its layout, `SettingsNav`, `SettingsLink` in the header's tools, one settings link in the
+  footer and the landing footer, the `settings` namespace and `nav.settings` in both languages, the four footer keys
+  removed; `routes.json` regenerated by `prepare-public.mjs`.
+- **Tests:** `settings-nav.test.ts`, the glyph registry, `e2e/settings.spec.ts`, `openSettings` in the e2e helpers and the
+  six specs that used the footer's links, `/settings` in the CSP pages and the titles test.
+- **Docs:** D264; D254 and the 24 October entry for the translator's explanation are archived (rule 8); PRD §7;
+  `apps/web/CLAUDE.md`.
+- **Then, for candid-ship's HIGH confidence (D265):** unit tests for the chrome and the settings area over
+  `src/__tests__/render.tsx`, the `vitest.config.mts` note and `apps/web/CLAUDE.md`'s gates; D255 archived (rule 8).
+
+**Verified:**
+- `pnpm verify` exit 0: check-types, lint and boundaries clean; `pnpm test` passed 292 files, 4,701 tests (8 todo).
+- The hermetic chromium project, with the warmup, through a temporary, uncommitted config on port 3456 (another
+  project's dev server held 3000): `settings`, `key`, `journeys`, `key-leak`, `sync`, `content`, `levels` and `smoke`,
+  60 of 60.
+- After `pnpm --filter @palier/web build`, the `offline` project's `csp-production.spec.ts`, `/settings` in both
+  locales included: 7 of 7, zero violations.
+- On the production build in Chrome at 1280px and 390px: the gear rightmost and a white pill inside the area, the
+  overview's cards, the menu on `/fr/settings/key`, and the footer's one link. **Found, not caused here:** at 390px
+  `/fr/settings/key` and `/fr/settings/data` are 10–14px wider than the screen. Their French content widens the section,
+  and the overflow is the same with the menu removed from the page. Left for its own fix.
+- For D265: `pnpm verify` exit 0, 299 files and 4,728 tests (8 todo), the 27 new tests among them. **Proven to bite:**
+  with the gear removed from `Header` and the footer's link pointed at `/settings/data`, four of the six header and
+  footer tests failed; restored, they passed. The landing footer's journey (`settings.spec.ts`) and `smoke.spec.ts`
+  passed, 19 of 19, through the same temporary config.
+- Not run: the rest of the `offline` project, Lighthouse and the live smoke.
 
 ### 26 October 2026 — `dougkeefe/image-clickable-bars` (the staircase is the result picker; D263)
 
@@ -1181,23 +1211,6 @@ Gate O and Gate M done. This commit changes documents only.
 - **Next, decided:** reading's library articles (D254), claimed by this branch.
 
 **Verified:** documents only, so no command proves this commit; the next commit on the branch runs `pnpm verify`.
-
-### 24 October 2026 — `dougkeefe/translate-page-output-order` (the translator's explanation in the card; D252)
-
-Not *Next, decided*, which is unchanged (Gate O): a human-requested detour. The human asked for the explanation to sit
-closest to the text areas, and the visit's total and "Your text goes only to OpenAI" to sit below the white card.
-- **The screen** (`Translator.tsx`): `Explanation` moves inside the `Card`, after the panes and the send controls; the
-  running total and the privacy line move below the card, still shown only with a key held. No message, decision or
-  style changed, and no branch was added.
-- **`apps/web/CLAUDE.md`**: the translator's bullet says where each sits.
-
-**Verified:**
-- `pnpm verify`: check-types, lint and boundaries were clean, and `pnpm test` passed 283 files, 4,570 tests (8 todo).
-- The chromium project, with the warmup, passed 6 of 6 for `translate.spec.ts` and 14 of 14 for `key-leak` and
-  `journeys`. Both runs used port 3010 through a temporary, uncommitted config, since another project's dev server held 3000.
-- A temporary, uncommitted spec checked at 1440px and 375px that "Choices worth knowing" is inside the card holding the
-  editor, and that the total is outside the card and below its bottom edge. It also took the screenshots.
-- Not run: the `offline` project, `csp-production` and the live smoke.
 
 Older entries, newest first: [October 2026](progress-archive/sessions-2026-10.md) ·
 [September 2026](progress-archive/sessions-2026-09.md).

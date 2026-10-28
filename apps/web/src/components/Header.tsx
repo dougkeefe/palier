@@ -4,14 +4,16 @@ import { Link } from "../i18n/navigation";
 
 import { HeaderNav } from "./HeaderNav";
 import { LanguageToggle } from "./LanguageToggle";
+import { SettingsLink } from "./SettingsLink";
 import { SyncStatus } from "./SyncStatus";
 
 /**
  * The site header, identical on every page (WCAG 2.2 SC 3.2.6, consistent
  * help/controls in the same place), as designed (progress.md D202): the wordmark
- * home, the primary destinations (today, review, oral practice, progress, about) on
- * a pill track, then the quiet sync status and the equal-prominence language
- * toggle. It wraps rather than overflowing on a narrow screen (WCAG 1.4.10).
+ * home, the primary destinations (today, review, oral practice, progress, translate) on
+ * a pill track, then the quiet sync status, the equal-prominence language toggle and,
+ * at the top right, the gear into the settings area (D264). It wraps rather than
+ * overflowing on a narrow screen (WCAG 1.4.10).
  */
 export function Header() {
   const t = useTranslations("nav");
@@ -25,6 +27,7 @@ export function Header() {
       <div className="app-header__tools">
         <SyncStatus />
         <LanguageToggle />
+        <SettingsLink />
       </div>
     </header>
   );

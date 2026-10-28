@@ -27,8 +27,8 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   new primitives here — they belong in `@palier/ui`. **The one exception is the landing page** (D201), below.
 - **The app as designed** (D202, `docs/Palier landing page/Palier App.dc.html`): the landing page's teal on warm paper
   and Source Serif 4, light only. The header is the wordmark, the destinations on a quiet pill track (`HeaderNav`, a
-  client component that marks the current page `aria-current="page"` from `features/nav/nav.ts`), then sync and the
-  language. The footer is deep teal with the giant wordmark, drawn by `::before` from a `data-` attribute. `.app-main`
+  client component that marks the current page `aria-current="page"` from `features/nav/nav.ts`), then sync, the
+  language and, rightmost, the settings gear (`SettingsLink`, D264). The footer is deep teal with the giant wordmark, drawn by `::before` from a `data-` attribute. `.app-main`
   is 760px, and a page whose section carries `.app-wide` (today, the translator, the library) takes 1160px. Every colour in `globals.css` is a token.
   **Today** (D214–D219) is the dashboard design (D219): a deep hero with the week's answers and the three skills as cards,
   each a link to its practice with today's plan done (`features/home/today-view.ts`, over the container's
@@ -56,7 +56,7 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     disclosure (never an ARIA menu) around the server-rendered nav and actions, deciding through `landing.ts`'s
     `menuOpenAfter`. At 1000px and up its panel is `display: contents`, so the header is D201's. Keep one `nav` landmark:
     never render the sections twice, one copy per width.
-  - The landing footer must keep what the app's promises: `NonAffiliation`, the data, sync and key links, about,
+  - The landing footer must keep what the app's promises: `NonAffiliation`, the settings link (D264), about,
     privacy, the library and `ShortcutSheet`.
   - **`components/landing/landing.css` holds the only palette outside `@palier/ui`'s tokens**: the `--landing-*` custom
     properties on `.landing`, held to the contrast gate by `landing-contrast.test.ts`, which reads them from the file.
@@ -89,6 +89,11 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   `/exam`, `/exam/run`, `/exam/results`, `/settings/{data,sync,key}`).
   The islands' decisions live in tested `.ts` beside them (`src/features/**`, `src/lib/study.ts`); a
   `.tsx` holds rendering and effects only.
+- **The settings area** (D264) is `/settings`, a static overview of a card for each screen, reached by the header's gear
+  and the footer's one "Settings" link. `app/[locale]/settings/layout.tsx` puts `components/settings/SettingsNav.tsx`, the
+  one menu, above every screen under it, and the overview leaves it out, its cards being the menu. **A new settings screen
+  is an entry in `features/settings/settings-nav.ts`'s `SETTINGS_ITEMS`**, never a new footer link. A spec reaches a
+  screen through `e2e/helpers.ts`'s `openSettings`.
 - **`public/content/` and `public/sw.js` are generated, gitignored and never edited.** `public/media/` is committed
   (the explainer videos, D220 and D230) and is never precached.
   `scripts/prepare-public.mjs` runs before `dev` and `build`: it copies `content/bank/` and
@@ -480,6 +485,11 @@ import every package; holds the concrete-adapter wiring nothing else may name.
 
 ## Gates this app owns
 
+- **The chrome and the settings area have unit tests in node** (D265): `Header`, `Footer`, `LandingFooter`,
+  `SettingsLink`, `SettingsNav` and `/settings`'s page and layout render to HTML through `src/__tests__/render.tsx` (the
+  real messages; `fakeNavigation` in place of `src/i18n/navigation`, which needs Next's router), and each test asserts what
+  the component does: where a link leads, what is current, what is left out. A screen's decisions still go in
+  `src/features/**` and its journeys in Playwright; a test that only shows a component rendered is not one of these.
 - Fast lane: `docs/progress.md`'s bounds and its archive's integrity (`src/docs/progress.test.ts`, D255: `docs/` is no
   workspace, so its one test lives here, reading by file URL), i18n key parity (`messages.test.ts`), container wiring test — including the
   production graph over `fake-indexeddb` planning a day from the committed bank, and one sync

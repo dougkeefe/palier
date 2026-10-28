@@ -145,10 +145,11 @@ body {
 }
 
 /*
- * Header controls (links, toggle, status). Every interactive target clears the
+ * Header controls (links, toggle, status), and the settings menu's links (D264). Every interactive target clears the
  * 24x24 CSS px floor (WCAG 2.5.8) via min-height/min-width.
  */
 .app-header__link,
+.app-settings-nav__link,
 .app-lang-toggle {
   display: inline-flex;
   align-items: center;
@@ -166,13 +167,15 @@ body {
   transition: background-color var(--pl-motion-state) var(--pl-ease);
 }
 
-.app-header__link:hover {
+.app-header__link:hover,
+.app-settings-nav__link:hover {
   color: var(--ink);
   background: color-mix(in srgb, var(--surface) 55%, transparent);
 }
 
 /* The page you are on is a white pill, and its weight says so too, not the fill alone. */
-.app-header__link[aria-current="page"] {
+.app-header__link[aria-current="page"],
+.app-settings-nav__link[aria-current="page"] {
   background: var(--surface);
   font-weight: 600;
 }
@@ -219,6 +222,57 @@ body {
 
 .app-sync-status--syncing .app-sync-status__dot {
   background: var(--primary);
+}
+
+/* --------------------------------------------------------------- settings */
+/* The header's gear (D264): `@palier/ui`'s icon target, a white pill inside the settings area, as a destination is. */
+.app-header__settings[aria-current="page"] {
+  background-color: var(--surface);
+}
+
+/* The menu above every settings screen: the header's quiet pill track, sized to its links. */
+.app-settings-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  width: fit-content;
+  max-width: 100%;
+  margin-bottom: 1.5rem;
+  padding: 5px;
+  border-radius: 999px;
+  background: var(--surface-quiet);
+  font-size: 0.9375rem;
+}
+
+/* The overview's cards, one per settings screen, two to a row where there is room. */
+.app-settings-overview {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 600px) {
+  .app-settings-overview {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.app-settings-overview > li,
+.app-settings-card {
+  height: 100%;
+}
+
+.app-settings-card__title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.app-settings-card__description {
+  margin: 0.25rem 0 0;
+  color: var(--ink-muted);
 }
 
 /* -------------------------------------------------------------------- main */
