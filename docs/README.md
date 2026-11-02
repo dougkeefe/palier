@@ -1,77 +1,75 @@
-# Palier: Document Set
+# Palier documentation
 
-A free, source-available web app for practising the Public Service Commission's Second Language Evaluation.
+These are the design documents for Palier, a free, source-available web app for practising the Public Service
+Commission's Second Language Evaluation. To find out what Palier is, try it or run it locally, start with the
+[repository README](../README.md). This page explains how the documents here fit together, and which one wins when
+two disagree.
 
-**Working name:** Palier (not final)
-**Owner:** Doug Keefe
-**Last revised:** 19 September 2026
+---
+
+## Where to start
+
+| You want to | Read |
+| --- | --- |
+| Understand what the product does and why | `product-requirements.md` §0 and §1, then the [ADR index](adr/README.md) |
+| Write practice items or passages | [`CONTRIBUTING.md`](../CONTRIBUTING.md), then `product-requirements.md` §13 and `schemas/` |
+| Change the code | [`CONTRIBUTING.md`](../CONTRIBUTING.md), `implementation-plan.md` §3 and §10, then `adr/` before any architectural change |
+| Pick up where the build is | `progress.md`: the status table, the deviations log, then *Next, decided* |
+| Deploy your own copy | `deploy.md`, and [`selfhost/`](../selfhost/README.md) for studio mode's secret endpoint |
+| Work in the repository as an agent | The root [`CLAUDE.md`](../CLAUDE.md), which routes into everything here |
 
 ---
 
 ## The documents
 
-| Document | Answers | Authoritative for | Changes when |
-| --- | --- | --- | --- |
-| `product-requirements.md` | What the product must do, and what it should look and feel like | The requirement list in section 0.1, the exam model, the screens, the content standards | A product decision changes |
-| `architecture.md` | How the application works | Components, data model, ports, protocols, security posture, performance and testing gates | A maintainer writes a superseding ADR |
-| `content-factory.md` | How the item bank gets made | The production pipeline, its assumptions, its metrics, its descoping options | The pipeline changes, independently of the app |
-| `implementation-plan.md` | In what order, with what boundaries | Module structure, testing strategy, phases, requirement coverage, definition of done | The plan meets reality, which it will first |
-| `adr/` | Why each significant choice was made, and what would reverse it | The reasoning, the alternatives, the revisit conditions | Never edited. Superseded by a new ADR |
-| `progress.md` | Where the build actually is | What is done, what is in flight, deviations from the plan, the session log; the older entries of the last two in `progress-archive/`, found through its deviation index | Every session that changes something |
-| `deploy.md` | How to deploy it, check it and roll it back | The provisioning steps, the environment variables, the smoke checks | The hosting or the migration step changes |
-| `realtime-checklist.md` | Whether studio mode's live conversation works on real browsers | The manual checks on six browser and platform pairs, before each release that touches studio mode, and the results table | Studio mode's screen, transport or secret path changes |
+| Document | Answers | Authoritative for |
+| --- | --- | --- |
+| [`product-requirements.md`](product-requirements.md) | What the product must do, and what it should look and feel like | The requirement list in §0.1, the exam model, the screens, the content standards |
+| [`architecture.md`](architecture.md) | How the application works | Components, data model, ports, protocols, security posture, performance and testing gates |
+| [`content-factory.md`](content-factory.md) | How the item bank gets made | The production pipeline, its assumptions, its metrics, its descoping options |
+| [`implementation-plan.md`](implementation-plan.md) | In what order, and with what boundaries | Module structure, testing strategy, phases, requirement coverage, definition of done |
+| [`adr/`](adr/README.md) | Why each significant choice was made, and what would reverse it | The reasoning, the alternatives, the *revisit when* conditions |
+| [`progress.md`](progress.md) | Where the build actually is | What is done, what is in flight, deviations from the plan, the session log, the next slice |
+| [`progress-archive/`](progress-archive/README.md) | What `progress.md` used to hold | Older deviations and session entries, moved verbatim and found through `progress.md`'s deviation index |
+| [`deploy.md`](deploy.md) | How to deploy Palier, check it and roll it back | Provisioning, environment variables, migrations, smoke checks |
+| [`realtime-checklist.md`](realtime-checklist.md) | Whether studio mode's live conversation works on real browsers | The manual checks on six browser and platform pairs, and their results |
+| [`schemas/`](schemas/) | What a valid content file looks like | JSON Schemas for items, passages, forms, scenarios and the exam profile, generated from `@palier/domain` |
+| [`content-runs/`](content-runs/) | How a published bank was actually made | The briefs and the reviewer evaluation behind each bank version (`v4/` for the current bank) |
+| [`prompts.md`](prompts.md) | How to start a build or review session with an agentic coding tool | Nothing. It is a working aid |
+| [`Palier landing page/`](<Palier landing page/readme.md>) | What the site looks like | The source design and design-system notes the landing page and app were built from |
 
-Read them in that order the first time. After that, `adr/` is usually the one you want, because it holds the arguments the other documents deliberately do not.
+The first five are the design. Read them in that order the first time. After that, `adr/` is usually the one you want,
+because it holds the arguments the other documents leave out on purpose.
 
-If you are resuming work rather than reading in, start at `progress.md`. It is the only document that changes weekly, and its deviations log is the part that cannot be reconstructed from the code. Only the newest deviations and sessions are there in full; the rest are in `progress-archive/`, moved verbatim, and `progress.md`'s index names the file for each deviation. The repository's `CLAUDE.md` is the router into all of it and is the right first read for an agent session.
-
-**When two documents disagree, the table above decides.** Each document names what it is authoritative for, and a statement outside that column is orientation rather than law: the plan owns module structure and testing, this set's `adr/` owns reasoning, `product-requirements.md` §0.1 owns the requirements, `content-factory.md` owns the pipeline. Rather than reconcile a conflict in passing, fix the document that is not authoritative for the statement, and say in the edit which decision it was brought in line with.
-
----
-
-## How to tell a requirement from an opinion
-
-This distinction is the point of the split, and it exists because a previous draft blurred it.
-
-- **Requirements** are in `product-requirements.md` section 0.1. Fourteen of them. Changing one is a product decision and it gets recorded in that document.
-- **Decisions** are in `adr/`. Each says what was chosen, what it costs, and what evidence would justify changing it. A maintainer who disagrees writes a new ADR rather than arguing with a specification — taking the next free number when it is accepted, never reserving one in prose (`progress.md` D16; this sentence named ADR 16 until the estimate-store decision took that number first, which is exactly the failure D16 records).
-- **Assumptions** are in `product-requirements.md` section 18 and `content-factory.md` section 3. These are beliefs, not facts, and several of them will turn out to be wrong.
-- **Preferences** are everything else: the product principles, the visual language, the phase ordering. Change them freely if the requirements are still met.
-
-If a future contributor cannot work out which category a statement belongs to, that is a defect in these documents and worth fixing.
+**When two documents disagree, the table above decides.** Each document names what it is authoritative for. A
+statement outside that column is orientation, not law. Don't reconcile a conflict in passing. Fix the document that
+is not authoritative for the statement, and say in the edit which decision you brought it in line with.
 
 ---
 
-## Current shape of the thing
+## Requirement, decision, assumption or preference?
 
-Reading, written expression and oral practice for the SLE, aimed first at French as a second language at level C. Local-first: the browser is the system of record and everything works offline. The item bank ships as static JSON, so drills, mock exams and progress need no API key. The AI features (item generation, written feedback, oral examiner) run on the user's own OpenAI key, from their browser. Progress syncs across a user's devices by default, with pairing by code rather than accounts. Bilingual interface, WCAG 2.2 AA enforced in CI. PolyForm Noncommercial code, CC BY-NC-SA content (ADR 23): free for any non-commercial use.
+Every statement in these documents belongs to one of four kinds. Knowing which kind you are reading tells you what it
+takes to change it.
 
-The band estimate comes from mock exams scored against the published PSC cut tables. Practice shows accuracy per band tag with a confidence interval, and deliberately does not produce a band letter of its own.
+- **Requirements** are in `product-requirements.md` §0.1. There are fourteen. Changing one is a product decision, and
+  it is recorded in that document.
+- **Decisions** are in `adr/`. Each says what was chosen, what it costs, and what evidence would justify changing it.
+  To disagree with one, write a new ADR that supersedes it, taking the next free number. Accepted ADRs are never
+  edited.
+- **Assumptions** are in `product-requirements.md` §18 and `content-factory.md` §3. They are beliefs, not facts, and
+  some will turn out to be wrong. Evidence that one is wrong is a useful contribution.
+- **Preferences** are everything else: the product principles, the visual language, the phase ordering. Change them
+  freely as long as the requirements are still met.
+
+If you can't tell which kind a statement is, treat that as a defect in these documents. An issue or a pull request
+that fixes it is welcome.
 
 ---
 
-## The three things most likely to sink this
+## Licence
 
-1. **The generated French does not convince a fluent speaker.** Tested in week one of phase 1 with thirty passages and two readers, before anything is built on top of it.
-2. **The adversarial review gate catches fewer defects than assumed.** Measured directly against a hand-seeded set of deliberate defects. Below 80 percent detection on any class, the batch is held.
-3. **The time is not there.** This is evening work alongside a full-time job. The phase order is arranged so that stopping after phase 3 still leaves a complete, useful, public tool: reading and written expression practice with mock exams, free, no key required.
-
----
-
-## Revision history
-
-**0.3, 20 September 2026.** Amendments from building the `AnswerItem` use case, which completed
-the review-schedule record. `implementation-plan.md` §3.3 gained a dated in-place amendment to
-the `ScheduleStore` signature (`ScheduleEntry` is now `{ itemId, due: ISO | null, skill, box }`
-and the port has a `get`), because §3.3 is authoritative for port signatures. `architecture.md`
-§9.1 gained the `ScheduleEntry` shape beside the `Attempt` one, with the note that IndexedDB
-will not index a null `due` — which the design relies on — and §9.4 now admits that its
-last-write-wins rule does not cover a record with no `updatedAt`. **ADR 18** records that
-content ships as a workspace package, `@palier/content`, so the app can import the profile
-through an exports map rather than a relative path the boundary gate rejects. This sentence's
-own instruction to "write ADR 16" was corrected to "write a new ADR", which is what
-`progress.md` D16 settled. Reasoning for all of it in deviations D38 to D43.
-
-**0.2, 19 September 2026.** Reconciliation pass, no new positions. Ten contradictions found while writing the repository's agent documentation were resolved in favour of whichever document the table above makes authoritative: `architecture.md` §4, §17 and §19 had fallen behind ADR 10 and the plan's build order, §1 and §18 behind ADR 6, and §9.1 declared an estimate store the plan had ruled out — which is now ADR 16, the one conflict that was a genuine open question rather than a stale sentence. `product-requirements.md` gained dated amendments to R12 (which had never admitted the ADR 3 exception), §8.11, §13.0 and §15. Full list and reasoning in deviation D17 of `progress.md`.
-
-**0.1, 17 September 2026.** First complete draft, revised twice in the same session. The second revision removed the item response theory, adaptive selection and FSRS scheduling specified in the first draft, on the grounds that all three required item parameters the project has no way to measure (ADR 7, ADR 8). The third revision, following an external architecture review, split this document set apart from what had been two large specifications: the reasoning moved to `adr/`, the content pipeline moved to `content-factory.md`, requirements were separated from design in `product-requirements.md`, accounts and email authentication were cut from v1 in favour of device pairing (ADR 5), and the position that content must be machine-authored was corrected to a preference (ADR 6). The implementation plan was then reconciled to all of it and gained a requirement coverage table, which is the check that the build order actually delivers the product.
+Palier is source-available, not open source: free for any non-commercial use. The code is under the PolyForm
+Noncommercial License 1.0.0 ([`LICENSE`](../LICENSE)) and the content under CC BY-NC-SA 4.0
+([`LICENSE-CONTENT`](../LICENSE-CONTENT)). [ADR 23](adr/0023-polyform-noncommercial-for-code-cc-by-nc-sa-4-0-for-content.md)
+records why.

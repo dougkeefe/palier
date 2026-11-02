@@ -1,35 +1,76 @@
-import { SCORED_SKILLS, type Band } from "@palier/domain";
-import { skillStanding } from "@palier/engine";
+import { SKILLS, type Band, type Skill, type TargetBand } from "@palier/domain";
+import type { SceneName } from "@palier/ui";
 
 import { type DailyGoal, NO_RESULTS, type StudyProfile, oneTarget, targetsOf } from "../../lib/study";
 
 /**
- * Onboarding's shape (product-requirements.md §8.1, in the owner's order of 10 October 2026, progress.md
- * D224): direction, target, the results already held (D259, §8.1's "self-declare a current profile"),
- * daily goal, the key, and last the placement, whose choice is where the wizard lands.
+ * Onboarding's shape (product-requirements.md §8.1, as the owner redrew it on 31 October 2026 and 1 November 2026,
+ * progress.md D269–D271): a welcome, the target, the results already held (D259), the daily goal, the key, and a "you're
+ * set" card that lands on today's plan. Continuing from the welcome means a new user; one bringing progress from a file
+ * or another device says so by a quiet link under it. No assessment comes first: the diagnostic is no step here, only
+ * an offer on Today, never a gate.
  *
- * The key step explains why Palier runs on the user's own key, what it costs and how to get one, and
- * takes the key in place (D220). It is left out only when this browser already holds a key, and stays
- * skippable: drills, review and mock exams need none.
+ * The key step explains why Palier runs on the user's own key, what it costs and how to get one, and takes the key in
+ * place (D220). It is left out only when this browser already holds a key, and stays skippable: drills, review and mock
+ * exams need none.
  */
-export const ONBOARDING_STEPS = ["direction", "target", "now", "goal", "key", "placement"] as const;
+export const ONBOARDING_STEPS = ["welcome", "target", "now", "goal", "key", "ready"] as const;
 export type OnboardingStep = (typeof ONBOARDING_STEPS)[number];
 
-/** Six, when the key step is shown: §8.1's five and the results held (D259). */
+/** Six, when the key step is shown. */
 export const ONBOARDING_TOTAL = ONBOARDING_STEPS.length;
 
-/**
- * The stepper's segments (progress.md D202): one per step, filled up to and including the step at
- * `index`. The words beside it carry the step, so the bar is decoration.
- */
-export const stepperSegments = (index: number, total: number = ONBOARDING_TOTAL): readonly boolean[] =>
-  Array.from({ length: total }, (_, i) => i <= index);
-
-export type Placement = "diagnostic" | "skip";
-
-/** The steps the wizard shows: the key step unless a key is already held, on either path. */
+/** The steps the wizard shows: the key step unless a key is already held. */
 export const stepsFor = (hasKey: boolean): readonly OnboardingStep[] =>
   hasKey ? ONBOARDING_STEPS.filter((step) => step !== "key") : ONBOARDING_STEPS;
+
+export const stepAfter = (step: OnboardingStep, hasKey: boolean): OnboardingStep | null => {
+  const steps = stepsFor(hasKey);
+  return steps[steps.indexOf(step) + 1] ?? null;
+};
+
+/** Back over the steps shown, so with a key held the ready card goes back to the goal, not a hidden key step. */
+export const stepBefore = (step: OnboardingStep, hasKey: boolean): OnboardingStep | null => {
+  const steps = stepsFor(hasKey);
+  return steps[steps.indexOf(step) - 1] ?? null;
+};
+
+/**
+ * Where "Skip" shows (D269): from the results on, once the one answer that shapes every plan, the target, is given, as
+ * §8.1's "skippable after step 2" has it. Skipping saves what is chosen, with the defaults for the rest, and lands on
+ * today's plan. Not on the ready card, whose own button does the same.
+ */
+const SKIPPABLE: ReadonlySet<OnboardingStep> = new Set(["now", "goal", "key"]);
+
+export const skippable = (step: OnboardingStep): boolean => SKIPPABLE.has(step);
+
+/**
+ * The picture heading each step (D269): Coco in one of `@palier/ui`'s scenes. None on the results, whose three
+ * staircases, Coco on each, are the picture already.
+ */
+const STEP_SCENES: Readonly<Record<OnboardingStep, SceneName | null>> = {
+  welcome: "hello",
+  target: "summit",
+  now: null,
+  goal: "time",
+  key: "key",
+  ready: "celebrate",
+};
+
+export const sceneFor = (step: OnboardingStep): SceneName | null => STEP_SCENES[step];
+
+/**
+ * The two ways to bring progress in (D271), offered in small type under the welcome, since the users they serve pick
+ * themselves out: an export to import, or another device to link. Continuing past the welcome means a new user.
+ */
+export const BRING_WAYS = ["import", "pair"] as const;
+export type BringWay = (typeof BRING_WAYS)[number];
+
+/** A progress dot: a step behind, the one shown, or one ahead. The words beside the dots carry the step. */
+export type StepDot = "past" | "current" | "next";
+
+export const stepDots = (index: number, total: number = ONBOARDING_TOTAL): readonly StepDot[] =>
+  Array.from({ length: total }, (_, i) => (i < index ? "past" : i === index ? "current" : "next"));
 
 export type OnboardingChoices = {
   /** One answer sets all three; "different per skill", folded under it, sets each (D259). */
@@ -37,29 +78,30 @@ export type OnboardingChoices = {
   /** The results the user holds now, each "not yet" by default (D259). */
   readonly current: StudyProfile["current"];
   readonly testDate: string | null;
-  readonly placement: Placement;
   readonly dailyGoalMinutes: DailyGoal;
 };
 
-/** The defaults a user who skips is left with: C everywhere, no results, no date, no diagnostic, 20 minutes. */
+/** The defaults a user who skips is left with: C everywhere, no results, no date, 20 minutes. */
 export const DEFAULT_CHOICES: OnboardingChoices = {
   targets: targetsOf("C"),
   current: NO_RESULTS,
   testDate: null,
-  placement: "skip",
   dailyGoalMinutes: 20,
 };
 
 /**
- * Whether the diagnostic has anything to place (D259): a scored skill with no result declared, or
- * one below its target. A skill held at its target or exempt has nothing to place, so with both
- * reading and writing that way the placement step offers only to start practising.
+ * Where the wizard starts (D269): a profile already saved, when one is, so coming back to `/start` shows what was
+ * chosen rather than overwriting it with the defaults on finishing (WCAG 3.3.7, redundant entry).
  */
-export const offersDiagnostic = (choices: Pick<OnboardingChoices, "targets" | "current">, exemptBand: Band): boolean =>
-  SCORED_SKILLS.some((skill) => {
-    const standing = skillStanding({ current: choices.current[skill], target: choices.targets[skill], exemptBand });
-    return standing === "unknown" || standing === "working";
-  });
+export const choicesFrom = (profile: StudyProfile | null): OnboardingChoices =>
+  profile === null
+    ? DEFAULT_CHOICES
+    : {
+        targets: profile.targets,
+        current: profile.current,
+        testDate: profile.testDate,
+        dailyGoalMinutes: profile.dailyGoalMinutes,
+      };
 
 /**
  * Whether the target step's per-skill disclosure is open (D259): once the user has opened it, or
@@ -69,30 +111,7 @@ export const offersDiagnostic = (choices: Pick<OnboardingChoices, "targets" | "c
 export const perSkillTargetsOpen = (opened: boolean, targets: StudyProfile["targets"]): boolean =>
   opened || oneTarget(targets) === null;
 
-/** The placements the last step offers: the diagnostic only when it has something to place. */
-export const placementsFor = (choices: OnboardingChoices, exemptBand: Band): readonly Placement[] =>
-  offersDiagnostic(choices, exemptBand) ? ["diagnostic", "skip"] : ["skip"];
-
-/** The choices as they finish: a diagnostic chosen and then made pointless by a result reads as a skip. */
-export const settle = (choices: OnboardingChoices, exemptBand: Band): OnboardingChoices =>
-  placementsFor(choices, exemptBand).includes(choices.placement) ? choices : { ...choices, placement: "skip" };
-
-export const stepAfter = (step: OnboardingStep, hasKey: boolean): OnboardingStep | null => {
-  const steps = stepsFor(hasKey);
-  return steps[steps.indexOf(step) + 1] ?? null;
-};
-
-/** Back over the steps shown, so with a key held the placement goes back to the goal, not a hidden key step. */
-export const stepBefore = (step: OnboardingStep, hasKey: boolean): OnboardingStep | null => {
-  const steps = stepsFor(hasKey);
-  return steps[steps.indexOf(step) - 1] ?? null;
-};
-
-/** The last step's button, a message key in `start`: it names the diagnostic when that is where it goes (D224). */
-export const finishLabel = (placement: Placement): "finish" | "finishDiagnostic" =>
-  placement === "diagnostic" ? "finishDiagnostic" : "finish";
-
-/** What onboarding stores. The placement choice is a destination, not a setting. */
+/** What onboarding stores. */
 export const profileFrom = (choices: OnboardingChoices): StudyProfile => ({
   targets: choices.targets,
   current: choices.current,
@@ -100,11 +119,35 @@ export const profileFrom = (choices: OnboardingChoices): StudyProfile => ({
   testDate: choices.testDate === "" ? null : choices.testDate,
 });
 
+/** The ready card's summary (D269): what is about to be saved, in the order the steps asked it. */
+export type ReadySummary = {
+  /** One target for every skill, or null when they differ and `targets` says each. */
+  readonly target: TargetBand | null;
+  readonly targets: StudyProfile["targets"];
+  /** The results declared, in the skills' order; none is an empty list. */
+  readonly results: readonly { readonly skill: Skill; readonly band: Band }[];
+  readonly dailyGoalMinutes: DailyGoal;
+  readonly testDate: string | null;
+  readonly keyHeld: boolean;
+};
+
+export const readySummary = (choices: OnboardingChoices, keyHeld: boolean): ReadySummary => ({
+  target: oneTarget(choices.targets),
+  targets: choices.targets,
+  results: SKILLS.flatMap((skill) => {
+    const band = choices.current[skill];
+    return band === null ? [] : [{ skill, band }];
+  }),
+  dailyGoalMinutes: choices.dailyGoalMinutes,
+  testDate: choices.testDate === "" ? null : choices.testDate,
+  keyHeld,
+});
+
 /**
- * Where onboarding lands (D224): the diagnostic when chosen, otherwise today's plan. The placement is
- * the last step, so a diagnostic chosen is taken at once, key or not. With no key held, the
- * diagnostic's own gate asks for one and comes back (ADR 25); the user chose the diagnostic after the
- * key step, so that gate answers the choice rather than repeating a question just declined.
+ * A `YYYY-MM-DD` test date as an instant to format: noon UTC that day, so the day named is the same in every time zone
+ * from UTC−12 to UTC+11.
  */
-export const destinationFor = (choices: OnboardingChoices): "/diagnostic" | "/home" =>
-  choices.placement === "diagnostic" ? "/diagnostic" : "/home";
+export const testDateInstant = (date: string): Date => {
+  const [year = 0, month = 1, day = 1] = date.split("-").map(Number);
+  return new Date(Date.UTC(year, month - 1, day, 12));
+};

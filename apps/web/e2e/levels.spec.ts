@@ -56,19 +56,15 @@ test("results declared in onboarding shape today, and the study settings change 
   await axeClean(page);
 });
 
-test("the study settings offer onboarding before there is a profile, and the results step renders in French (D259)", async ({
+test("the study settings send a visitor with no profile to onboarding, and the results step renders in French (D259, D270)", async ({
   page,
 }) => {
+  // Before there is a profile, the study settings wait until onboarding is done (D270).
   await page.goto("/fr/settings/study");
-  await expect(page.getByRole("heading", { level: 1, name: "Vos niveaux et vos objectifs" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Préparer votre pratique" })).toBeVisible();
-  // No profile, no cards, so no links to them (D266).
-  await expect(page.getByRole("navigation", { name: "Sur cette page" })).toHaveCount(0);
-  await axeClean(page);
+  await expect(page).toHaveURL(/\/fr\/start$/);
 
   await page.goto("/fr/start");
-  await page.getByRole("button", { name: "Continuer" }).click();
-  await page.getByRole("button", { name: "Continuer" }).click();
+  for (let card = 0; card < 2; card++) await page.getByRole("button", { name: "Continuer" }).click();
   await expect(page.getByRole("heading", { name: "Quels résultats d’ELS détenez-vous déjà?" })).toBeFocused();
   await axeClean(page);
 });

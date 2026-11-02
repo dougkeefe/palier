@@ -2,26 +2,45 @@
 
 import type { ReactNode } from "react";
 
-import { showsAppChrome } from "../features/landing/landing";
+import { chromeFor } from "../features/chrome/chrome";
 import { usePathname } from "../i18n/navigation";
+import { OnboardingGate } from "./OnboardingGate";
 
 /**
- * The app's chrome around a page: the shared header, `main` and footer, on every page but the
- * landing page, which brings its own as designed (progress.md D201). A client component because
- * it reads the pathname: the layout persists across soft navigations, so a decision made there
- * would go stale on the way from the landing page into the app. The header and footer stay server
- * components, handed in as slots.
+ * The app's chrome around a page (`chromeFor`): the shared header, `main` and footer on most pages; nothing on the
+ * landing page, which brings its own as designed (progress.md D201); and onboarding's slim focus frame, with no
+ * navigation, sync status or settings for a first-time user to wander into (D269). A client component because it
+ * reads the pathname: the layout persists across soft navigations, so a decision made there would go stale on the
+ * way from the landing page into the app, or from onboarding to today. The headers and footers stay server
+ * components, handed in as slots. On the app's pages it also holds `OnboardingGate`, which sends a visitor who has not
+ * been through onboarding there (D270).
  */
-export function Shell({ header, footer, children }: { header: ReactNode; footer: ReactNode; children: ReactNode }) {
-  const pathname = usePathname();
-  if (!showsAppChrome(pathname)) return children;
+export function Shell({
+  header,
+  footer,
+  focusHeader,
+  focusFooter,
+  children,
+}: {
+  header: ReactNode;
+  footer: ReactNode;
+  focusHeader: ReactNode;
+  focusFooter: ReactNode;
+  children: ReactNode;
+}) {
+  const chrome = chromeFor(usePathname());
+  if (chrome === "own") return children;
+  const focus = chrome === "focus";
   return (
     <>
-      {header}
-      <main id="main" tabIndex={-1} className="app-main">
+      {focus ? focusHeader : header}
+      {/* Keyed by the chrome, so the gate's move to onboarding mounts a new main rather than shifting the page's: the
+          old one moving up into the slimmer frame was a layout shift Lighthouse measured on a gated page (D270). */}
+      <main key={chrome} id="main" tabIndex={-1} className={focus ? "app-main app-main--focus" : "app-main"}>
         {children}
       </main>
-      {footer}
+      {focus ? null : <OnboardingGate />}
+      {focus ? focusFooter : footer}
     </>
   );
 }

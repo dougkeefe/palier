@@ -570,30 +570,325 @@ body {
   outline-offset: 2px;
 }
 
-/* "Step 2 of 5" and its bar: the words carry the step, so the bar is hidden from assistive technology. */
-.app-stepper {
+/* ---------------------------------------------------------------- onboarding */
+/*
+ * Onboarding's cards (D269), after the owner's reference: Back at the top left and Skip at the top right, Coco in a
+ * scene on a tinted disc, the heading and its lead centred, the question's choices, then the dots and the way on at
+ * the foot. No panel around the card: the paper is the card, so the white choices keep their contrast and the flat
+ * rule holds (no border, no shadow). The frame around it is the focus chrome, below.
+ */
+.app-main--focus {
+  max-width: 600px;
+  padding-top: 8px;
+  padding-bottom: clamp(32px, 5vw, 56px);
+}
+
+.app-onboarding {
+  display: grid;
+  gap: 20px;
+}
+
+.app-onboarding__top {
   display: flex;
   align-items: center;
-  gap: 14px;
-  font-size: 0.8125rem;
+  justify-content: space-between;
+  min-height: 44px;
 }
 
-.app-stepper__bar {
+.app-onboarding__skip {
+  min-height: 44px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-soft);
+  font: inherit;
+  font-size: 1.0625rem;
+  cursor: pointer;
+  transition: background-color var(--pl-motion-state) var(--pl-ease);
+}
+
+.app-onboarding__skip:hover:not(:disabled) {
+  background: var(--surface);
+}
+
+.app-onboarding__skip:disabled {
+  cursor: not-allowed;
+}
+
+.app-onboarding__scene {
+  max-width: 260px;
+}
+
+/* The key step has the most to show above its video, so its picture is smaller (D222's video in view). */
+.app-onboarding__scene--small {
+  max-width: 150px;
+}
+
+.app-onboarding__head {
+  text-align: center;
+}
+
+.app-onboarding__head > * + * {
+  margin-top: 0.75rem;
+}
+
+/* A legend sits outside the fieldset's grid, so its gap does not reach it: the space under the question is its own. */
+.app-onboarding .app-fieldset > legend.app-onboarding__head {
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+/* A lead under the question belongs to it, so it sits close, and the space opens below it instead. */
+.app-onboarding .app-fieldset > legend.app-onboarding__head + p {
+  margin-top: -1rem;
+}
+
+.app-onboarding__lead {
+  margin: 0 auto;
+  max-width: 46ch;
+  font-size: 1.125rem;
+  color: var(--ink-soft);
+}
+
+/* The ways to bring progress in, under the welcome's way on (D271): small, for those who look for them. */
+.app-onboarding__bring {
   display: flex;
-  flex: 1;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  column-gap: 16px;
+  font-size: 0.875rem;
+  color: var(--ink-muted);
+}
+
+.app-onboarding__bring > .app-link {
+  font-size: 0.875rem;
+}
+
+.app-onboarding__bring-scene {
+  max-width: 150px;
+}
+
+.app-onboarding__choices {
+  display: grid;
+  gap: 12px;
+}
+
+@media (min-width: 560px) {
+  .app-onboarding__choices--pair {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .app-onboarding__choices--tiles {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* A goal tile: the radio above its words, so three sit side by side. */
+/* Doubled classes: the base `.app-choice` rules come later in this file and would otherwise win. */
+.app-choice.app-choice--tile {
+  grid-template-columns: 1fr;
+  row-gap: 8px;
+  padding: 18px;
+}
+
+.app-choice.app-choice--tile input {
+  grid-row: auto;
+  margin-top: 0;
+}
+
+.app-choice.app-choice--tile .app-choice__label {
+  font-size: 1.125rem;
+}
+
+.app-onboarding__summary {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 4px 20px;
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.app-onboarding__summary > div {
+  display: grid;
+  grid-template-columns: minmax(8rem, 1fr) 2fr;
+  gap: 12px;
+  padding: 12px 0;
+}
+
+.app-onboarding__summary > div + div {
+  border-top: 1px solid var(--surface-quiet);
+}
+
+.app-onboarding__summary dt {
+  color: var(--ink-muted);
+}
+
+.app-onboarding__summary dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.app-onboarding__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 8px;
+}
+
+/* The dots: the steps behind filled, the one shown drawn long, the ones ahead a ring. The words beside them carry
+   the step, so the dots are hidden from assistive technology. */
+.app-onboarding__progress {
+  display: grid;
   gap: 6px;
-  max-width: 200px;
+  font-size: 0.875rem;
+  color: var(--ink-muted);
 }
 
-.app-stepper__segment {
-  flex: 1;
-  height: 4px;
-  border-radius: 2px;
-  background: color-mix(in srgb, var(--ink) 15%, transparent);
+/* The way on keeps the right of the row, even where a long label wraps it under the dots. */
+.app-onboarding__bottom > .pl-btn {
+  margin-left: auto;
 }
 
-.app-stepper__segment--done {
+.app-onboarding__dots {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.app-onboarding__dot {
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--primary);
+  border-radius: 999px;
+  transition: width var(--pl-motion-panel) var(--pl-ease);
+}
+
+.app-onboarding__dot--past {
   background: var(--primary);
+}
+
+.app-onboarding__dot--current {
+  width: 26px;
+  background: var(--primary);
+}
+
+@media (max-width: 420px) {
+  .app-onboarding__summary > div {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}
+
+/*
+ * On a desktop screen (D271) each card fits without scrolling: the picture moves to a column of its own beside the
+ * card, the heading and its lead read from the left, the results' three staircases stand side by side, and the key
+ * step's video takes the picture's place, beside the key's form.
+ */
+@media (min-width: 960px) {
+  .app-main--focus {
+    max-width: 1080px;
+  }
+
+  .app-onboarding {
+    grid-template-columns: minmax(220px, 320px) minmax(0, 1fr);
+    column-gap: 56px;
+    row-gap: 12px;
+    align-items: start;
+  }
+
+  .app-onboarding > * {
+    grid-column: 2;
+  }
+
+  .app-onboarding > .app-onboarding__top {
+    grid-column: 1 / -1;
+  }
+
+  .app-onboarding > .app-onboarding__scene {
+    grid-column: 1;
+    grid-row: 2 / span 3;
+    align-self: center;
+    max-width: none;
+  }
+
+  .app-onboarding__head {
+    text-align: left;
+  }
+
+  .app-onboarding__bring {
+    justify-content: flex-start;
+  }
+
+  .app-onboarding__lead {
+    margin: 0;
+  }
+
+  /* With no picture, the card takes the whole width. */
+  .app-onboarding--no-scene > * {
+    grid-column: 1 / -1;
+  }
+
+  .app-onboarding[data-step="now"] .app-levels {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  .app-onboarding[data-step="key"] > .app-onboarding__scene {
+    display: none;
+  }
+
+  /* The key step's video is its picture: why, how and the key stand in three columns, in reading order. */
+  .app-onboarding[data-step="key"] > .app-key-step {
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr) minmax(0, 1fr);
+    column-gap: 36px;
+    align-items: start;
+  }
+
+  /* The welcome's lead runs the column's width, and its notes and statement are set a size smaller. */
+  .app-onboarding__lead {
+    max-width: none;
+  }
+
+  .app-onboarding .app-nonaffiliation--inline {
+    padding: 12px 16px;
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .app-header--focus {
+    padding-block: 10px;
+  }
+}
+
+/* ---- The focus chrome (D269): onboarding's slim header and quiet footer ---- */
+.app-header--focus {
+  flex-wrap: nowrap;
+}
+
+.app-focus-footer {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  padding: 24px clamp(20px, 4vw, 56px) 32px;
+  text-align: center;
+}
+
+.app-focus-footer .app-nonaffiliation {
+  max-width: 62ch;
+  line-height: 1.55;
+}
+
+.app-focus-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  column-gap: 20px;
 }
 
 /*
@@ -703,6 +998,33 @@ body {
 .app-field {
   display: grid;
   gap: 8px;
+}
+
+/* A file input (the import, D272): the field holds the file's name, and its chooser is the design's pill, not the
+   platform's grey button. */
+.app-input[type="file"] {
+  display: flex;
+  align-items: center;
+  padding: 6px 12px 6px 6px;
+  cursor: pointer;
+}
+
+.app-input[type="file"]::file-selector-button {
+  min-height: 2.5rem;
+  margin-inline-end: 14px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 999px;
+  background-color: var(--primary);
+  color: var(--on-deep);
+  font: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color var(--pl-motion-state) var(--pl-ease);
+}
+
+.app-input[type="file"]::file-selector-button:hover {
+  background-color: var(--primary-hover);
 }
 
 /*
@@ -2395,6 +2717,23 @@ body {
 
 .app-key-entry__more > .app-choice {
   margin-top: 0.25rem;
+}
+
+/* The choice inside the key's form is a plain checkbox row at the form's own size, not a question's card (D272). */
+.app-key-entry__more > .app-choice,
+.app-key-entry__more > .app-choice:has(input:checked) {
+  column-gap: 12px;
+  padding: 8px 0 0;
+  background: transparent;
+  border: 0;
+}
+
+.app-key-entry__more .app-choice__label {
+  font-size: 1rem;
+}
+
+.app-key-entry__more .app-choice__hint {
+  font-size: 0.9375rem;
 }
 
 /* ---- Print: the one-page progress summary (product-requirements.md §8.9, progress.md D145) ----

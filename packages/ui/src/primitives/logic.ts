@@ -416,6 +416,12 @@ export type MascotPose = "asleep" | "cheer";
 /** A cheering Coco settles in with the celebration spring; a sleeping one does not move. */
 export const mascotClass = (pose: MascotPose): string => (pose === "cheer" ? "pl-mascot pl-celebrate" : "pl-mascot");
 
+/** Coco's pose in a `Scene` (D269): wings folded, one raised in a wave, one forward holding a prop, or both up. */
+export type CocoPose = "rest" | "wave" | "hold" | "cheer";
+
+/** The spot illustrations a screen can head a step with (D269), each a drawing in `Scene`'s `SCENES`. */
+export type SceneName = "hello" | "devices" | "summit" | "time" | "key" | "celebrate";
+
 export const streakFlameClass = (lit: boolean): string => (lit ? "pl-streak-flame pl-streak-flame--lit" : "pl-streak-flame");
 
 // ---- Voice form (studio mode's one visual, product-requirements.md §8.6, progress.md D184) ----

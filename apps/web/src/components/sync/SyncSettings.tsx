@@ -1,24 +1,20 @@
 "use client";
 
-import { type DeviceId, type DeviceSummary, normalizePairCode } from "@palier/app";
+import { type DeviceId, type DeviceSummary } from "@palier/app";
 import { Button, Callout, Card, Toast } from "@palier/ui";
 import { useTranslations } from "next-intl";
 import { useEffect, useId, useRef, useState } from "react";
 
 import { sectionId } from "../../features/settings/settings-sections";
-import { codeLapsesAt, joinFailure, pairCodeView, statusLine } from "../../features/sync/sync-view";
+import { codeLapsesAt, pairCodeView, statusLine } from "../../features/sync/sync-view";
 import { Link } from "../../i18n/navigation";
 import { deviceLabel } from "../../lib/device-label";
 import type { Container } from "../../lib/container";
 import { useContainer } from "../ContainerProvider";
 import { ExportButton } from "../data/ExportButton";
 import { SettingsSections } from "../settings/SettingsSections";
+import { JoinForm } from "./JoinForm";
 import { useSync } from "./SyncRunner";
-
-type JoinState =
-  | { readonly status: "idle" }
-  | { readonly status: "invalid" | "joinRejected" | "unavailable" }
-  | { readonly status: "restoring" | "joined"; readonly count: number };
 
 type DeleteStep = "idle" | "confirming" | "deleted" | "failed";
 
@@ -65,8 +61,6 @@ export function SyncSettings() {
   const [devices, setDevices] = useState<readonly DeviceSummary[]>([]);
   const [offOffer, setOffOffer] = useState<"hidden" | "asking" | "deleted">("hidden");
   const [code, setCode] = useState<{ code: string; expiresAt: string } | null>(null);
-  const [typed, setTyped] = useState("");
-  const [join, setJoin] = useState<JoinState>({ status: "idle" });
   const [problem, setProblem] = useState(false);
   const [deleteStep, setDeleteStep] = useState<DeleteStep>("idle");
   const ready = container.status === "ready";
@@ -134,28 +128,6 @@ export function SyncSettings() {
     setOffOffer(!on && sync.view.paired ? "asking" : "hidden");
     await reload();
     if (on) sync.notify("demand");
-  };
-
-  const onJoin = async () => {
-    const normal = normalizePairCode(typed);
-    if (normal === null) {
-      setJoin({ status: "invalid" });
-      return;
-    }
-    setJoin({ status: "restoring", count: 0 });
-    try {
-      const outcome = await useCases.pairDevice({
-        code: normal,
-        label: label(),
-        onPulled: (count) => setJoin({ status: "restoring", count }),
-      });
-      sync.settle(outcome);
-      setJoin(outcome.status === "synced" ? { status: "joined", count: outcome.pulled } : { status: "unavailable" });
-      setTyped("");
-      await reload();
-    } catch (error) {
-      setJoin({ status: joinFailure(error) });
-    }
   };
 
   const onDeleteEverywhere = async () => {
@@ -364,37 +336,7 @@ export function SyncSettings() {
 
       <Card id={sectionId("sync", "join")}>
         <h2>{t("joinTitle")}</h2>
-        <form
-          className="app-stack"
-          onSubmit={(event) => {
-            event.preventDefault();
-            void onJoin();
-          }}
-        >
-          <p>{t("joinBody")}</p>
-          <label className="app-field" htmlFor={`${id}-code`}>
-            <span>{t("joinLabel")}</span>
-            <input
-              id={`${id}-code`}
-              className="app-input app-input--code"
-              autoComplete="one-time-code"
-              autoCapitalize="characters"
-              spellCheck={false}
-              value={typed}
-              onChange={(event) => setTyped(event.target.value)}
-            />
-          </label>
-          <div className="app-actions">
-            <Button type="submit" variant="primary" disabled={join.status === "restoring"}>
-              {t("joinAction")}
-            </Button>
-          </div>
-          {join.status === "invalid" ? <Toast tone="incorrect">{t("joinInvalid")}</Toast> : null}
-          {join.status === "joinRejected" ? <Toast tone="incorrect">{t("joinRejected")}</Toast> : null}
-          {join.status === "unavailable" ? <Toast tone="incorrect">{t("unavailable")}</Toast> : null}
-          {join.status === "restoring" ? <Toast tone="info">{t("restoring", { count: join.count })}</Toast> : null}
-          {join.status === "joined" ? <Toast tone="correct">{t("joined", { count: join.count })}</Toast> : null}
-        </form>
+        <JoinForm onJoined={reload} />
       </Card>
 
       <Card>

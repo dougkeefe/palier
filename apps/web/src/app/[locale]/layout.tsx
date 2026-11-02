@@ -7,6 +7,8 @@ import { notFound } from "next/navigation";
 import { isHermetic } from "@palier/testing/in-memory";
 
 import { ContainerProvider } from "../../components/ContainerProvider";
+import { FocusFooter } from "../../components/FocusFooter";
+import { FocusHeader } from "../../components/FocusHeader";
 import { Footer } from "../../components/Footer";
 import { Header } from "../../components/Header";
 import { ServiceWorkerRegistrar } from "../../components/ServiceWorkerRegistrar";
@@ -87,7 +89,7 @@ export default async function LocaleLayout({
         <NextIntlClientProvider>
           <ContainerProvider hermetic={isHermetic(process.env)}>
             <SyncRunner>
-              <Shell header={<Header />} footer={<Footer />}>
+              <Shell header={<Header />} footer={<Footer />} focusHeader={<FocusHeader />} focusFooter={<FocusFooter />}>
                 {children}
               </Shell>
             </SyncRunner>

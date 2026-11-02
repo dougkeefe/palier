@@ -52,9 +52,20 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   the pointer's own `lang`, never the screen's.**
   A screen the design does not draw takes its header, ground, buttons and panels and keeps its function.
 - **The landing page brings its own chrome and palette** (`/[locale]`, D201, as designed in `docs/Palier landing page` v4).
-  - The layout wraps every page in `components/Shell.tsx`. It renders the app's header, `main#main` and footer everywhere
-    except `/` (`features/landing/landing.ts`'s `showsAppChrome`, on next-intl's pathname). There the page renders its own
-    `LandingHeader`, `main#main` and `LandingFooter`.
+  - The layout wraps every page in `components/Shell.tsx`, which picks the chrome by `features/chrome/chrome.ts`'s
+    `chromeFor`, on next-intl's pathname (D269): the app's header, `main#main` and footer everywhere but two pages. On `/`
+    the page renders its own `LandingHeader`, `main#main` and `LandingFooter`. **On `/start` it is the focus frame**:
+    `FocusHeader` (the wordmark and the language) and `FocusFooter` (the statement in the footer's class, about, privacy
+    and the shortcut sheet), with no navigation, sync status or settings for a first-time user. A page that should join
+    either is an entry in `chromeFor`'s record.
+  - **Every app page waits until onboarding is done** (D270): `Shell` holds `OnboardingGate` on the app's pages, which
+    sends a visitor with no study profile to `/start` (`router.replace`) on every page change. `chrome.ts`'s
+    `needsOnboarding` decides: a page in `routes.json`, not open before onboarding. The open ones are `/`, `/start`,
+    about, privacy, the translator and the library (the key guide was too, until the key step stopped linking it, D272).
+    **A new page is gated by default**; one that a visitor may open first is an entry in `OPEN_BEFORE_ONBOARDING`.
+    Lighthouse opens a gated page with no profile, so it measures the move to onboarding: `Shell` keys `main` by its
+    chrome, so the move is no layout shift, and **a gated screen that reads much reads the profile first and, with
+    none, loads nothing** (Today, a drill, review and progress do), or its reads hold onboarding's first paint back.
   - **Below 1000px the landing header folds behind a menu button** at the top right (D232): `LandingMenu.tsx`, a
     disclosure (never an ARIA menu) around the server-rendered nav and actions: `HeaderMenu` since D267, deciding through
     `features/nav/menu.ts`'s `menuOpenAfter`. At 1000px and up its panel is `display: contents`, so the header is D201's. Keep one `nav` landmark:
@@ -131,8 +142,8 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   - Nothing names or styles a pilot item (D84 ruling 9).
 - **The R5 non-affiliation statement** is in the footer of every page, from day one, and **beside every band
   estimate and at the head of onboarding** (Gate K, progress.md D145): the exam result and home's exam half, the
-  diagnostic readout, the oral report, workshop feedback, `/progress` and onboarding's first step (D224: the wizard renders
-  it on that step only; the footer carries it after). Every surface renders
+  diagnostic readout, the oral report, workshop feedback, `/progress` and onboarding's welcome (D224, D269: the wizard renders
+  it on that step only; the focus frame's footer carries it on every step). Every surface renders
   `components/NonAffiliation.tsx`, never the key, so the wording cannot drift; a new screen that shows a band adds it.
 - **The about page and the privacy notice** (`/about`, `/privacy`, D145) are static pages the agent drafted and the
   human reads at Gate L. **A change to what the server holds, never holds or deletes changes `/privacy` in the same
@@ -321,10 +332,21 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     **name**, never the raw error. The form itself is `components/key/KeyEntry.tsx` (`useKeyEntry` holds the state, so
     the key screen keeps its own loading gate), shared with onboarding. **It is a `<form>` of its own, so never put it
     inside another.** `/settings/key/guide` is static: the owner's explainer video and `KeyGuideSteps`.
-  - **Onboarding's order** (D224, D259): direction, target, the results held (*now*), goal, the key, then the placement
-    last, whose choice is where it lands (`destinationFor`: the diagnostic when chosen, key or not, else Today). There is
-    no "Skip for now" button; each step after the target has its own way past. **Today and a drill send a user with no
-    study profile to `/start`** with `router.replace`; there is no set-up card.
+  - **Onboarding** (D269, over D224 and D259) is one card per step in the focus frame: the welcome, target, the results
+    held (*now*), goal, the key, then the ready card, which reads the choices back (`readySummary`) and always lands on
+    Today. **No assessment comes first**: there is no placement step, and the diagnostic is Today's offer, never a gate.
+    Continuing from the welcome means a new user (D271). Under its way on, in small type, `BringProgress.tsx` offers
+    "I have a file I exported" and "I use Palier on another device", each a `Dialog` over `components/data/ImportForm.tsx`
+    or `components/sync/JoinForm.tsx`, the same forms the data and sync screens use, which wait until onboarding is
+    done. A study profile that came over offers "Go to today". **Every card fits a desktop screen without scrolling**
+    (D271, held at 1366 × 660 by a journey): from 960px the picture stands in a column beside the card, the results'
+    staircases side by side, and the key step in three columns (why, how, the key). A change that makes a card taller is
+    measured there.
+    Each card but the results is headed by Coco in `@palier/ui`'s `Scene` (`sceneFor`), keyed by the step; Back is an
+    icon at the top left, **Skip** (`skippable`: the results, goal and key) saves the choices with the defaults and lands
+    on Today. The steps are `components/onboarding/{Welcome,Target,Now,Goal,Ready}Step.tsx` and `KeyStep.tsx`,
+    the dots `StepProgress.tsx`, and the wizard starts from a saved profile (`choicesFrom`). **Today and a drill send a
+    user with no study profile to `/start`** with `router.replace`, as the gate does; there is no set-up card.
   - **The study profile is per skill** (D259, `lib/study.ts`): `targets` and `current`, a target and a declared result
     (or null) for each of reading, writing and oral. **Read a target through `targetFor(profile, skill)`, never one band
     for all**; `writeStudyProfile` still stores `targetBand`, the highest, for a tab on the old shape, and
@@ -338,14 +360,14 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     **`/settings/study`** (`components/settings/StudySettings.tsx`, `features/settings/study-view.ts`), the one screen that
     edits the profile after onboarding; it carries `NonAffiliation`. A declared result is the user's word, never an
     estimate: every sentence says "you hold".
-  - **Onboarding's step 4 is the key** (D220, the owner's request, amending PRD §8.1): `components/onboarding/KeyStep.tsx`,
+  - **Onboarding's key step** (D220, the owner's request, amending PRD §8.1): `components/onboarding/KeyStep.tsx`,
     with its decisions in `features/onboarding/key-step.ts`. It says why a key (free, safer, then `key.offerStays`, the one
     sentence carrying studio mode's exception), what it costs (`keyStepCosts` over `featureCosts`, never a typed figure),
     and how (the video, the written steps, and `KeyEntry`, which checks the key as soon as it is saved). Why and cost are
     `<details>`, closed by default, and the step scrolls the video into view as it mounts, so it is above the fold (D222). It is
     shown unless a key is already held (`stepsFor(hasKey)`), rendered outside the wizard's `<form>`, and stays skippable;
-    either way on leads to the placement (`keyStepFinish`). A diagnostic chosen with no key held meets **the diagnostic's own
-    gate** (ADR 25): `DiagnosticLauncher` shows `NoKeyCard`, whose link carries `?next=diagnostic`, and the key
+    either way on leads to the ready card (`keyStepFinish`), and its scene is the small one, so the video stays in view.
+    The diagnostic taken from Today with no key held meets **the diagnostic's own gate** (ADR 25): `DiagnosticLauncher` shows `NoKeyCard`, whose link carries `?next=diagnostic`, and the key
     screen then offers the way back (`returnAfterKey`, an allow-list, never an address from the query).
   - **The explainer video** is `public/media/openai-explainer.mp4`, committed (only `public/content/` and `public/sw.js`
     are generated), rendered by `components/key/ExplainerVideo.tsx` with `preload="none"`, never autoplaying, and a poster
@@ -557,6 +579,9 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   under `next build && next start`.
 - **Hermetic journeys move by in-app links, never `page.goto`, once they have state:** the
   in-memory container lives for one page load.
+- **A hermetic spec that opens an app page directly calls `asOnboarded(context)` first** (`e2e/helpers.ts`, D270), or
+  the gate sends the page to `/start`. It seeds the hermetic graph's settings with a study profile through
+  `@palier/testing`'s `HERMETIC_SETTINGS_GLOBAL`, before the page loads; a production spec onboards instead.
 - **Every page sets its own title** through `generateMetadata` (the layout's template makes it
   `Page · Palier`, WCAG 2.4.2).
 - **An island page's section carries `.app-island`.** It gives `<main>` a full viewport of height, so the

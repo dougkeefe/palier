@@ -59,6 +59,8 @@ export {
   type CalloutTone,
   type DialogPlacement,
   type MascotPose,
+  type CocoPose,
+  type SceneName,
   type GlyphName,
   type OptionOutcome,
   type OptionRowInput,
@@ -102,6 +104,7 @@ export { Passage, type PassageProps } from "./primitives/Passage.js";
 export { Toast, type ToastProps } from "./primitives/Toast.js";
 export { Working, type WorkingProps } from "./primitives/Working.js";
 export { Mascot, type MascotProps } from "./primitives/Mascot.js";
+export { SCENES, Scene, type SceneProps } from "./primitives/Scene.js";
 export { StreakFlame, type StreakFlameProps } from "./primitives/StreakFlame.js";
 export { Timer, type TimerProps } from "./primitives/Timer.js";
 export { Dialog, type DialogProps } from "./primitives/Dialog.js";

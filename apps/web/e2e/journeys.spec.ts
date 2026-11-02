@@ -2,6 +2,7 @@ import { expect, test } from "@playwright/test";
 
 import {
   addKeyAtDiagnosticGate,
+  asOnboarded,
   axeClean,
   drillThroughByKeyboard,
   expectStatementInMain,
@@ -23,7 +24,7 @@ test("journey 1: onboarding, the key the diagnostic needs, the diagnostic, its r
   page,
 }) => {
   await stubOpenAi(page.context());
-  // The key passed over in step 4, the diagnostic chosen last still lands on it (D224).
+  // The key passed over in onboarding, the diagnostic Today offers still runs, behind its gate (D224, D269).
   await onboard(page, "diagnostic");
   // The diagnostic runs on the key: with none, its gate says what the key buys and where to add it.
   await axeClean(page);
@@ -181,10 +182,95 @@ test("today sends a first-time user straight to onboarding, rather than an empty
   await expect(page).not.toHaveURL(/\/en\/(home|start)$/);
 });
 
+test("every app page sends a visitor who has not been through onboarding there, and the reference pages and the translator stay open (D270)", async ({
+  page,
+}) => {
+  for (const path of ["/en/review", "/en/progress", "/en/practice/oral", "/en/exam", "/en/settings", "/fr/settings/data"]) {
+    await page.goto(path);
+    await expect(page).toHaveURL(new RegExp(`/${path.slice(1, 3)}/start$`));
+  }
+  // Replaced, not pushed: Back from onboarding does not bounce through the page again.
+  await page.goBack();
+  await expect(page).not.toHaveURL(/\/fr\/(settings\/data|start)$/);
+
+  for (const [path, heading] of [
+    ["/en/practice/writing/translate", "Translator"],
+    ["/en/library", "Library"],
+    ["/en/about", /Palier/],
+    ["/en/privacy", "Privacy"],
+  ] as const) {
+    await page.goto(path);
+    await expect(page.getByRole("heading", { level: 1, name: heading })).toBeVisible();
+    // Once the container has loaded and nothing is in flight, the gate has read the profile and decided: a page it
+    // gated would have gone to /start by now, as the ones above did.
+    await page.waitForLoadState("networkidle");
+    await expect(page).toHaveURL(new RegExp(`${path}$`));
+  }
+});
+
 test("a drill opened before onboarding sends the user straight to it too, never to a set-up card (D224)", async ({ page }) => {
   await page.goto("/en/practice/reading");
   await expect(page).toHaveURL(/\/en\/start$/);
   await expect(page.getByText("Step 1 of 6")).toBeVisible();
+});
+
+test("every onboarding card is axe-clean in both languages, each but the results headed by Coco, and Skip from the results lands on today (D269)", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  for (const [locale, next, skip, noKey] of [
+    ["fr", "Continuer", "Passer", "Pas maintenant, continuer sans clé"],
+    ["en", "Continue", "Skip", "Not now, continue without a key"],
+  ] as const) {
+    await page.goto(`/${locale}/start`);
+    const continueButton = page.getByRole("button", { name: next });
+    await expect(continueButton).toBeEnabled();
+    // Each card in turn: Coco's scene on all but the results, whose staircases are the picture, and Skip only from
+    // the results on. The key step is passed over by its own way on; the ready card ends the walk.
+    for (const [step, scenes, skips] of [
+      ["welcome", 1, 0],
+      ["target", 1, 0],
+      ["now", 0, 1],
+      ["goal", 1, 1],
+      ["key", 1, 1],
+      ["ready", 1, 0],
+    ] as const) {
+      await expect(page.locator(`.app-onboarding[data-step="${step}"]`)).toBeVisible();
+      await expect(page.locator(".app-onboarding__scene")).toHaveCount(scenes);
+      await expect(page.getByRole("button", { name: skip })).toHaveCount(skips);
+      await axeClean(page);
+      if (step === "key") await page.getByRole("button", { name: noKey }).click();
+      else if (step !== "ready") await continueButton.click();
+    }
+  }
+  // Skip saves the defaults and lands on today's plan, with no assessment asked for on the way.
+  await page.goto("/en/start");
+  const continueButton = page.getByRole("button", { name: "Continue" });
+  await expect(continueButton).toBeEnabled();
+  await continueButton.click();
+  await continueButton.click();
+  await page.getByRole("button", { name: "Skip" }).click();
+  await expect(page).toHaveURL(/\/en\/home$/);
+  await expect(page.getByRole("tablist", { name: "Practising" })).toBeVisible();
+});
+
+test("on a desktop screen every onboarding card fits without scrolling, in both languages (D271)", async ({ page }) => {
+  // A 1366 × 768 laptop's screen less the browser's own chrome: the smallest common desktop.
+  await page.setViewportSize({ width: 1366, height: 660 });
+  for (const locale of ["en", "fr"] as const) {
+    await page.goto(`/${locale}/start`);
+    const wayOn = page.locator(".app-onboarding__bottom button").last();
+    await expect(wayOn).toBeEnabled();
+    for (const step of ["welcome", "target", "now", "goal", "key", "ready"]) {
+      await expect(page.locator(`.app-onboarding[data-step="${step}"]`)).toBeVisible();
+      await page.evaluate(() => window.scrollTo(0, 0));
+      // The card's way on, its last row, is on screen with nothing scrolled.
+      await expect(wayOn).toBeInViewport({ ratio: 1 });
+      await expect(page.getByRole("heading", { level: 2 }).first()).toBeInViewport({ ratio: 1 });
+      if (step === "welcome") await expect(page.getByRole("button", { name: /^(I have a file I exported|J’ai un fichier exporté)$/ })).toBeInViewport();
+      if (step !== "ready") await wayOn.click();
+    }
+  }
 });
 
 test("onboarding and today render in French too, at parity", async ({ page }) => {
@@ -230,12 +316,16 @@ test("journey 6: export, delete everything, import, and the same progress is bac
   await page.getByRole("link", { name: "Today", exact: true }).click();
   await expect(page).toHaveURL(/\/en\/start$/);
 
-  // Import the file, and the same progress is back.
-  await openSettings(page, "Your data");
+  // Import the file from the welcome's quiet link (D271), and the same progress is back, with the study profile, so
+  // today is open at once.
+  await page.getByRole("button", { name: "I have a file I exported" }).click();
   await page.getByLabel("Choose an export file").setInputFiles(file);
   await page.getByRole("button", { name: "Import" }).click();
   await expect(page.getByRole("status").filter({ hasText: `Imported ${answered} answers` })).toBeVisible();
+  await expect(page.getByText("Your levels and goals came over.", { exact: false })).toBeVisible();
   await axeClean(page);
+  await page.getByRole("button", { name: "Go to today" }).click();
+  await expect(page).toHaveURL(/\/en\/home$/);
 
   await page.getByRole("link", { name: "Progress" }).click();
   await expect(page.getByText(/\d+ items? answered/)).toHaveText(`${answered} items answered`);
@@ -307,6 +397,7 @@ test("every page is titled for its purpose, ahead of the product name (WCAG 2.4.
     ["/fr/exam/results", "Résultats de l’examen · Palier"],
     ["/en", "Palier"],
   ] as const) {
+    await asOnboarded(page.context());
     await page.goto(path);
     await expect(page).toHaveTitle(title);
   }

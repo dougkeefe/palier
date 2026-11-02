@@ -233,6 +233,7 @@ import {
   counterIdGenerator,
   fakeClock,
   fixtureBankRepository,
+  hermeticSettingsSeed,
   isHermetic,
   memoryAttemptStore,
   memoryCostLedger,
@@ -1092,6 +1093,9 @@ function productionPorts(): Ports {
 function hermeticPorts(): Ports {
   const device = hermeticDevice();
   const vault = memoryKeyVault(device.secret);
+  // A spec that opens a page directly starts it as a user who has been through onboarding (D270).
+  const settings = memorySettingsStore();
+  for (const [key, value] of hermeticSettingsSeed(globalThis as unknown as Record<string, unknown>)) void settings.set(key, value);
   return {
     clock: fakeClock(),
     random: seededRandom(1),
@@ -1101,7 +1105,7 @@ function hermeticPorts(): Ports {
     schedule: memoryScheduleStore(),
     sessions: memorySessionStore(),
     examRuns: memoryExamRunStore(),
-    settings: memorySettingsStore(),
+    settings,
     vault,
     sync: httpSyncTransport({ baseUrl: SYNC_BASE_URL, credentials: () => vault.deviceSecret() }),
     syncState: memorySyncStateStore(),

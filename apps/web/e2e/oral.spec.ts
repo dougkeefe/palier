@@ -1,6 +1,6 @@
 import { expect, type Page, test } from "@playwright/test";
 
-import { axeClean, getOralReport, practiseSpeaking, talkInStudio } from "./helpers";
+import { asOnboarded, axeClean, getOralReport, practiseSpeaking, talkInStudio } from "./helpers";
 import {
   EXAMINER_QUESTION,
   MODELS_ANSWER,
@@ -35,6 +35,8 @@ import {
 const REFUSED: OpenAiAnswer = { status: 401, body: { error: { message: "bad key", code: "invalid_api_key" } } };
 
 const openOral = async (page: Page, path = "/en/practice/oral") => {
+  // Every app page but a few waits until onboarding is done (D270); this spec is about the screen, so it starts onboarded.
+  await asOnboarded(page.context());
   await page.goto(path);
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 };

@@ -7,20 +7,7 @@ import {
   sampleFeedback,
   sampleLanguage,
   sampleOptionState,
-  showsAppChrome,
 } from "./landing";
-
-describe("showsAppChrome", () => {
-  it("leaves the landing page to its own header and footer", () => {
-    expect(showsAppChrome("/")).toBe(false);
-  });
-
-  it("wraps every other page in the app's", () => {
-    expect(showsAppChrome("/home")).toBe(true);
-    expect(showsAppChrome("/about")).toBe(true);
-    expect(showsAppChrome("/practice/reading")).toBe(true);
-  });
-});
 
 describe("sampleLanguage", () => {
   it("shows the English page a French question, the language its visitor is practising", () => {

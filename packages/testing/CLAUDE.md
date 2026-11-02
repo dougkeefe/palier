@@ -2,7 +2,9 @@
 
 In-memory implementations of every port, the port contract suites, fixture builders, a
 seeded `Random`, a `FakeClock`, a deterministic `counterIdGenerator` (the `IdGenerator`
-counterpart to `seededRandom`/`fakeClock`, so a hermetic run is reproducible — D48), the
+counterpart to `seededRandom`/`fakeClock`, so a hermetic run is reproducible — D48), the hermetic flag and
+`HERMETIC_SETTINGS_GLOBAL`/`hermeticSettingsSeed` (D270: the settings a hermetic page starts with, set by an E2E init
+script so a spec can open a page as a user who has been through onboarding; only the hermetic graph reads it), the
 canonical 60-item fixture bank (§3.2), and the MSW handlers — including `bankHandlers`, which
 serves an `ItemRepositoryBank` as the manifest + content-hashed shards the real bank ships, so the
 HTTP bank adapter is held to the same `itemRepositoryContract` the in-memory repo passes (it

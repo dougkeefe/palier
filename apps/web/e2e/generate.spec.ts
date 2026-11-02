@@ -1,6 +1,6 @@
 import { expect, type Page, test } from "@playwright/test";
 
-import { axeClean, onboard } from "./helpers";
+import { asOnboarded, axeClean, onboard } from "./helpers";
 import {
   GENERATED_SENTINEL,
   MODELS_ANSWER,
@@ -27,6 +27,8 @@ import {
 const RATE_LIMITED: OpenAiAnswer = { status: 429, body: { error: { message: "slow down", code: "rate_limit_exceeded" } } };
 
 const openGenerator = async (page: Page, path = "/en/practice/writing/generate") => {
+  // Every app page but a few waits until onboarding is done (D270); this spec is about the screen, so it starts onboarded.
+  await asOnboarded(page.context());
   await page.goto(path);
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 };

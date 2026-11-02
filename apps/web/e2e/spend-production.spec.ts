@@ -75,6 +75,8 @@ test("the meter reads the device's ledger, warns near the cap and past it, and a
   await page.getByRole("button", { name: "Delete everything" }).click();
   await page.getByRole("button", { name: "Yes, delete everything" }).click();
   await expect(page.getByText("Everything on this device has been deleted.")).toBeVisible();
+  // The study profile went with everything else, so the key screen waits for onboarding again (D270).
+  await onboard(page, "skip");
   await page.goto("/en/settings/key");
   await expect(figure(page, "This month")).toHaveText("US$0.00");
   await expect(page.getByText("No cap is set.")).toBeVisible();

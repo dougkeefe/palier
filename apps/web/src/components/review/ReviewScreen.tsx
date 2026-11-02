@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 import { Link } from "../../i18n/navigation";
-import { REVIEW_SET_LIMIT, minutesFor } from "../../lib/study";
+import { REVIEW_SET_LIMIT, minutesFor, readStudyProfile } from "../../lib/study";
 import { useContainer } from "../ContainerProvider";
 import { PracticeSession } from "../practice/PracticeSession";
 
@@ -14,6 +14,10 @@ import { PracticeSession } from "../practice/PracticeSession";
  * The review queue (product-requirements.md §8.8): the due stack with its count and an
  * estimated time, drilled straight through, and a genuine reward state when nothing is
  * due (§14: "Coco asleep. 'Nothing due. Come back tomorrow, or do a set anyway.'").
+ *
+ * With no study profile it loads nothing and stays on its loading line: `OnboardingGate` is sending the visitor to
+ * onboarding, and the queue's read of the bank, half a megabyte, would only hold that page back (D270), as Today's
+ * own check spares it the plan.
  */
 export function ReviewScreen() {
   const t = useTranslations("review");
@@ -24,10 +28,14 @@ export function ReviewScreen() {
   useEffect(() => {
     if (container.status !== "ready") return;
     let live = true;
-    container.container.useCases.reviewQueue({ limit: REVIEW_SET_LIMIT }).then(
-      ({ items }) => live && setDue(items),
-      () => live && setDue("failed"),
-    );
+    const { settings, useCases } = container.container;
+    readStudyProfile(settings)
+      .then(async (profile) => {
+        if (profile === null) return;
+        const { items } = await useCases.reviewQueue({ limit: REVIEW_SET_LIMIT });
+        if (live) setDue(items);
+      })
+      .catch(() => live && setDue("failed"));
     return () => {
       live = false;
     };
