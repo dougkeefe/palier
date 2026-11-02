@@ -88,28 +88,32 @@ export function ProgressScreen() {
     let live = true;
     const { useCases, clock, settings } = container.container;
     const timeZone = deviceTimeZone();
-    Promise.all([
-      Promise.all(SCORED_SKILLS.map((s) => useCases.progressReport({ skill: s }))),
-      Promise.all(SCORED_SKILLS.map((s) => useCases.practiceTrendHistory({ skill: s, weeks: TREND_HISTORY_WEEKS, timeZone }))),
-      readStudyProfile(settings),
-      useCases.oralTotals(),
-      useCases.oralProgress({ limit: ORAL_RECENT_SESSIONS }),
-    ]).then(
-      ([reports, histories, profile, oral, oralProgress]) =>
-        live &&
+    // With no study profile nothing is read and the loading line stays: `OnboardingGate` is sending the visitor to
+    // onboarding, and every report's read of the bank would only hold that page back (D270).
+    readStudyProfile(settings)
+      .then(async (profile) => {
+        if (profile === null) return;
+        const [reports, histories, oral, oralProgress] = await Promise.all([
+          Promise.all(SCORED_SKILLS.map((s) => useCases.progressReport({ skill: s }))),
+          Promise.all(SCORED_SKILLS.map((s) => useCases.practiceTrendHistory({ skill: s, weeks: TREND_HISTORY_WEEKS, timeZone }))),
+          useCases.oralTotals(),
+          useCases.oralProgress({ limit: ORAL_RECENT_SESSIONS }),
+        ]);
+        if (!live) return;
         setLoaded({
           reports: Object.fromEntries(SCORED_SKILLS.map((s, i) => [s, reports[i]!])) as Record<ScoredSkill, ProgressReport>,
           histories: Object.fromEntries(SCORED_SKILLS.map((s, i) => [s, histories[i]!])) as Record<ScoredSkill, TrendPoint[]>,
-          band: historyBand(profile === null ? null : highestScoredTarget(profile)),
-          bands: Object.fromEntries(
-            SCORED_SKILLS.map((s) => [s, historyBand(profile === null ? null : targetFor(profile, s))]),
-          ) as Record<ScoredSkill, TargetBand>,
+          band: historyBand(highestScoredTarget(profile)),
+          bands: Object.fromEntries(SCORED_SKILLS.map((s) => [s, historyBand(targetFor(profile, s))])) as Record<
+            ScoredSkill,
+            TargetBand
+          >,
           oral,
           oralProgress,
           printedAt: clock.now(),
-        }),
-      () => live && setLoaded("failed"),
-    );
+        });
+      })
+      .catch(() => live && setLoaded("failed"));
     return () => {
       live = false;
     };

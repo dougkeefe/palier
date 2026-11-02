@@ -63,6 +63,9 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     `needsOnboarding` decides: a page in `routes.json`, not open before onboarding. The open ones are `/`, `/start`,
     about, privacy, the translator and the library (the key guide was too, until the key step stopped linking it, D272).
     **A new page is gated by default**; one that a visitor may open first is an entry in `OPEN_BEFORE_ONBOARDING`.
+    Lighthouse opens a gated page with no profile, so it measures the move to onboarding: `Shell` keys `main` by its
+    chrome, so the move is no layout shift, and **a gated screen that reads much reads the profile first and, with
+    none, loads nothing** (Today, a drill, review and progress do), or its reads hold onboarding's first paint back.
   - **Below 1000px the landing header folds behind a menu button** at the top right (D232): `LandingMenu.tsx`, a
     disclosure (never an ARIA menu) around the server-rendered nav and actions: `HeaderMenu` since D267, deciding through
     `features/nav/menu.ts`'s `menuOpenAfter`. At 1000px and up its panel is `display: contents`, so the header is D201's. Keep one `nav` landmark:

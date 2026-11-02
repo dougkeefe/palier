@@ -34,7 +34,9 @@ export function Shell({
   return (
     <>
       {focus ? focusHeader : header}
-      <main id="main" tabIndex={-1} className={focus ? "app-main app-main--focus" : "app-main"}>
+      {/* Keyed by the chrome, so the gate's move to onboarding mounts a new main rather than shifting the page's: the
+          old one moving up into the slimmer frame was a layout shift Lighthouse measured on a gated page (D270). */}
+      <main key={chrome} id="main" tabIndex={-1} className={focus ? "app-main app-main--focus" : "app-main"}>
         {children}
       </main>
       {focus ? null : <OnboardingGate />}

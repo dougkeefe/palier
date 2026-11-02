@@ -983,6 +983,14 @@ collected to stay, and for no assessment first; then chose Coco drawn inline, a 
   cache (check-types 27s against main's 10s); the new tests were 4.5s of it. Within the rule (make it faster, never
   raise the number): `TargetStep` and `GoalStep` render in node now, their choosing left to the wizard's jsdom test,
   so two jsdom start-ups go; and the gate's, the import's and the pairing's tests wait one tick, not 20 to 50ms.
+- **Then CI's Lighthouse budget** failed `/en/review` at 0.93, all five runs: Lighthouse opens a gated page with no
+  profile, so it measured the gate's move to onboarding. Two causes, each fixed at its root. `Shell`'s `main` is keyed
+  by its chrome, so the move mounts a new one instead of shifting the page's up into the slimmer frame (a layout shift
+  of 0.089). And `ReviewScreen` and `ProgressScreen` read the study profile first and, with none, load nothing and stay
+  on their loading line, as Today does, so the queue's and the reports' half a megabyte of bank no longer holds
+  onboarding's first paint back (1.5s). Both pages now 0.99, and every other URL in `lighthouserc.json` 0.98 or more,
+  measured once each on the production build; each screen has its first unit test, so both leave
+  `untested-components.json`.
 - **Docs:** D269–D272; D259 to D262 archived (rule 8); the 24 October `progress.md-archive` entry archived; PRD
   §8.1's dated amendments; `apps/web/CLAUDE.md`, `packages/ui/CLAUDE.md` and `packages/testing/CLAUDE.md`; a line in
   `docs/Palier landing page/readme.md`.
