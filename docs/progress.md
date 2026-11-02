@@ -949,6 +949,11 @@ Not *Next, decided*, which is unchanged (D206). The human asked for the failing 
 - On CI, cold (every package's tsconfig changed, so Turborepo missed all 14 tasks, and no `tsc-` cache existed yet):
   check-types took 37–38 s, and both runs were still cut off at 120 s, about 73 s into the tests.
   `committed-bank.test.ts` took 4.3–4.4 s at four workers. Both runs saved their caches.
+- On CI, the next push, docs only, so Turborepo hit all 14 tasks: the whole lane took 72 s and 75 s of 120, and both
+  runs passed. The test phase was 62–64 s at four workers, against 70–84 s at three before. `committed-bank.test.ts`
+  took 3.2–3.3 s.
+- Not yet seen on CI: a Turborepo miss with the `tsc-` cache warm, the case it is for. Locally, `turbo run check-types
+  --force` took 17.9 s cold and 8–9 s warm.
 
 ### 1 November 2026 — `dougkeefe/pull-requests-next-steps` (the four open PRs cleared; `msw` 3 rebuilt; D273, D274)
 
