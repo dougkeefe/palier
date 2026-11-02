@@ -69,6 +69,8 @@ test("a page's preloads are in its document, never a Link header, so a page the 
 test("the key guide's video is fetched in ranges through the service worker, which leaves it to the network and never caches it (D220)", async ({
   page,
 }) => {
+  // The guide waits until onboarding is done (D272); IndexedDB keeps the profile across the load below.
+  await onboard(page, "skip");
   await page.goto("/en/settings/key/guide");
   await waitForOfflineReady(page);
 

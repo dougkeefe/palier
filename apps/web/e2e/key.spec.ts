@@ -1,6 +1,6 @@
 import { type Page, expect, test } from "@playwright/test";
 
-import { addKeyAtDiagnosticGate, axeClean, onboard, openSettings } from "./helpers";
+import { addKeyAtDiagnosticGate, asOnboarded, axeClean, onboard, openSettings } from "./helpers";
 import { SENTINEL, stubOpenAi } from "./leak-guard";
 
 /**
@@ -92,21 +92,22 @@ test("journey 5: onboarding's step 5 takes the key and checks it, then the key s
   await expect(page.getByText(/the key ending in/)).toHaveCount(0);
 });
 
-/** From `/en/start`, through the first four steps with their defaults, to the key, step 5 (D224, D259). */
+/** From `/en/start`, through the first four steps with their defaults, to the key, step 5 (D224, D259, D271). */
 const toKeyStep = async (page: Page) => {
   const next = page.getByRole("button", { name: "Continue" });
   await expect(next).toBeEnabled();
   for (let i = 0; i < 4; i++) await next.click();
 };
 
-/** From the key step on to the placement, the last step, choosing it and finishing. */
-const placeAndFinish = async (page: Page, placement: "diagnostic" | "skip") => {
-  await expect(page.getByRole("heading", { level: 2, name: "Where are you now?" })).toBeFocused();
-  await page.getByRole("radio", { name: placement === "diagnostic" ? /Take the diagnostic/ : /Skip for now/ }).check();
-  await page.getByRole("button", { name: placement === "diagnostic" ? "Start the diagnostic" : "Start practising" }).click();
+/** On the ready card, the last step (D269): it says whether a key is held, then finishes on today's plan. */
+const finishReady = async (page: Page, key: "held" | "none") => {
+  await expect(page.getByRole("heading", { level: 2, name: "You’re set" })).toBeFocused();
+  await expect(page.getByText(key === "held" ? "Saved on this device" : "Not yet. Drills, review and mock exams need none.")).toBeVisible();
+  await page.getByRole("button", { name: "Start practising" }).click();
+  await expect(page).toHaveURL(/\/en\/home$/);
 };
 
-test("the key step says why a key, what it costs and how to get one, with the video, before the placement (D220, D224)", async ({
+test("the key step says why a key, what it costs and how to get one, with the video, before the ready card (D220, D269)", async ({
   page,
 }) => {
   await page.goto("/en/start");
@@ -150,11 +151,10 @@ test("the key step says why a key, what it costs and how to get one, with the vi
   await expect(page.getByRole("link", { name: /OpenAI’s limits page/ })).toHaveAttribute("target", "_blank");
   await axeClean(page);
 
-  // Passed over, the wizard goes on to the placement, the last step, and from there to today.
+  // Passed over, the wizard goes on to the ready card, the last step, and from there to today.
   await page.getByRole("button", { name: "Not now, continue without a key" }).click();
   await expect(page.getByText("Step 6 of 6")).toBeVisible();
-  await placeAndFinish(page, "skip");
-  await expect(page).toHaveURL(/\/en\/home$/);
+  await finishReady(page, "none");
 });
 
 test("the key step says so at once when OpenAI refuses the key pasted there", async ({ page, context }) => {
@@ -181,7 +181,7 @@ for (const [name, size] of [
   });
 }
 
-test("a key saved in the key step, then the diagnostic chosen last, leads straight to the diagnostic's launcher (D224)", async ({
+test("a key saved in the key step is kept through Back, said on the ready card, and the diagnostic Today offers then runs on it (D269)", async ({
   page,
   context,
 }) => {
@@ -192,38 +192,22 @@ test("a key saved in the key step, then the diagnostic chosen last, leads straig
   await page.getByRole("button", { name: "Save the key" }).click();
   await expect(page.getByRole("status").filter({ hasText: "This key works." })).toBeVisible();
   await page.getByRole("button", { name: "Continue" }).click();
-  // Back from the placement finds the key step still holding the key.
+  // Back from the ready card finds the key step still holding the key.
   await page.getByRole("button", { name: "Back" }).click();
   await expect(page.getByText(/^Saved on this device/)).toBeVisible();
   await page.getByRole("button", { name: "Continue" }).click();
-  await placeAndFinish(page, "diagnostic");
+  await finishReady(page, "held");
+  // No assessment came first; Today offers the diagnostic, and with the key held its launcher stands where the gate would.
+  await page.locator(".app-home__next").getByRole("link", { name: "Take the diagnostic" }).click();
   await expect(page).toHaveURL(/\/en\/diagnostic$/);
-  // The key is held, so the launcher stands where the gate would.
   await expect(page.getByRole("button", { name: /^Start the .* diagnostic$/ })).toBeVisible();
 });
 
-test("with a key already held, onboarding leaves the key step out and counts five steps", async ({ page, context }) => {
-  await stubOpenAi(context);
-  await page.goto("/en/settings/key");
-  await page.getByLabel("OpenAI API key").fill(SENTINEL);
-  await page.getByRole("button", { name: "Save the key" }).click();
-  await expect(page.getByText(/^Saved on this device/)).toBeVisible();
-  // In-app, since the hermetic container lives for one page load: today sends a new user to onboarding (D224).
-  await page.getByRole("link", { name: "Today", exact: true }).click();
-  await expect(page).toHaveURL(/\/en\/start$/);
-  await expect(page.getByText("Step 1 of 5")).toBeVisible();
-  const next = page.getByRole("button", { name: "Continue" });
-  for (let i = 0; i < 4; i++) await next.click();
-  // From the goal straight to the placement; and back from it to the goal, never to a hidden key step.
-  await expect(page.getByText("Step 5 of 5")).toBeVisible();
-  await page.getByRole("button", { name: "Back" }).click();
-  await expect(page.getByRole("heading", { level: 2, name: "How much time a day?" })).toBeFocused();
-  await next.click();
-  await placeAndFinish(page, "skip");
-  await expect(page).toHaveURL(/\/en\/home$/);
-});
-
+// A key held before onboarding is no longer reachable here: the key screen waits until onboarding is done (D270). The
+// wizard's five steps with a key held are `OnboardingWizard.test.tsx`'s.
 test("the key guide shows the video and the seven steps, and links back to the key", async ({ page }) => {
+  // The guide waits until onboarding is done, as the rest of settings does (D272).
+  await asOnboarded(page.context());
   await page.goto("/en/settings/key/guide");
   await expect(page.getByRole("heading", { level: 1, name: "Create an OpenAI key" })).toBeVisible();
   await expect(page.locator("video source")).toHaveAttribute("src", "/media/openai-explainer.mp4");
@@ -235,7 +219,7 @@ test("the key guide shows the video and the seven steps, and links back to the k
   await axeClean(page);
 });
 
-test("with the key passed over, choosing the diagnostic last lands on it, and it asks for the key first (ADR 25, D224)", async ({
+test("with the key passed over, the diagnostic Today offers asks for the key first (ADR 25, D269)", async ({
   page,
 }) => {
   await onboard(page, "diagnostic");
@@ -249,6 +233,7 @@ test("with the key passed over, choosing the diagnostic last lands on it, and it
 });
 
 test("the key screen and its guide render in French too, at parity", async ({ page }) => {
+  await asOnboarded(page.context());
   await page.goto("/fr/settings/key");
   await expect(page.getByRole("heading", { level: 1, name: "Votre clé d’API" })).toBeVisible();
   await expect(page.getByLabel("Clé d’API OpenAI")).toBeVisible();
@@ -261,6 +246,7 @@ test("the key screen and its guide render in French too, at parity", async ({ pa
 test("the spend section: an empty meter, a cap refused, set and removed, and the per-feature table (PRD §8.10, D101–D104)", async ({
   page,
 }) => {
+  await asOnboarded(page.context());
   await page.goto("/en/settings/key");
   await expect(page.getByRole("heading", { name: "What you have spent" })).toBeVisible();
 
@@ -312,6 +298,7 @@ test("the spend section: an empty meter, a cap refused, set and removed, and the
 });
 
 test("the spend section renders in French too, at parity", async ({ page }) => {
+  await asOnboarded(page.context());
   await page.goto("/fr/settings/key");
   await expect(page.getByRole("heading", { name: "Ce que vous avez dépensé" })).toBeVisible();
   await expect(page.getByLabel("Plafond mensuel, en dollars américains")).toBeVisible();

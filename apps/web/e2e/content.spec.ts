@@ -1,6 +1,6 @@
 import { expect, type Page, test } from "@playwright/test";
 
-import { axeClean, drillThroughByKeyboard, expectStatementInMain, onboard, openSettings } from "./helpers";
+import { asOnboarded, axeClean, drillThroughByKeyboard, expectStatementInMain, onboard, openSettings } from "./helpers";
 
 /**
  * Phase 7 Slice 3 (progress.md D145): the about page and the privacy notice, the statement
@@ -44,6 +44,7 @@ test("the privacy notice lists what is held, what never is, and the 180 days, in
 });
 
 test("the footer reaches the about page and the privacy notice from every page", async ({ page }) => {
+  await asOnboarded(page.context());
   await page.goto("/en/review");
   const footer = page.getByRole("contentinfo");
   await footer.getByRole("link", { name: "Privacy" }).click();

@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-import { axeClean } from "./helpers";
+import { axeClean, onboard } from "./helpers";
 import { SENTINEL, stubOpenAi } from "./leak-guard";
 
 /**
@@ -17,6 +17,8 @@ test("each key-check result reads as its own sentence in the production build", 
   let answer: Answer = { status: 200, body: { object: "list", data: [] } };
   await stubOpenAi(context, () => answer);
 
+  // The key screen waits until onboarding is done (D270); IndexedDB keeps the profile across the load below.
+  await onboard(page, "skip");
   await page.goto("/en/settings/key");
   await page.getByLabel("OpenAI API key").fill(SENTINEL);
   await page.getByRole("button", { name: "Save the key" }).click();

@@ -1,6 +1,6 @@
 import { expect, type Page, test } from "@playwright/test";
 
-import { recordViolations, waitForOfflineReady } from "./helpers";
+import { onboard, recordViolations, waitForOfflineReady } from "./helpers";
 import { SENTINEL } from "./leak-guard";
 
 /**
@@ -79,6 +79,8 @@ for (const locale of ["en", "fr"]) {
   test(`every /${locale} page carries its own nonce and breaks none of the policy`, async ({ page }) => {
     test.setTimeout(120_000);
     const violations = await recordViolations(page);
+    // Onboarded first, so every page renders as itself rather than sending the visitor to `/start` (D270).
+    await onboard(page, "skip");
 
     for (const path of PAGES) {
       const response = await page.goto(`/${locale}${path}`);

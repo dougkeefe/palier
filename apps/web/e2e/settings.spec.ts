@@ -1,12 +1,15 @@
 import { expect, test } from "@playwright/test";
 
-import { axeClean } from "./helpers";
+import { asOnboarded, axeClean } from "./helpers";
 
 /**
  * The settings area (progress.md D264): the header's gear and the footer's link both lead to the overview, whose cards
  * open each settings screen, and every screen carries the same menu with the one you are on marked. The landing page's
  * own footer leads there too. No test holds state, so each may start with `page.goto`.
  */
+
+// The settings area waits until onboarding is done (D270); these tests are about the area, so they start onboarded.
+test.beforeEach(({ context }) => asOnboarded(context));
 
 test("the gear and the footer's link lead to the overview, and its cards and menu move between the screens", async ({ page }) => {
   await page.goto("/en/review");

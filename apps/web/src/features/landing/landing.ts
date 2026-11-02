@@ -4,13 +4,6 @@
  */
 
 /**
- * Whether the app's shared header, `main` and footer wrap a page. The landing page (`/`, under
- * either locale) brings its own, as designed; every other page has the app's. `pathname` is
- * next-intl's, without the locale prefix.
- */
-export const showsAppChrome = (pathname: string): boolean => pathname !== "/";
-
-/**
  * The language the sample question is written in: the one the visitor is practising, which is the
  * other one from the page's. An anglophone on `/en` is preparing for the French test, so the sample
  * is French; the tag, hint and verdict around it stay in the page's language.

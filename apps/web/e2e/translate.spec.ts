@@ -1,6 +1,6 @@
 import { expect, type Page, test } from "@playwright/test";
 
-import { axeClean, onboard } from "./helpers";
+import { asOnboarded, axeClean, onboard } from "./helpers";
 import { MODELS_ANSWER, type OpenAiAnswer, SENTINEL, completionKind, stubOpenAi, translateAnswer } from "./leak-guard";
 
 /**
@@ -50,6 +50,9 @@ const CORRECTED: OpenAiAnswer = {
 };
 
 const openTranslator = async (page: Page, path = "/en/practice/writing/translate") => {
+  // The translator is open before onboarding, but its key and cap are set on the key screen, which is not (D270), so
+  // these specs start onboarded. The journeys hold that the translator itself opens without it.
+  await asOnboarded(page.context());
   await page.goto(path);
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 };

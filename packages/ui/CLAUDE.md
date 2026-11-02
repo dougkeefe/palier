@@ -74,7 +74,10 @@ system, not the application.
   focus, not a dialog), **Passage** (serif, 66ch, `lang`-marked), **Toast** (a polite status
   message that does **not** dismiss itself: a timed disappearance is a 2.2.1 problem) and
   **Mascot** (Coco asleep, decorative and `aria-hidden`; the empty state's words carry the
-  meaning, and its "z"s are drawn, not typed, so the no-literals rule holds), and, from Phase 3
+  meaning, and its "z"s are drawn, not typed, so the no-literals rule holds), **Scene** (D269: a spot illustration, Coco
+  in a pose among ink line-art props on a disc of a light token, for onboarding's cards. **A scene is an entry in
+  `SCENES` and a pose one in `COCO_WINGS`, never a case**; presentation attributes only, no text, `aria-hidden`; Coco hops
+  in, a wing waves and confetti pops, `transform` only, so the one motion switch stills them), and, from Phase 3
   Slice 3, **Timer** (presentation only: the tone arrives decided, with a glyph and words as well
   as colour, and the caller's once-a-minute announcement is the only live text) and **Dialog** (a
   native modal `<dialog>` opened with `showModal()`, labelled by its heading, with a `side`

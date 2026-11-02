@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-import { axeClean } from "./helpers";
+import { asOnboarded, axeClean } from "./helpers";
 
 /**
  * The mock exam against the hermetic container (the fixture bank's 25-item reading
@@ -11,6 +11,7 @@ import { axeClean } from "./helpers";
 test("a mock exam runs from the picker to its results, by keyboard, with the navigator, flags and the submit dialog", async ({
   page,
 }) => {
+  await asOnboarded(page.context());
   await page.goto("/en/exam");
   // The fixture bank ships no supervised form, and the picker says so rather than hiding it.
   await expect(page.getByText("Not in this item bank yet").first()).toBeVisible();

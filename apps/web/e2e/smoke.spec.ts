@@ -1,6 +1,8 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
+import { asOnboarded, onboard } from "./helpers";
+
 /**
  * Accessibility is a build gate, not an audit (ADR 13), so the shell's E2E
  * asserts it on every route and in an interactive state, not just an initial
@@ -111,6 +113,7 @@ test("on a phone, the app's header folds its destinations, sync and the language
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
+  await asOnboarded(page.context());
   await page.goto("/en/review");
   const menu = page.getByRole("button", { name: "Menu" });
   const destinations = page.getByRole("navigation", { name: "Primary" });
@@ -156,6 +159,7 @@ test("on a phone, the app's header folds its destinations, sync and the language
 });
 
 test("on a wide screen, the app's header shows its destinations in the row and no menu button (D267)", async ({ page }) => {
+  await asOnboarded(page.context());
   await page.goto("/en/review");
   await expect(page.getByRole("button", { name: "Menu" })).toBeHidden();
   await expect(page.getByRole("navigation", { name: "Primary" }).getByRole("link")).toHaveCount(5);
@@ -217,7 +221,9 @@ test("the landing page shows the explainer in its own language, between the stri
   await axeClean(page);
 });
 
-test("the landing page's way in leads to the app, with the app's header and footer (D201)", async ({ page }) => {
+test("the landing page's way in leads to onboarding, in the focus frame: no navigation, sync status or settings (D201, D269)", async ({
+  page,
+}) => {
   await page.goto("/en");
   await expect(page.locator(".app-header")).toHaveCount(0);
   // The link names Today; a new visitor has no study profile, so Today sends them on to /start (D224). Waiting for
@@ -226,8 +232,18 @@ test("the landing page's way in leads to the app, with the app's header and foot
   await expect(wayIn).toHaveAttribute("href", "/en/home");
   await wayIn.click();
   await expect(page).toHaveURL(/\/en\/start$/);
-  await expect(page.locator(".app-header")).toBeVisible();
+  // The focus frame: the wordmark and the language, and the statement below (R5).
+  await expect(page.locator(".app-header--focus")).toBeVisible();
+  await expect(page.locator(".app-header--focus").getByRole("link", { name: "Français" })).toBeVisible();
   await expect(page.locator(".app-footer__disclaimer")).toBeVisible();
+  // None of the app's chrome a first-time user has no use for yet.
+  await expect(page.getByRole("navigation")).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "Settings" })).toHaveCount(0);
+  await expect(page.locator(".app-sync-status, .app-footer")).toHaveCount(0);
+  // Onboarding done, today has the app's header back.
+  await onboard(page, "skip");
+  await expect(page.locator(".app-header:not(.app-header--focus)")).toBeVisible();
+  await expect(page.getByRole("link", { name: "Settings" }).first()).toBeVisible();
 });
 
 test("activating the skip link moves focus into main", async ({ page }) => {

@@ -16,7 +16,7 @@ Palier is a free web study tool for the Public Service Commission of Canada's Se
 - **Ground:** paper `#f3f2f2`, ink `#201e1d`. Sections separate by whitespace (clamp 48–104px), not rules.
 - **Accent:** a single teal ramp (100 tint, 700 links, 800 deep panels, 900 footer and dark buttons). Magenta `#9b004e` is used only for small kickers ("Test one").
 - **Type:** Source Serif 4 for everything. Display 400 at tight tracking (−0.035em); H2 500; body 16/1.55. Flush-left except the features heading, How it works and FAQ headers, which are centred.
-- **Photography:** full-bleed photos under navy scrims (`--overlay-hero`, `--overlay-banner`, `--overlay-card`), white text on top. Cool, teal-leaning imagery. No grain or illustration.
+- **Photography:** full-bleed photos under navy scrims (`--overlay-hero`, `--overlay-banner`, `--overlay-card`), white text on top. Cool, teal-leaning imagery. No grain or illustration. (This is the landing page's rule. The app draws Coco, its mascot, in onboarding, empty states and milestones: `progress.md` D269.)
 - **Glass:** translucent white fills with 8–12px backdrop blur for nav, chips and the language switch, only over photographs.
 - **Shape:** pills (999px) for buttons, chips and nav; 12px for panels; 10px FAQ rows; 8px inputs and answer options; 16px banner.
 - **Buttons:** white pill with a dark arrow disc on photos; deep-teal pill with a white disc on paper. Hover shifts to teal 100 (light) or teal 700 (dark).

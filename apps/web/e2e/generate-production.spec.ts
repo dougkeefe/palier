@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-import { axeClean } from "./helpers";
+import { axeClean, onboard } from "./helpers";
 import { SENTINEL, stubOpenAi } from "./leak-guard";
 
 /**
@@ -13,6 +13,8 @@ import { SENTINEL, stubOpenAi } from "./leak-guard";
 
 test("a key removed in another tab mid-run: the no-key card replaces the form and takes focus", async ({ page, context }) => {
   await stubOpenAi(context);
+  // The key screen waits until onboarding is done (D270); IndexedDB keeps the profile across the loads below.
+  await onboard(page, "skip");
   await page.goto("/en/settings/key");
   await page.getByLabel("OpenAI API key").fill(SENTINEL);
   await page.getByRole("button", { name: "Save the key" }).click();

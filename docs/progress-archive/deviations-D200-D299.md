@@ -1800,3 +1800,135 @@ The human found two things on the translator.
   are now "Anglais" and "Français". Only the radios read these two keys.
 - **Tests:** `translate.spec.ts`'s no-key test asserts the card's heading sits above the editor; its French test
   asserts the two radios by their capitalised names.
+
+### D259 — the SLE results a user holds are declared in onboarding and at `/settings/study`, and shape the plan: E leaves it, a result at the target keeps it sharp
+**Date:** 25 October 2026 · **Status:** accepted (human's request and three answers; agent's design). Builds PRD §8.1
+step 3's "self-declare a current profile", which D224 left unbuilt; amends D224's five steps and D248's three tabs
+
+The human: nothing let a user say what they already hold, so someone with an E in reading still got a reading plan every
+day. Asked, the human chose a target per skill, with one answer still asked first; a skill held at its target, below E,
+kept sharp rather than dropped; and a staircase with a stamp as the mastery indicator.
+- **What is stored.** The `studyProfile` setting gains `targets` and `current`, a target and a declared result (`Band`
+  or null) per skill. It still writes `targetBand`, the highest target, so a tab or worker on the old code still reads
+  the synced setting and does not send its user to `/start`. `parseStudyProfile` reads the old shape as its one target
+  everywhere with nothing declared, and a result that is not a band as none. It syncs, exports and wipes as before;
+  `/privacy`'s list of what the server holds now names the results.
+- **E is data.** The profile gains `exemptBand: "E"`, refined to be one of its `bands` (ADR 9). The engine's
+  `skillStanding` reads it: `unknown`, `exempt`, `held` (at or above the target) or `working`.
+- **The plan.** An exempt skill leaves Today's tabs, and its hero card is stamped "Exempt: nothing to practise". With all
+  three exempt, a cheering Coco replaces the plan. A held scored skill plans with the planner's new `maintaining`: half
+  the budget (`MAINTAIN_FACTOR`, a study heuristic like `SHORTEN_FACTOR`), reviews and maintenance, no new items, and no
+  diagnostic or mock-exam step (`nextStep`'s `held`). A working skill with no diagnostic is placed at its declared result
+  through `studyFocus`'s `declared` and the engine's `declaredStart` (X starts at A); a diagnostic run, measured, wins
+  over a declaration. Speaking's plan is still one session, worded as keeping sharp when held. `dayRequestFor` gives
+  Today's preview and the drill the same request, so the plan shown is the plan opened. Every goldens test passed unmoved.
+- **Onboarding has six steps**: direction, target, *now* (one row of pill radios per skill, "Not yet" to E, each with its
+  staircase; skippable), goal, the key, the placement. The target step's B or C sets all three; "My position needs a
+  different level in each skill" is folded under it. With reading and writing each held or exempt, the placement offers
+  only to start practising (`placementsFor`, `settle`).
+- **`/settings/study`, "Your levels and goals"**, is the first screen to edit the study profile after onboarding: the
+  results, the targets, the daily goal and the test date, saved whole. It carries `NonAffiliation`, since it shows bands.
+  The footer links it as "Your levels", and Today's "Where you stand" links it under the declared result.
+- **The staircase** is `@palier/ui`'s `LevelStair`: a step per band, solid up to the result, Coco on it, a flag on the
+  target, and at the exempt band a stamp pressed on with the celebration spring (still under reduced motion and in exam
+  mode). With a label it is one image named by the sentence ("Reading: you hold C. Your target is C."); without one,
+  inside a hero card, it is hidden whole. Every sentence says "you hold", and Where you stand adds "The result you told
+  us, not a measure of your practice" (R10, ADR 7).
+- **`/progress`** reads each skill's history at that skill's target; its overview reads both at the higher of the two.
+- **Tests whose premise changed**, said here as D225 did: `onboarding.test.ts`'s step list, `profileFrom` and defaults;
+  `study.test.ts`'s fixture, from one `targetBand` to `targets` and `current`, and its refusal list (an old-shape profile
+  with a bad target is still refused); the stepper's six segments; `key.spec.ts`'s and `journeys.spec.ts`'s step counts
+  ("Step 1 of 6", the key at 5 of 6) and `toKeyStep`'s four clicks; `helpers.ts`'s `onboard`, which passes the new step and
+  takes optional `results`. No assertion about behaviour that this change did not alter was touched.
+- **Not an ADR.** Product scope and flow on an existing requirement, recorded here and in the PRD, as D220 and D224 were.
+
+### D260 — the E2E warmup visits one page per route file, and the levels journey onboards once: shard 2 back inside its budget
+**Date:** 26 October 2026 · **Status:** accepted (agent's diagnosis of a CI failure the human reported). Amends D249's
+warmup list
+
+The human reported #105's medium lane: E2E shard 2 ran past its 300 s budget. It was not this branch's alone: `main` had
+failed the same shard at 300 s on #104's merge, and had taken 231 s, then 282 s, on the two merges before it.
+- **Where the time goes.** `--shard` splits by count in project order (D223), so shard 2 is all hermetic `chromium` tests,
+  and all of them wait for the warmup, which runs alone. Locally, with CI's two workers, shard 2 took 151 s, the warmup
+  44 s of it; CI ran about 1.8 times slower, 270 s of tests after 11 s of server start.
+- **The warmup visits one page per route file** (`warmup.setup.ts`'s `warmupRoutes`): an entry of `routes.json` with no
+  `page.tsx` of its own is an expansion of a dynamic route, and only the first expansion under each parent is visited.
+  The eighteen library articles are one route, `library/[subSkill]`, so one article compiles it, which is what D249
+  needed; the other seventeen only rendered and waited for the network. 42 visits became 25, and the warmup went from
+  43–44 s to 30.6 s locally, in both shards.
+- **D259's levels journey onboards once.** Its first two tests each onboarded from a fresh page load; they are one journey
+  now, with the same assertions, and the French test is unchanged.
+- **Measured locally** (`--workers=2`, a hermetic `next dev` at port 3010, since another app held 3000): shard 2 137 s, twice,
+  against 151 s; shard 1 118 s; no test failed or was retried.
+- **Not changed:** the budget, and the warmup's serial order (D67). Shard 2 remains the tighter of the two, since nothing
+  runs beside its warmup; splitting the hermetic project would be the next lever, if the creep continues.
+
+### D261 — three dev-only advisories close with a lockfile refresh, not an override; Lighthouse's `zod` 3 is dismissed as unreachable
+**Date:** 26 October 2026 · **Status:** accepted (human's request; agent's fix and dismissal). Extends D155, D236 and D246
+
+The human asked for the open high and moderate Dependabot alerts to be resolved. Seven were open, all transitive and
+dev-only.
+
+| Alert | Package | Severity | Path | Parent's range | Now |
+| --- | --- | --- | --- | --- | --- |
+| #21 | `body-parser` 1.20.8 | high | `@lhci/cli` → `express` 4.22.3 | `~1.20.5` | 1.20.9 |
+| #22–#25 | `fast-uri` 3.1.8 | two moderate, two low | `@stryker-mutator/core` → `ajv` 8.20.0 | `^3.0.1` | 3.1.9 |
+| #19 | `ip-address` 10.7.2 | moderate | `@lhci/cli` → … → `proxy-agent` → `socks` 2.8.10 | `^10.1.1` | 10.7.5 |
+| #20 | `zod` 3.25.76 | high | `@lhci/cli` → `lighthouse` 12.6.1 → `puppeteer-core` 24.43.1 → `chromium-bidi` 14.0.0 | `^3.24.1` | dismissed |
+
+- **Unlike D155 and D236, the first three needed no override.** Each patched version fits inside the range its parent
+  already asks for, so `pnpm update -r --depth Infinity body-parser fast-uri ip-address` moved them. `pnpm-workspace.yaml`
+  is unchanged. Dependabot's security updates are enabled, but none had been opened for these three.
+- **The lockfile also takes `legacy-javascript` 0.0.3 → 0.0.4.** Lighthouse's `@paulirish/trace_engine` asks for it as
+  `latest`, so any re-resolve picks up the newest. That is the whole of Dependabot's PR #98, which was titled "Bump zod
+  from 3.25.76 to 4.6.7" but changed no `zod`. It passed CI, and is closed in favour of this one. Nothing else moves, and
+  no package is added.
+- **`zod` 3 is dismissed on GitHub as `not_used`, not overridden.** No 3.x release is patched (GHSA fixed in 4.6.6).
+  - An override to zod 4 would break `chromium-bidi` 14. Its parser reads `parseResult.error.errors`, which zod 4
+    removed.
+  - Every `chromium-bidi` up to 17.0.2 asks for zod 3. `@lhci/cli` 0.15.1 is its latest release and pins `lighthouse`
+    12.6.1, which holds `puppeteer-core` at 24.
+  - The vulnerable code never runs. `puppeteer-core` requires `chromium-bidi` lazily, only in `createBiDiBrowser` and
+    `createBiDiOverCdpBrowser` (`BrowserLauncher.js`), which serve the `webDriverBiDi` protocol. Lighthouse drives Chrome
+    over CDP. Even on that path, the only input zod would validate is puppeteer's own protocol messages, on CI's
+    Lighthouse step.
+  - **Revisit when** `@lhci/cli` moves to a `lighthouse` whose `puppeteer-core` ships a `chromium-bidi` on zod 4
+    (157.x asks for `^4.6.5`).
+- **Smoke checks:** `lhci --version` answers 0.15.1. From `express`'s directory, `body-parser` 1.20.9 loads with `json` and
+  `urlencoded`. From `ajv`'s directory, a `$ref` across two `$id`s resolves through `fast-uri` 3.1.9 and validates both
+  ways. From `socks`'s directory, `ip-address` 10.7.5's `Address6` and `Address4` answer.
+- **`pnpm audit` over the whole tree** now shows the two `extract-zip` entries D155 dismissed and the `zod` entry. D236's
+  `braces` entry no longer appears. CI's `--prod --audit-level=high` gate is unchanged and exits 0, showing only D135's
+  two ignored `content` entries.
+
+### D262 — the E2E lane runs three shards: the hermetic specs' heaviest files sort last, so two left shard 2 at its budget
+**Date:** 26 October 2026 · **Status:** accepted (agent's diagnosis of the CI failure the human reported). Extends D178 and D223; amends D260's "the next lever"
+
+The human reported this branch's E2E 2/2 failing. It ran 300 s and was stopped by the budget with 65 of its 66 tests
+passed, on a change that touched no app code. The same commit's other run passed shard 2 in 226 s.
+- **Shard 2 sat at its budget after D260 too.** Its test step ran 190–300 s in every run since 24 October, and it had already
+  failed at 300 s on `main` (#104's merge) and on `current-levels-input`. Shard 1 ran 166–272 s.
+- **Why shard 2.** `--shard` splits by count in project order (D223), and inside `chromium` the files sort by name.
+  `oral`, `translate`, `key-leak` and `sync`, the four heaviest, all sort late. Locally, at two workers:
+  - shard 1 held 27 hermetic tests worth 49 s, beside the 38 production specs;
+  - shard 2 held 65 hermetic tests worth 201 s, after a 36 s warmup that runs alone.
+- **Tried first, and reverted: three workers on CI.** Locally the suite used about 1.3 of 8 cores at two workers, and
+  three took it from 158 s to 127 s. On CI's four vCPUs it did not help: shard 2 took 260 s, then 289 s with the per-page
+  title test past its 30 s timeout. There the dev server is the bottleneck, so a third worker only adds contention.
+  Shard 1 dropped to about 200 s.
+- **So three shards.** Playwright 1.64 has no weighted sharding, and reordering files or splitting the `chromium` project
+  to move weight would tie the split to file names. Three shards by count give, locally:
+  - shard 1: the 38 production specs and 6 hermetic tests (9 s);
+  - shard 2: 43 hermetic tests (111 s);
+  - shard 3: 43 hermetic tests (141 s).
+
+  At two workers that puts the slowest shard at about 101 s, against 137 s before. The cost is a fourth medium-lane job
+  and one more warmup, on a public repository's free runners.
+- **Measured on CI, both runs of `bc7ac21`, all green:** shard 1 took 191 s and 191 s, shard 2 148 s and 223 s, and shard 3
+  214 s and 209 s, against 226–300 s for the old shard 2. The gain is smaller than the local split promised, because each
+  shard still pays CI's server start and a warmup of about a minute, and the runners vary by about 70 s. That leaves
+  about 75 s of headroom, not 150. If the suite keeps growing, the next lever is the warmup, which every hermetic shard
+  repeats.
+- **The required checks change with it** (`docs/deploy.md`): `Medium lane: E2E 1/2` and `2/2` become `1/3`, `2/3` and
+  `3/3`, in `deploy.md`'s table and, with the human's approval once CI was green, in `main`'s branch protection. `verify.yml`'s comment now counts four jobs.
+- **Not changed:** the 300 s budget, two workers, `retries: 0`, and the warmup.

@@ -19,6 +19,8 @@ import { Sheet } from "./Sheet.js";
 import { LevelStair } from "./LevelStair.js";
 import { LevelStairPicker } from "./LevelStairPicker.js";
 import { Mascot } from "./Mascot.js";
+import { SCENES, Scene } from "./Scene.js";
+import type { SceneName } from "./logic.js";
 import { StreakFlame } from "./StreakFlame.js";
 import { Toast } from "./Toast.js";
 import { TrendChart } from "./TrendChart.js";
@@ -486,6 +488,43 @@ describe("Mascot", () => {
     expect(cheer?.querySelectorAll("path").length).not.toBe(asleep?.querySelectorAll("path").length);
     // No style attribute anywhere: the strict CSP would refuse it.
     expect(cheer?.querySelector("[style]")).toBeNull();
+  });
+});
+
+describe("Scene (D269)", () => {
+  it.each(Object.keys(SCENES) as SceneName[])("draws %s as decoration, with no text and no style attribute", (name) => {
+    const svg = render(<Scene name={name} />).container.querySelector("svg");
+    expect(svg?.getAttribute("aria-hidden")).toBe("true");
+    expect(svg?.getAttribute("focusable")).toBe("false");
+    // Nothing to translate and nothing for a screen reader: every word is the caller's.
+    expect(svg?.textContent).toBe("");
+    expect(svg?.querySelector("text")).toBeNull();
+    // The strict CSP would refuse a style attribute.
+    expect(svg?.querySelector("[style]")).toBeNull();
+    // Coco is in every scene, on its own group so the hop leaves the placement alone.
+    expect(svg?.querySelectorAll(".pl-scene__coco")).toHaveLength(1);
+  });
+
+  it("gives each scene its own disc colour from the tokens", () => {
+    const discs = (Object.keys(SCENES) as SceneName[]).map(
+      (name) => render(<Scene name={name} />).container.querySelector("svg > circle")?.getAttribute("fill") ?? "",
+    );
+    for (const disc of discs) expect(disc).toMatch(/^var\(--surface-[a-z]+\)$/);
+    expect(new Set(discs.slice(0, 4)).size).toBe(4);
+  });
+
+  it("waves on hello and pops confetti on celebrate, and nowhere else", () => {
+    const hello = render(<Scene name="hello" />).container;
+    const celebrate = render(<Scene name="celebrate" />).container;
+    const summit = render(<Scene name="summit" />).container;
+    expect(hello.querySelector(".pl-scene__wing")).not.toBeNull();
+    expect(celebrate.querySelector(".pl-scene__confetti")).not.toBeNull();
+    expect(summit.querySelector(".pl-scene__wing, .pl-scene__confetti")).toBeNull();
+  });
+
+  it("adds the caller's class after its own", () => {
+    const svg = render(<Scene name="key" className="app-x" />).container.querySelector("svg");
+    expect(svg?.getAttribute("class")).toBe("pl-scene app-x");
   });
 });
 

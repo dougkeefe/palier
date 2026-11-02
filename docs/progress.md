@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 28 October 2026 (each settings screen opens with links to its sections, D266, the app header folds into a menu on a phone, D267, and every component has a unit test or a place on a shrinking list, D268; next, D206's bank budget)
+**Last updated:** 1 November 2026 (onboarding redrawn as illustrated cards in a focus frame, Coco on each, with no assessment first, D269, every app page waits for it, D270, every card fits a desktop screen, D271, and the review's fixes, D272; next, D206's bank budget)
 **Current phase:** **1.0 is reached** (24 October 2026, D253): the human passed Gate O and Gate M and read bank v4 with no
 disagreement, so Phases 6 and 7 are complete. After 1.0, reading's library articles are built (D254), and D206's bank
 budget is next. Phase 3's product pilot still runs (Gate E, D97), and Phase 8, the English mirror, is the plan's next
@@ -102,6 +102,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 | `dougkeefe/image-clickable-bars` | **The staircase is the result picker**: a skill's result is picked by tapping its step, Coco hops there, and the pill row is gone (D263). | 26 October 2026 |
 | `dougkeefe/settings-shared-menu` | **One settings area**: `/settings` lists levels, the key, your data and sync, each screen carries one menu, and a gear at the header's top right and one footer link lead there (D264). | 27 October 2026 |
 | `dougkeefe/settings-subsections-navigation` | **Each settings screen opens with "On this page"**: a pill row of links to its sections, each landing on its card (D266). **The app header folds into a menu below 1100px** (D267). **Every component has a unit test, or a line on a list that only shrinks** (D268). | 28 October 2026 |
+| `dougkeefe/liny0` | **Onboarding redrawn**: a focus frame with no navigation, sync status or settings, Coco on every card, a welcome and a "you're set" card in place of the direction and placement questions, Skip from the results on, and no assessment first (D269). **Every app page waits for onboarding**, but for the translator, about, privacy and the library, and the welcome offers, in small type, to bring progress from a file or another device; every card fits a desktop screen without scrolling (D270, D271); the welcome cut to one line, and the review's smaller fixes (D272). | 31 October 2026 |
 
 *(Merged rows are removed: this table tracks current work, and the session log is the permanent record. The rows
 removed up to 24 October 2026, the last of them the reading articles (#100), are listed in
@@ -617,138 +618,10 @@ full.
 - **D256** — the library as a browsable index and readable articles, with three photographs served from this origin · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d256--the-library-as-a-browsable-index-and-readable-articles-with-three-photographs-served-from-this-origin)
 - **D257** — the library's index is one grid of cards under pills that filter by skill or topic, each article with its own photograph · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d257--the-librarys-index-is-one-grid-of-cards-under-pills-that-filter-by-skill-or-topic-each-article-with-its-own-photograph)
 - **D258** — The translator's no-key card sits above the editor, and its French language labels are capitalised · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d258--the-translators-no-key-card-sits-above-the-editor-and-its-french-language-labels-are-capitalised)
-
-### D259 — the SLE results a user holds are declared in onboarding and at `/settings/study`, and shape the plan: E leaves it, a result at the target keeps it sharp
-**Date:** 25 October 2026 · **Status:** accepted (human's request and three answers; agent's design). Builds PRD §8.1
-step 3's "self-declare a current profile", which D224 left unbuilt; amends D224's five steps and D248's three tabs
-
-The human: nothing let a user say what they already hold, so someone with an E in reading still got a reading plan every
-day. Asked, the human chose a target per skill, with one answer still asked first; a skill held at its target, below E,
-kept sharp rather than dropped; and a staircase with a stamp as the mastery indicator.
-- **What is stored.** The `studyProfile` setting gains `targets` and `current`, a target and a declared result (`Band`
-  or null) per skill. It still writes `targetBand`, the highest target, so a tab or worker on the old code still reads
-  the synced setting and does not send its user to `/start`. `parseStudyProfile` reads the old shape as its one target
-  everywhere with nothing declared, and a result that is not a band as none. It syncs, exports and wipes as before;
-  `/privacy`'s list of what the server holds now names the results.
-- **E is data.** The profile gains `exemptBand: "E"`, refined to be one of its `bands` (ADR 9). The engine's
-  `skillStanding` reads it: `unknown`, `exempt`, `held` (at or above the target) or `working`.
-- **The plan.** An exempt skill leaves Today's tabs, and its hero card is stamped "Exempt: nothing to practise". With all
-  three exempt, a cheering Coco replaces the plan. A held scored skill plans with the planner's new `maintaining`: half
-  the budget (`MAINTAIN_FACTOR`, a study heuristic like `SHORTEN_FACTOR`), reviews and maintenance, no new items, and no
-  diagnostic or mock-exam step (`nextStep`'s `held`). A working skill with no diagnostic is placed at its declared result
-  through `studyFocus`'s `declared` and the engine's `declaredStart` (X starts at A); a diagnostic run, measured, wins
-  over a declaration. Speaking's plan is still one session, worded as keeping sharp when held. `dayRequestFor` gives
-  Today's preview and the drill the same request, so the plan shown is the plan opened. Every goldens test passed unmoved.
-- **Onboarding has six steps**: direction, target, *now* (one row of pill radios per skill, "Not yet" to E, each with its
-  staircase; skippable), goal, the key, the placement. The target step's B or C sets all three; "My position needs a
-  different level in each skill" is folded under it. With reading and writing each held or exempt, the placement offers
-  only to start practising (`placementsFor`, `settle`).
-- **`/settings/study`, "Your levels and goals"**, is the first screen to edit the study profile after onboarding: the
-  results, the targets, the daily goal and the test date, saved whole. It carries `NonAffiliation`, since it shows bands.
-  The footer links it as "Your levels", and Today's "Where you stand" links it under the declared result.
-- **The staircase** is `@palier/ui`'s `LevelStair`: a step per band, solid up to the result, Coco on it, a flag on the
-  target, and at the exempt band a stamp pressed on with the celebration spring (still under reduced motion and in exam
-  mode). With a label it is one image named by the sentence ("Reading: you hold C. Your target is C."); without one,
-  inside a hero card, it is hidden whole. Every sentence says "you hold", and Where you stand adds "The result you told
-  us, not a measure of your practice" (R10, ADR 7).
-- **`/progress`** reads each skill's history at that skill's target; its overview reads both at the higher of the two.
-- **Tests whose premise changed**, said here as D225 did: `onboarding.test.ts`'s step list, `profileFrom` and defaults;
-  `study.test.ts`'s fixture, from one `targetBand` to `targets` and `current`, and its refusal list (an old-shape profile
-  with a bad target is still refused); the stepper's six segments; `key.spec.ts`'s and `journeys.spec.ts`'s step counts
-  ("Step 1 of 6", the key at 5 of 6) and `toKeyStep`'s four clicks; `helpers.ts`'s `onboard`, which passes the new step and
-  takes optional `results`. No assertion about behaviour that this change did not alter was touched.
-- **Not an ADR.** Product scope and flow on an existing requirement, recorded here and in the PRD, as D220 and D224 were.
-
-### D260 — the E2E warmup visits one page per route file, and the levels journey onboards once: shard 2 back inside its budget
-**Date:** 26 October 2026 · **Status:** accepted (agent's diagnosis of a CI failure the human reported). Amends D249's
-warmup list
-
-The human reported #105's medium lane: E2E shard 2 ran past its 300 s budget. It was not this branch's alone: `main` had
-failed the same shard at 300 s on #104's merge, and had taken 231 s, then 282 s, on the two merges before it.
-- **Where the time goes.** `--shard` splits by count in project order (D223), so shard 2 is all hermetic `chromium` tests,
-  and all of them wait for the warmup, which runs alone. Locally, with CI's two workers, shard 2 took 151 s, the warmup
-  44 s of it; CI ran about 1.8 times slower, 270 s of tests after 11 s of server start.
-- **The warmup visits one page per route file** (`warmup.setup.ts`'s `warmupRoutes`): an entry of `routes.json` with no
-  `page.tsx` of its own is an expansion of a dynamic route, and only the first expansion under each parent is visited.
-  The eighteen library articles are one route, `library/[subSkill]`, so one article compiles it, which is what D249
-  needed; the other seventeen only rendered and waited for the network. 42 visits became 25, and the warmup went from
-  43–44 s to 30.6 s locally, in both shards.
-- **D259's levels journey onboards once.** Its first two tests each onboarded from a fresh page load; they are one journey
-  now, with the same assertions, and the French test is unchanged.
-- **Measured locally** (`--workers=2`, a hermetic `next dev` at port 3010, since another app held 3000): shard 2 137 s, twice,
-  against 151 s; shard 1 118 s; no test failed or was retried.
-- **Not changed:** the budget, and the warmup's serial order (D67). Shard 2 remains the tighter of the two, since nothing
-  runs beside its warmup; splitting the hermetic project would be the next lever, if the creep continues.
-
-### D261 — three dev-only advisories close with a lockfile refresh, not an override; Lighthouse's `zod` 3 is dismissed as unreachable
-**Date:** 26 October 2026 · **Status:** accepted (human's request; agent's fix and dismissal). Extends D155, D236 and D246
-
-The human asked for the open high and moderate Dependabot alerts to be resolved. Seven were open, all transitive and
-dev-only.
-
-| Alert | Package | Severity | Path | Parent's range | Now |
-| --- | --- | --- | --- | --- | --- |
-| #21 | `body-parser` 1.20.8 | high | `@lhci/cli` → `express` 4.22.3 | `~1.20.5` | 1.20.9 |
-| #22–#25 | `fast-uri` 3.1.8 | two moderate, two low | `@stryker-mutator/core` → `ajv` 8.20.0 | `^3.0.1` | 3.1.9 |
-| #19 | `ip-address` 10.7.2 | moderate | `@lhci/cli` → … → `proxy-agent` → `socks` 2.8.10 | `^10.1.1` | 10.7.5 |
-| #20 | `zod` 3.25.76 | high | `@lhci/cli` → `lighthouse` 12.6.1 → `puppeteer-core` 24.43.1 → `chromium-bidi` 14.0.0 | `^3.24.1` | dismissed |
-
-- **Unlike D155 and D236, the first three needed no override.** Each patched version fits inside the range its parent
-  already asks for, so `pnpm update -r --depth Infinity body-parser fast-uri ip-address` moved them. `pnpm-workspace.yaml`
-  is unchanged. Dependabot's security updates are enabled, but none had been opened for these three.
-- **The lockfile also takes `legacy-javascript` 0.0.3 → 0.0.4.** Lighthouse's `@paulirish/trace_engine` asks for it as
-  `latest`, so any re-resolve picks up the newest. That is the whole of Dependabot's PR #98, which was titled "Bump zod
-  from 3.25.76 to 4.6.7" but changed no `zod`. It passed CI, and is closed in favour of this one. Nothing else moves, and
-  no package is added.
-- **`zod` 3 is dismissed on GitHub as `not_used`, not overridden.** No 3.x release is patched (GHSA fixed in 4.6.6).
-  - An override to zod 4 would break `chromium-bidi` 14. Its parser reads `parseResult.error.errors`, which zod 4
-    removed.
-  - Every `chromium-bidi` up to 17.0.2 asks for zod 3. `@lhci/cli` 0.15.1 is its latest release and pins `lighthouse`
-    12.6.1, which holds `puppeteer-core` at 24.
-  - The vulnerable code never runs. `puppeteer-core` requires `chromium-bidi` lazily, only in `createBiDiBrowser` and
-    `createBiDiOverCdpBrowser` (`BrowserLauncher.js`), which serve the `webDriverBiDi` protocol. Lighthouse drives Chrome
-    over CDP. Even on that path, the only input zod would validate is puppeteer's own protocol messages, on CI's
-    Lighthouse step.
-  - **Revisit when** `@lhci/cli` moves to a `lighthouse` whose `puppeteer-core` ships a `chromium-bidi` on zod 4
-    (157.x asks for `^4.6.5`).
-- **Smoke checks:** `lhci --version` answers 0.15.1. From `express`'s directory, `body-parser` 1.20.9 loads with `json` and
-  `urlencoded`. From `ajv`'s directory, a `$ref` across two `$id`s resolves through `fast-uri` 3.1.9 and validates both
-  ways. From `socks`'s directory, `ip-address` 10.7.5's `Address6` and `Address4` answer.
-- **`pnpm audit` over the whole tree** now shows the two `extract-zip` entries D155 dismissed and the `zod` entry. D236's
-  `braces` entry no longer appears. CI's `--prod --audit-level=high` gate is unchanged and exits 0, showing only D135's
-  two ignored `content` entries.
-
-### D262 — the E2E lane runs three shards: the hermetic specs' heaviest files sort last, so two left shard 2 at its budget
-**Date:** 26 October 2026 · **Status:** accepted (agent's diagnosis of the CI failure the human reported). Extends D178 and D223; amends D260's "the next lever"
-
-The human reported this branch's E2E 2/2 failing. It ran 300 s and was stopped by the budget with 65 of its 66 tests
-passed, on a change that touched no app code. The same commit's other run passed shard 2 in 226 s.
-- **Shard 2 sat at its budget after D260 too.** Its test step ran 190–300 s in every run since 24 October, and it had already
-  failed at 300 s on `main` (#104's merge) and on `current-levels-input`. Shard 1 ran 166–272 s.
-- **Why shard 2.** `--shard` splits by count in project order (D223), and inside `chromium` the files sort by name.
-  `oral`, `translate`, `key-leak` and `sync`, the four heaviest, all sort late. Locally, at two workers:
-  - shard 1 held 27 hermetic tests worth 49 s, beside the 38 production specs;
-  - shard 2 held 65 hermetic tests worth 201 s, after a 36 s warmup that runs alone.
-- **Tried first, and reverted: three workers on CI.** Locally the suite used about 1.3 of 8 cores at two workers, and
-  three took it from 158 s to 127 s. On CI's four vCPUs it did not help: shard 2 took 260 s, then 289 s with the per-page
-  title test past its 30 s timeout. There the dev server is the bottleneck, so a third worker only adds contention.
-  Shard 1 dropped to about 200 s.
-- **So three shards.** Playwright 1.64 has no weighted sharding, and reordering files or splitting the `chromium` project
-  to move weight would tie the split to file names. Three shards by count give, locally:
-  - shard 1: the 38 production specs and 6 hermetic tests (9 s);
-  - shard 2: 43 hermetic tests (111 s);
-  - shard 3: 43 hermetic tests (141 s).
-
-  At two workers that puts the slowest shard at about 101 s, against 137 s before. The cost is a fourth medium-lane job
-  and one more warmup, on a public repository's free runners.
-- **Measured on CI, both runs of `bc7ac21`, all green:** shard 1 took 191 s and 191 s, shard 2 148 s and 223 s, and shard 3
-  214 s and 209 s, against 226–300 s for the old shard 2. The gain is smaller than the local split promised, because each
-  shard still pays CI's server start and a warmup of about a minute, and the runners vary by about 70 s. That leaves
-  about 75 s of headroom, not 150. If the suite keeps growing, the next lever is the warmup, which every hermetic shard
-  repeats.
-- **The required checks change with it** (`docs/deploy.md`): `Medium lane: E2E 1/2` and `2/2` become `1/3`, `2/3` and
-  `3/3`, in `deploy.md`'s table and, with the human's approval once CI was green, in `main`'s branch protection. `verify.yml`'s comment now counts four jobs.
-- **Not changed:** the 300 s budget, two workers, `retries: 0`, and the warmup.
+- **D259** — the SLE results a user holds are declared in onboarding and at `/settings/study`, and shape the plan: E leaves it, a result at the target keeps it sharp · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d259--the-sle-results-a-user-holds-are-declared-in-onboarding-and-at-settingsstudy-and-shape-the-plan-e-leaves-it-a-result-at-the-target-keeps-it-sharp)
+- **D260** — the E2E warmup visits one page per route file, and the levels journey onboards once: shard 2 back inside its budget · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d260--the-e2e-warmup-visits-one-page-per-route-file-and-the-levels-journey-onboards-once-shard-2-back-inside-its-budget)
+- **D261** — three dev-only advisories close with a lockfile refresh, not an override; Lighthouse's `zod` 3 is dismissed as unreachable · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d261--three-dev-only-advisories-close-with-a-lockfile-refresh-not-an-override-lighthouses-zod-3-is-dismissed-as-unreachable)
+- **D262** — the E2E lane runs three shards: the hermetic specs' heaviest files sort last, so two left shard 2 at its budget · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d262--the-e2e-lane-runs-three-shards-the-hermetic-specs-heaviest-files-sort-last-so-two-left-shard-2-at-its-budget)
 
 ### D263 — the staircase is the result picker: a skill's result is picked by tapping its step, and the pill row is gone
 **Date:** 26 October 2026 · **Status:** accepted (human's request and choice; agent's design). Amends D259's "one row of
@@ -909,9 +782,231 @@ changed files.
   `src/features/**` and `src/lib/**`, which have no coverage threshold either. The thresholds stay glob-keyed (D9), since one
   on components would fail until all 61 were backfilled.
 
+### D269 — onboarding is a focused, illustrated card flow: Coco on every card, a welcome and a ready card in place of the direction and placement questions, and no assessment first
+**Date:** 31 October 2026 · **Status:** accepted (human's request and four answers; agent's design). Amends PRD §8.1
+(D224's order and D259's six steps), D224's "no Skip for now button", D201's one exception to the app's chrome, and
+`docs/Palier landing page/readme.md`'s "no illustration", which was written for the landing page
+
+The human asked for onboarding to have the whimsy of a reference they attached: three phone cards, each a line-art
+figure on a tinted disc above a short centred heading, with a back arrow, "Skip" at the top right, progress dots and an
+arrow button, and "Get started" on the last. They also asked for a first-time user not to see the app's navigation,
+sync status or settings; for everything onboarding collects to stay; for any improvement to the flow; and that **no
+user has to take an assessment first**. Asked, they chose Coco drawn inline over a licensed set or their own artwork, a
+"you're set" card in place of the placement question, a welcome in place of the direction question, and Skip from the
+results on.
+- **The focus frame.** `features/chrome/chrome.ts`'s `chromeFor` replaces `showsAppChrome`: `own` for `/`, `focus` for
+  `/start`, `app` otherwise, a record and not a branch per page. `Shell` takes two more slots. `FocusHeader` is the
+  wordmark and the language; the language stays because the interface is bilingual at equal prominence (§12), and a
+  francophone who lands on `/en` must switch before answering anything. `FocusFooter` is a quiet line on the paper with
+  the statement in the footer's own class (R5), about, privacy and the shortcut sheet (WCAG 3.2.6), and no settings
+  link. `main#main` stays, so the skip link works. With the gear gone, **the welcome links a user who already has
+  Palier on another device to `/settings/sync`**, the pairing screen.
+- **Coco's scenes.** `@palier/ui`'s `Scene`: five drawings in a `SCENES` record (`hello`, `summit`, `time`, `key`,
+  `celebrate`), Coco in a pose from a `COCO_WINGS` record, props in ink line art, each on a disc of an existing light
+  token, so no new colour meets the contrast gate. Presentation attributes only, no text, `aria-hidden`. Coco hops in,
+  the wing waves, the confetti pops: `transform` only, on the motion tokens, so the one switch stills them under reduced
+  motion. The wizard keys the scene by the step, so the hop replays on each card. **`Mascot` is unchanged**: the plan
+  had it share Coco's body with the scenes, but its poses fill the larger, rounder bird of the empty states and the
+  milestone, and sharing would have changed both for no gain here.
+- **The flow.** `ONBOARDING_STEPS` is welcome, target, now, goal, key, ready: six, five with a key held, as before. The
+  placement and everything it needed are gone (`placementsFor`, `offersDiagnostic`, `settle`, `destinationFor`,
+  `finishLabel`), and the wizard always lands on `/home`. Today's next-step banner still offers the diagnostic as
+  "Start here", with "Until then, today's plan below works without it", unchanged here and raised with the human. The
+  welcome says what Palier is, that no test comes first, that French is practised and English comes later, the sync
+  line and the statement. The ready card reads back the targets, the results declared, the minutes, the test date and
+  whether a key is held (`readySummary`), then "Start practising" saves and opens today's plan.
+- **Skip** (`skippable`) shows on the results, the goal and the key: once the target is given, as §8.1's "skippable
+  after step 2" always said. It saves what is chosen, with the defaults for the rest, and lands on today's plan. D224
+  had removed the button because every step had its own way past; they still do, and Skip is the quicker one.
+- **`/start` starts from a saved profile** (`choicesFrom`). Before, a returning user who opened it got the defaults,
+  and finishing overwrote their profile (WCAG 3.3.7).
+- **Kept from the reference, and not.** The dots are drawn, the current one long, beside the words "Step 2 of 6", which
+  carry the step. The way on stays D202's labelled pill with its arrow disc rather than an unlabelled round arrow: a
+  visible label is clearer, and the reference's own last card uses one. The key step's scene is smaller, so D222's
+  video is still in view as the step opens, on a phone too.
+- **Tests whose premise changed** (D225's kind): `e2e/helpers.ts`'s `onboard` ends on the ready card, and its
+  `"diagnostic"` mode now takes the diagnostic from Today's banner; `smoke.spec.ts` asserted the app header on
+  `/start` and now asserts the focus frame and the chrome's absence; journey 6 reached the data screen by the footer's
+  settings link on `/start` and now goes by the welcome's link to sync, then the settings menu; `key.spec.ts`'s
+  placement steps became the ready card; `onboarding.test.ts`'s placement and stepper cases went with the code.
+- **New tests:** `chrome.test.ts`; `Scene` in `primitives.test.tsx`; unit tests for `Shell`, `FocusHeader`,
+  `FocusFooter`, `OnboardingWizard` (jsdom: no assessment on the way, Back and Skip, Skip's saved defaults, the ready
+  card's read-back and save, a held key's five steps, the prefill) and each step's component, so `Shell.tsx` and
+  `OnboardingWizard.tsx` leave `untested-components.json`; and a journey that runs axe on each card in both languages
+  under reduced motion, then skips from the results to Today.
+
+### D270 — every app page waits until onboarding is done, but for the reference pages and the translator; and onboarding asks early whether the user brings progress from a file or another device
+**Date:** 31 October 2026 · **Status:** accepted (human's request and design). Amends D224, where only Today and a drill
+sent a user with no study profile to onboarding, and D269's welcome link to `/settings/sync`
+
+The human asked whether Today could be reached without onboarding. It could not: Today and a drill redirected (D224).
+Every other app page opened, though, for a visitor arriving by a link. The human ruled that **every page inside the
+site sends a visitor who has not been through onboarding there, except the translator, about, privacy and the
+library**, and settings too. Because settings was where an export is imported and a device is paired, they asked for
+onboarding to ask about both **early, as a lower-priority question**.
+- **The gate.** `features/chrome/chrome.ts`'s `needsOnboarding` is true for a page `routes.json` knows and that is not
+  open before onboarding: `/`, `/start`, `/about`, `/privacy`, `/practice/writing/translate`, the library and its
+  articles, and **`/settings/key/guide`**. The guide is the agent's addition: onboarding's key step opens it in a new
+  tab, and gating it would send that tab to a second onboarding. An unknown path is never gated, so the 404 stays.
+  `components/OnboardingGate.tsx`, in `Shell` on the app's pages, reads the study profile on every page change and,
+  with none, `router.replace("/start")`. The page renders meanwhile, as Today's own redirect did (D224), so a visitor
+  with no profile may glimpse it for the moment the container takes. Today's and the drill's own redirects stay, since
+  they also spare an empty plan.
+- **The translator's "Add a key" now leads into onboarding** for a visitor with no profile. The key screen is gated,
+  and onboarding has its own key step, but it lands on Today afterwards, not back on the translator. Raised with the
+  human.
+- **Onboarding's second step, "New to Palier, or bringing your progress?"** (`restore`; seven steps, six with a key
+  held). "I'm new to Palier" is chosen already, so it costs one tap. "I have a file I exported" opens the import, and
+  "I use Palier on another device" opens the pairing, with where to find the code. Both are the settings screens' own
+  forms, extracted into `components/data/ImportForm.tsx` and `components/sync/JoinForm.tsx` and used by both screens.
+  Once a study profile has come over, the step says so and offers **"Go to today"** beside Continue, and the questions
+  after it start from what came over. Progress that came over without a profile is said so, and the questions set
+  one up. The new scene is `devices`: Coco on a laptop, a dotted line to a phone and a folder. The welcome's link to
+  `/settings/sync` is gone.
+- **Hermetic specs start onboarded when they need to** (`@palier/testing`'s `HERMETIC_SETTINGS_GLOBAL` and
+  `hermeticSettingsSeed`; `e2e/helpers.ts`'s `asOnboarded`). A hermetic page's stores last one load, so a spec about
+  another screen could no longer open it directly. An init script sets the global, and **only the hermetic graph reads
+  it**, seeding the in-memory settings with a study profile. Onboarding all over again in each spec would have cost every
+  shard minutes it does not have (D260, D262). The production specs onboard instead, since IndexedDB keeps the profile.
+- **Tests whose premise changed:** `key.spec.ts`'s "with a key already held, onboarding counts its steps" saved a key on
+  the key screen before onboarding, which is no longer reachable. A key held before onboarding now means a returning
+  user reopening `/start`, so the count is `OnboardingWizard.test.tsx`'s, and the e2e test became the key guide's
+  exemption. `levels.spec.ts` checked the study settings' "Set up" link with no profile; it now checks the redirect.
+  Journey 6 imports on onboarding's second step and goes straight to today. `csp-production.spec.ts` onboards before
+  walking every page, so a gated page renders as itself, not as `/start`. `generate-production`, `key-states-production`
+  and `spend-production` (after its wipe) onboard before the key screen.
+- **New tests:** `needsOnboarding` for every route and every exemption; `OnboardingGate`; `ImportForm`, `JoinForm`
+  and `RestoreStep`; the wizard's import that brings a profile and offers today; `hermeticSettingsSeed`; and a journey
+  that six app pages redirect, replacing rather than pushing, while the translator, library, about and privacy stay.
+
+### D271 — no "bringing your progress" step: the welcome carries the import and the pairing as two small links; every onboarding card fits a desktop screen without scrolling
+**Date:** 1 November 2026 · **Status:** accepted (human's request and design; agent's layout). Amends D270's second step
+and D269's single-column card
+
+The human asked for every onboarding card to show **without scrolling on a standard desktop screen**. They also found
+D270's second step, "New to Palier, or bringing your progress?", unnecessary: **continuing from the welcome means a new
+user**, and "I have a file I exported" and "I use Palier on another device" belong at the foot of the welcome **in small
+type**, since the users they serve pick themselves out.
+- **Six steps again**, five with a key held. `onboarding.ts`'s `restore` step and `RESTORE_CHOICES` are gone, and
+  `BRING_WAYS` is the two links. `components/onboarding/BringProgress.tsx` draws them under the welcome's way on, after
+  "Already use Palier?". Each opens `@palier/ui`'s `Dialog` holding D270's `ImportForm` or `JoinForm`, with the `devices`
+  scene, so the welcome never grows. Once a study profile has come over, the dialog offers "Go to today" or "Continue
+  setting up", which starts the questions from it. `RestoreStep` is deleted. The welcome now renders outside the
+  wizard's `<form>`, as the key step does, since the dialog's forms sit in it.
+- **The desktop layout, from 960px.** The picture moves to a column of its own beside the card. The heading and lead
+  read from the left. The page's title shares the card's top row with Back and Skip, so it costs no height of its own
+  (at every width). The focus header is slimmer, and the welcome's notes and statement are set a size smaller. With no
+  picture, the results card takes the whole width and its three staircases stand side by side. D263's "one stair per
+  row" was for a 760px column, where three across shrank the letters; at 232px each they keep their size here. **The key
+  step stands in three columns**: why (the heading, intro and disclosures), how (the video, the written steps, the
+  guide) and the key (its form and the way on), in reading order. Two columns stretched the shorter one's rows to the
+  video's height, and putting the form beside the intro would have read it before "How to get one". The step's scene is
+  hidden there, since the video is its picture.
+- **Measured** at 1920 × 960, 1440 × 800, 1280 × 720 and 1366 × 660, a 1366 × 768 laptop less the browser's chrome,
+  in both languages. The tallest card, the French target, ends at 644px. Phones are unchanged: one column.
+- **Tests whose premise changed:** D270's (`onboard`, the step counts in `key.spec.ts`, `levels.spec.ts`, journeys)
+  return to six steps, and journey 6 imports from the welcome's link. **New:** `BringProgress.test.tsx`; the wizard's
+  import from the welcome, with today offered; and a journey that, at 1366 × 660 in both languages, holds every card's
+  heading and way on in view with nothing scrolled.
+
+### D272 — the welcome is one line and the statement; the results' two paragraphs are one; the key's tab-only choice and the import's file chooser read as the design
+**Date:** 1 November 2026 · **Status:** accepted (human's review of D271's screens). Amends PRD §8.1's "Sync in
+onboarding", whose quiet line on step 1 is gone, and D259's results step
+
+The human reviewed the cards and asked for each of these.
+- **The welcome:** "Free" is gone from the lead, which now begins "Practice for…" ("De la pratique pour…"). Also gone:
+  "A few quick questions… no test to take first", and the language and sync notes (`start.welcomeSteps`,
+  `welcomeLanguage`, `localNote`). Left are the heading, the one-line lead, the non-affiliation statement, the way on
+  and D271's quiet links. **§8.1's sync line is no longer on step 1**: sync still starts on first run, as ADR 4 has it,
+  and `/settings/sync` and `/privacy` say what syncs.
+- **The page's title, "Let's set up your practice", is visually hidden.** In D271's top row it did not line up with the
+  welcome's heading. It stays the page's `h1`, for a screen reader and the document outline, and the tab's title is
+  unchanged.
+- **The results step:** one paragraph, `start.nowIntro`, with `nowHint`'s sentences after its first, and without "A skill
+  where you hold E leaves your plan, and a skill already at your target only keeps sharp."
+- **The daily goal:** more space under the question. A `legend` sits outside its fieldset's grid, so the gap never
+  reached it; it has its own margin now, and a lead right under a question is drawn up to it.
+- **"Keep it for this tab only"** is a plain checkbox row at the key form's own size, not a question's card with a
+  1.25rem label. It is `KeyEntry`'s, so `/settings/key` changes with it.
+- **The import's file chooser** is the design's pill, through `::file-selector-button`, not the platform's grey
+  button, in the dialog and on `/settings/data`.
+- **The key step no longer links "Open the guide on a page of its own"** (`start.keyHowGuide` removed): the video and
+  the written steps are on the step already. With nothing in onboarding leading there, **`/settings/key/guide` waits
+  until onboarding is done**, as the rest of settings does, and D270's exemption for it is gone. Its e2e test went with
+  it, and the guide's own specs onboard first: `asOnboarded` in `key.spec.ts`, `onboard` in `offline.spec.ts`.
+- **Tests:** `WelcomeStep.test.tsx` asserts the one-line welcome and no list; its earlier assertions on the removed
+  sentences went with them.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 31 October 2026 — `dougkeefe/liny0` (onboarding redrawn: a focus frame, Coco on every card, and no assessment first; every app page waits for it; each card fits a desktop screen; D269–D272)
+
+Not *Next, decided*, which is unchanged (D206). The human attached a reference of three illustrated onboarding cards and
+asked for its whimsy and visuals, for no navigation, sync status or settings during a first onboarding, for everything
+collected to stay, and for no assessment first; then chose Coco drawn inline, a ready card, a welcome and Skip.
+- **UI:** `Scene` (`primitives/Scene.tsx`, `SCENES`, `COCO_WINGS`), `CocoPose` and `SceneName` in `logic.ts`, `.pl-scene*` and
+  three keyframes in `components.css`, the export; its tests in `primitives.test.tsx`.
+- **Web, the frame:** `features/chrome/chrome.ts` in place of `landing.ts`'s `showsAppChrome`; `Shell`'s two slots;
+  `FocusHeader`, `FocusFooter`; the layout; the focus chrome in `globals.css`.
+- **Web, the flow:** `features/onboarding/onboarding.ts` (the six steps, `skippable`, `sceneFor`, `stepDots`,
+  `choicesFrom`, `readySummary`, `testDateInstant`; the placement gone); `OnboardingWizard` as the card frame;
+  `WelcomeStep`, `TargetStep`, `NowStep`, `GoalStep`, `ReadyStep`, `StepProgress`; `KeyStep`'s row; the page's title;
+  the onboarding section of `globals.css` in place of the stepper; `start.*` in both languages (the `direction*` and
+  `placement*` keys removed).
+- **Tests:** unit tests beside every new component, `Shell.tsx` and `OnboardingWizard.tsx` off `untested-components.json`;
+  `onboarding.test.ts` and `chrome.test.ts`; the e2e premises in D269 (`helpers.ts`, `smoke`, `journeys`, `key`) and a
+  new journey over every card.
+- **Then the gate (D270)**, on the human's question whether Today opened without onboarding (it did not; most other
+  pages did): `needsOnboarding` in `features/chrome/chrome.ts`, `OnboardingGate` in `Shell`; onboarding's `restore`
+  step (`RestoreStep`, the `devices` scene), over `ImportForm` and `JoinForm`, extracted from the data and sync screens;
+  `HERMETIC_SETTINGS_GLOBAL` and `hermeticSettingsSeed` in `@palier/testing`, read by `container.ts`'s hermetic graph,
+  and `asOnboarded` in `e2e/helpers.ts`; `start.restore*` in both languages, `start.linkDevice` removed; the specs in D270.
+- **Then the desktop layout (D271)**, on the human's asking for no scrolling on a desktop screen and for the second
+  step to go: `BringProgress` (two small links under the welcome, each a dialog over `ImportForm` or `JoinForm`) in place
+  of `RestoreStep`; the welcome outside the wizard's form; the key step's three columns (`app-key-step__intro`, `__how`,
+  `__entry`); the desktop rules in `globals.css`; `start.bring*` in both languages and D270's step keys removed.
+- **Then the human's review (D272):** the welcome's lead without "Free" and without the three lines under it, the
+  page's title visually hidden, the results' one paragraph, the goal's space under its question, the key form's
+  tab-only row, the file chooser's pill, and the key step's guide link removed, with the guide gated again;
+  `WelcomeStep.test.tsx`, `chrome.test.ts`, `key.spec.ts`, `offline.spec.ts`.
+- **Then a candid-loop review**, nine fixes: the goal tiles' layout and the key form's ticked tab-only row, each lost
+  to a later or weightier `.app-choice` rule; `JoinForm` tells its caller whether the link synced, so an unavailable
+  one no longer reads as "Your progress came over"; `ImportForm` and `JoinForm` run the caller's follow-up outside
+  their own `try`, so its failure never turns a success into "failed"; the welcome's way on waits for the container,
+  as every other step's does, so `onboard()`'s first wait is real; a key held from the start reads as held on the ready
+  card at once; the axe journey walks all six cards in both languages; the gate journey waits for the network to
+  settle, not a second; and a comment's step count. Tests for each new branch beside them.
+- **Docs:** D269–D272; D259 to D262 archived (rule 8); the 24 October `progress.md-archive` entry archived; PRD
+  §8.1's dated amendments; `apps/web/CLAUDE.md`, `packages/ui/CLAUDE.md` and `packages/testing/CLAUDE.md`; a line in
+  `docs/Palier landing page/readme.md`.
+
+**Verified:**
+- `pnpm verify` exit 0: check-types, lint and boundaries clean; `pnpm test` passed 327 files, 4,841 tests (8 todo), after D272 and the candid-loop fixes.
+- The hermetic `warmup` and `chromium` projects in full, through a temporary, uncommitted config on port 3400 (another
+  project's dev server held 3000): 102 of 102.
+- After `pnpm --filter @palier/web build`, the whole `offline` project against `next start` on 3100 and the self-hosted
+  endpoint on 3300, started by hand: 38 of 38, `csp-production.spec.ts` onboarded first so every page renders as itself.
+- In the hermetic dev server in Chrome, at 390px and 1280px in English and at 390px in French, under reduced motion:
+  each card, screenshotted for the human. For D271, every card measured at 1920 × 960, 1440 × 800, 1280 × 720 and
+  1366 × 660 in both languages, the tallest ending at 644px, and the import dialog and the phone's welcome screenshotted.
+- Not run: Lighthouse and the live smoke. CI runs the medium lane on the pull request.
+
+### 30 October 2026 — `dougkeefe/liny0` (`docs/README.md` rewritten for outside readers)
+
+Not *Next, decided*, which is unchanged (D206). The human asked for the docs directory's README to be cleaned up for a
+source-available project. This commit changes documents only.
+- **`docs/README.md`:** the working-name, owner and last-revised lines, the "three things most likely to sink this"
+  section and the 0.1–0.3 revision history are gone; git and this file's archive hold that record. The "current shape"
+  summary is gone too, since the root README describes the product. Added: a "where to start" table by reader, and rows
+  for every directory and file in `docs/` (`progress-archive/`, `schemas/`, `content-runs/`, `prompts.md`, the landing
+  page design). Kept, reworded: the authority table and its "the table decides" rule, and the four kinds of statement.
+- **Docs:** the 24 October D254 entry archived (rule 8).
+
+**Verified:** documents only. Every link in `docs/README.md` resolves in the tree. The D254 entry's move is byte for byte
+(a `diff` of it against `HEAD` is empty), and `apps/web/src/docs/progress.test.ts`, run alone, passed 11 of 11. Not run:
+the full `pnpm verify`, which CI runs on the pull request.
 
 ### 28 October 2026 — `dougkeefe/settings-subsections-navigation` (links to each settings screen's sections, the app header's menu on a phone, and a test for every component; D266–D268)
 
@@ -1143,56 +1238,6 @@ with royalty-free photographs credited, keeping its hierarchy, accessibility and
   `/en/home`. With the network off, `/fr/library/pronouns` drew its photograph from the cache (200).
 - Screenshots at 1280px and 390px, English and French, with a keyboard pass to a card's focus ring.
 - Not run: the rest of the medium lane. CI runs it on the pull request.
-
-### 24 October 2026 — `dougkeefe/progress.md-archive` (this file split into a live file and `progress-archive/`; D255)
-
-Not *Next, decided*, which is unchanged (D206): the human asked for `progress.md` to be cut down to its basics with an
-archive, keeping everything it records.
-- **Docs:** `docs/progress-archive/` (its README, `history.md`, three deviation files, two session files); this file's
-  header, working agreement (rules 1, 4 and 7 amended, rule 8 added), *In flight*, *Next, decided*, the deviation index
-  and D255; root `CLAUDE.md`, `docs/README.md` and `apps/web/CLAUDE.md` in place.
-- **Test:** `apps/web/src/docs/progress.test.ts`.
-
-**Verified:**
-- **Nothing lost or changed:** a script split the original at every `### D…` and session heading, then did the same
-  over the live file and the archive together. All 381 blocks (254 deviations, 127 session entries) are present once and
-  byte-identical, and only D255 and this entry are new. Every other line of the original is still somewhere, except the
-  deliberate edits to the header, the working agreement, *In flight* and *Next, decided*.
-- **Size:** `progress.md` went from 12,537 lines and 970 KB to about 1,100 lines and 150 KB, 245 of the lines being the
-  index.
-- `pnpm verify`: check-types, lint and boundaries clean; `pnpm test` passed 284 files, 4,589 tests (8 todo), in 48.7 s.
-- **Proven to bite**, each restored and the files compared identical afterwards:
-  - D150 deleted from its archive file: "expected { missing: [ 'D150' ], repeated: [] }", and the index test failed too.
-  - an eleventh live session entry: "expected 11 to be less than or equal to 10".
-  - D50 moved into `deviations-D100-D199.md`: "expected [ 'D50 in deviations-D100-D199.md' ] to deeply equal []", with
-    the order and index tests.
-  - D3's status changed in the archive and not in the index: the index test failed.
-- Not run: the medium lane, since nothing it covers changed.
-
-### 24 October 2026 — `dougkeefe/palier-reading-comprehension-add` (reading's library articles; D254)
-
-*Next, decided*'s slice, which the first commit on this branch set (D253).
-- **Domain:** `LibraryArticle` a union over reading and writing (`LibraryExcerpt`, `LIBRARY_SUB_SKILLS`), the schema a
-  discriminated union on `subSkill`, `parseLibrary` over all eighteen; `docs/schemas/library-article.schema.json`
-  regenerated (`pnpm run test -u`).
-- **Content:** eight reading articles in `content/library/`.
-- **Web:** `/library` in two sections; the article page's excerpts and reading button; `articleHref` for reading;
-  `readingHeading`, `writingHeading`, `excerpt` and `practiseReading` in both languages, `readingLater` removed;
-  `routes.json` regenerated by `prepare-public.mjs`.
-- **Docs:** D254; `packages/domain/CLAUDE.md` and `apps/web/CLAUDE.md`; architecture.md §5 and PRD §8 in place;
-  *Next, decided* now D206.
-
-**Verified:**
-- `pnpm verify`: check-types, lint and boundaries clean; `pnpm test` passed 283 files, 4,578 tests (8 todo).
-- **Proven to bite:** with `content/library/inference.json` moved away, `library-content.test.ts` failed all five tests,
-  naming `(root): "inference" has no article`; restored, it passed.
-- `content.spec.ts` on the `chromium` project, with the warmup: 12 of 12, the new reading-drill journey and the
-  eighteen-article library test included. Run through a temporary, uncommitted config on port 3010, since another
-  project's dev server held 3000.
-- After `pnpm --filter @palier/web build`, the `offline` project's `csp-production.spec.ts` (every page in both locales,
-  `/library/inference` included, zero violations), `offline.spec.ts`, `exam-offline.spec.ts` and
-  `telemetry-offline.spec.ts`: 17 of 17.
-- Not run: Lighthouse, the rest of the medium lane and the live smoke. CI runs the medium lane on the pull request.
 
 Older entries, newest first: [October 2026](progress-archive/sessions-2026-10.md) ·
 [September 2026](progress-archive/sessions-2026-09.md).

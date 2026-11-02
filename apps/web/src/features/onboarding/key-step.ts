@@ -32,7 +32,7 @@ export const keyStepCosts = (costs: readonly FeatureCost[]): readonly KeyStepCos
   });
 
 /**
- * The step's way on (D220, D224), a message key in `start`. Both lead to the placement, the last step:
+ * The step's way on (D220, D224), a message key in `start`. Both lead to the ready card, the last step (D269):
  * with a key saved, the wizard's own "Continue"; with none, a quiet skip that names itself, since the
  * key is recommended but never required.
  */

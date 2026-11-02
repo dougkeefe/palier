@@ -52,6 +52,7 @@ describe("@palier/testing/in-memory", () => {
         "counterIdGenerator",
         "fakeClock",
         "fixtureBankRepository",
+        "hermeticSettingsSeed",
         "isHermetic",
         "memoryAttemptStore",
         "memoryCostLedger",

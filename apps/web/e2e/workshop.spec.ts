@@ -1,6 +1,6 @@
 import { expect, type Page, test } from "@playwright/test";
 
-import { axeClean } from "./helpers";
+import { asOnboarded, axeClean } from "./helpers";
 import { MODELS_ANSWER, type OpenAiAnswer, SENTINEL, completionKind, feedbackAnswer, stubOpenAi } from "./leak-guard";
 
 /**
@@ -21,6 +21,8 @@ const FEEDBACK = feedbackAnswer(
 const RATE_LIMITED: OpenAiAnswer = { status: 429, body: { error: { message: "slow down", code: "rate_limit_exceeded" } } };
 
 const openWorkshop = async (page: Page, path = "/en/practice/writing/workshop") => {
+  // Every app page but a few waits until onboarding is done (D270); this spec is about the screen, so it starts onboarded.
+  await asOnboarded(page.context());
   await page.goto(path);
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 };

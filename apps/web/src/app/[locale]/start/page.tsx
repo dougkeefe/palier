@@ -11,7 +11,8 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/start">)
   return { title: t("title") };
 }
 
-// Onboarding (product-requirements.md §8.1): a static shell around the wizard island.
+// Onboarding (product-requirements.md §8.1): a static shell around the wizard island, in the focus frame (D269). The
+// page's title names it for a screen reader and the tab; on screen each step's own heading is the title (D272).
 export default function StartPage({ params }: PageProps<"/[locale]/start">) {
   const { locale } = use(params);
   setRequestLocale(locale);
@@ -19,7 +20,7 @@ export default function StartPage({ params }: PageProps<"/[locale]/start">) {
 
   return (
     <section className="app-stack app-island">
-      <h1 className="app-hero__title">{t("title")}</h1>
+      <h1 className="pl-visually-hidden">{t("title")}</h1>
       <OnboardingWizard />
     </section>
   );

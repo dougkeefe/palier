@@ -1,7 +1,8 @@
 import { readFileSync } from "node:fs";
 
 import AxeBuilder from "@axe-core/playwright";
-import { expect, type Page } from "@playwright/test";
+import { HERMETIC_SETTINGS_GLOBAL } from "@palier/testing";
+import { type BrowserContext, expect, type Page } from "@playwright/test";
 
 import { bankVersionFrom } from "../scripts/prepare-public.mjs";
 
@@ -52,15 +53,39 @@ export const waitForOfflineReady = async (page: Page) => {
   await page.waitForFunction(() => navigator.serviceWorker.controller !== null);
 };
 
+/** The study profile `asOnboarded` starts a page with: C everywhere, no results, 20 minutes, no date. */
+export const ONBOARDED_PROFILE = {
+  targetBand: "C",
+  targets: { reading: "C", writing: "C", oral: "C" },
+  current: { reading: null, writing: null, oral: null },
+  dailyGoalMinutes: 20,
+  testDate: null,
+} as const;
+
+/**
+ * Starts every hermetic page this context opens as a user who has been through onboarding (D270), so a spec about
+ * another screen can open it directly: the in-memory stores last one page load, and every app page but a few sends a
+ * visitor with no study profile to `/start`. Only the hermetic graph reads the seed; a production spec onboards.
+ */
+export const asOnboarded = (context: BrowserContext) =>
+  context.addInitScript(
+    ([name, seed]) => {
+      (window as unknown as Record<string, unknown>)[name] = seed;
+    },
+    [HERMETIC_SETTINGS_GLOBAL, { studyProfile: ONBOARDED_PROFILE }] as const,
+  );
+
 /** A skill's name on onboarding's results step, as its pill row's legend says it (D259). */
 export type ResultSkill = "Reading" | "Written expression" | "Oral expression";
 
 /**
- * §8.1 onboarding, placing as asked, in the owner's order (progress.md D224, D259): direction, target,
- * the results held (each "not yet" unless `results` names one), goal, the key, then the placement. Leaves the page wherever onboarding lands. Given a `key`, it is pasted in
- * the key step, saved and checked at once (so OpenAI must be stubbed to accept it); otherwise the step
- * is passed over. Choosing the diagnostic lands on it either way; with no key, the diagnostic's own gate
- * asks for one (ADR 25): see {@link addKeyAtDiagnosticGate}.
+ * §8.1 onboarding, in the owner's order (progress.md D269, D271): the welcome, continued as a new user, the target, the
+ * results held (each "not yet"
+ * unless `results` names one), the goal, the key, then the ready card, which lands on today's plan. Given a `key`, it is
+ * pasted in the key step, saved and checked at once (so OpenAI must be stubbed to accept it); otherwise the step is
+ * passed over. Onboarding asks for no assessment (D269), so `"diagnostic"` then takes the diagnostic from Today's offer,
+ * by its link, and leaves the page on it; with no key, the diagnostic's own gate asks for one (ADR 25): see
+ * {@link addKeyAtDiagnosticGate}. `"skip"` leaves the page on today's plan.
  */
 export const onboard = async (
   page: Page,
@@ -70,6 +95,8 @@ export const onboard = async (
   await page.goto("/en/start");
   const next = page.getByRole("button", { name: "Continue" });
   await expect(next).toBeEnabled();
+  await expect(page.getByRole("heading", { name: "Welcome to Palier" })).toBeVisible();
+  // Continuing from the welcome means a new user (D271).
   await next.click();
 
   await page.getByRole("radio", { name: /Level C/ }).check();
@@ -81,7 +108,7 @@ export const onboard = async (
   }
   await next.click();
 
-  await page.getByRole("radio", { name: "20 minutes a day" }).check();
+  await page.getByRole("radio", { name: /20 minutes a day/ }).check();
   await next.click();
   await expect(page.getByRole("heading", { name: "Add your OpenAI key" })).toBeFocused();
   if (key === undefined) {
@@ -94,13 +121,14 @@ export const onboard = async (
     await next.click();
   }
 
-  await expect(page.getByRole("heading", { name: "Where are you now?" })).toBeFocused();
-  await page
-    .getByRole("radio", { name: placement === "diagnostic" ? /Take the diagnostic/ : /Skip for now/ })
-    .check();
-  await page.getByRole("button", { name: placement === "diagnostic" ? "Start the diagnostic" : "Start practising" }).click();
+  await expect(page.getByRole("heading", { name: "You’re set" })).toBeFocused();
+  await page.getByRole("button", { name: "Start practising" }).click();
   // The profile is written before the wizard leaves, so a caller may navigate once it has landed.
-  await expect(page).toHaveURL(placement === "diagnostic" ? /\/en\/diagnostic$/ : /\/en\/home$/);
+  await expect(page).toHaveURL(/\/en\/home$/);
+  if (placement === "diagnostic") {
+    await page.locator(".app-home__next").getByRole("link", { name: "Take the diagnostic" }).click();
+    await expect(page).toHaveURL(/\/en\/diagnostic$/);
+  }
 };
 
 /**

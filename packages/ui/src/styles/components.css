@@ -1153,6 +1153,66 @@
   display: block;
 }
 
+/* ---- Scene (a spot illustration: Coco among line-art props on a disc, D269) ---- */
+
+.pl-scene {
+  display: block;
+  width: 100%;
+  max-width: 240px;
+  height: auto;
+  margin: 0 auto;
+}
+
+/* Coco hops up onto the ground as the scene mounts; the wing waves once; the confetti pops. Each is drawn
+   about its own box, so the SVG's own `transform` attribute on the group around it is left alone. */
+.pl-scene__coco {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: pl-scene-hop var(--pl-motion-celebrate) var(--pl-ease-spring);
+}
+
+.pl-scene__wing {
+  transform-box: fill-box;
+  transform-origin: 0% 100%;
+  animation: pl-scene-wave var(--pl-motion-celebrate) var(--pl-ease);
+}
+
+.pl-scene__confetti {
+  transform-box: fill-box;
+  transform-origin: 50% 80%;
+  animation: pl-scene-pop var(--pl-motion-celebrate) var(--pl-ease-spring);
+}
+
+@keyframes pl-scene-hop {
+  0% {
+    transform: translateY(12px) scale(0.92);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+@keyframes pl-scene-wave {
+  0% {
+    transform: rotate(-24deg);
+  }
+  50% {
+    transform: rotate(10deg);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+@keyframes pl-scene-pop {
+  0% {
+    transform: translateY(20px) scale(0.3);
+  }
+  100% {
+    transform: none;
+  }
+}
+
 /* ---- Celebration (§10.5: 400ms with a small spring; transform only, D65) ------ */
 
 .pl-celebrate {

@@ -254,6 +254,26 @@ its own gate asks for one and comes back), or Today. The numbered descriptions b
 non-affiliation statement heads the first step only; the footer carries it on every page. Opening Today or a drill with no
 study profile goes straight to step 1.
 
+Redrawn by the owner on 31 October 2026 (`progress.md` D269): **a welcome, the target, the results held, the daily goal,
+the key, then a "you're set" card** that reads the choices back and lands on Today. No assessment comes first: the
+placement question is gone, and the diagnostic is Today's offer, never a step or a gate here. The welcome replaces the
+direction question, whose English choice could not be taken: it says French is practised and English comes later. Each
+card is headed by Coco in a small scene (§10.1), with Back at its top left and **Skip at its top right from the results
+on**, which saves what is chosen with the defaults for the rest. Onboarding sits in a **focus frame**: the wordmark and the
+language above, the statement, about, privacy and the shortcut sheet below, and no navigation, sync status or settings.
+The welcome links a user who already has Palier on another device to the pairing screen.
+
+Amended by the owner the same day (`progress.md` D270): **every page inside the app waits until onboarding is done**,
+except the translator, about, privacy and the library, which a visitor may open first; settings wait too. Since importing
+an export and pairing a device lived in settings, **onboarding's second step asks, as a question of low priority,
+whether the user is new or brings progress from a file or another device**, "new" chosen already, and opens the import
+or the pairing in place. A study profile that comes over lets the user go straight to Today. Amended again on 1 November
+2026 (`progress.md` D271): there is no such step. Continuing from the welcome means a new user, and **the welcome offers
+"I have a file I exported" and "I use Palier on another device" in small type at its foot**, each in a dialog. **Every
+card fits a standard desktop screen without scrolling**: from 960px the picture stands beside the card. The
+welcome is one line and the statement (D272), so the quiet sync line below no longer sits on step 1; sync still starts on
+first run, and `/settings/sync` and `/privacy` say what syncs.
+
 1. **Which direction.** French as a second language, or English. Large bilingual cards.
 2. **What you are aiming for.** B or C, with a plain-language description of what each means at work. Optional: "I have a test booked on [date]", which turns the dashboard into a countdown and back-plans the study schedule.
 3. **Where you are now.** Offer the diagnostic (30 items, about 15 minutes per skill, per section 6.2), or self-declare a current profile (for example ECB), or skip. The diagnostic runs on the user's key (ADR 25), so choosing it without a key leads to the key first, and back.

@@ -1,7 +1,6 @@
 "use client";
 
-import { SKILLS } from "@palier/domain";
-import { Button, Callout } from "@palier/ui";
+import { Button, Callout, IconButton, Scene } from "@palier/ui";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 
@@ -9,44 +8,46 @@ import {
   DEFAULT_CHOICES,
   type OnboardingChoices,
   type OnboardingStep,
-  destinationFor,
-  finishLabel,
-  perSkillTargetsOpen,
-  placementsFor,
+  choicesFrom,
   profileFrom,
-  settle,
+  readySummary,
+  sceneFor,
+  skippable,
   stepAfter,
   stepBefore,
-  stepperSegments,
   stepsFor,
 } from "../../features/onboarding/onboarding";
 import { useRouter } from "../../i18n/navigation";
-import { DAILY_GOALS, oneTarget, targetsOf, writeStudyProfile } from "../../lib/study";
+import { readStudyProfile, writeStudyProfile } from "../../lib/study";
 import { useContainer } from "../ContainerProvider";
-import { NonAffiliation } from "../NonAffiliation";
-import { ResultPicker, TargetPicker } from "../study/LevelPickers";
+import { BringProgress, type Restored } from "./BringProgress";
+import { GoalStep } from "./GoalStep";
 import { KeyStep } from "./KeyStep";
+import { NowStep } from "./NowStep";
+import { ReadyStep } from "./ReadyStep";
+import { StepProgress } from "./StepProgress";
+import { TargetStep } from "./TargetStep";
+import { WelcomeStep } from "./WelcomeStep";
 
 /**
- * Onboarding (product-requirements.md §8.1), as one fieldset per step with native
- * radio inputs: real form controls, so keyboard and screen-reader behaviour come from
- * the platform. Each step's heading takes focus as it appears, so a screen-reader user
- * hears where they are (§11: focus is never lost as a flow advances).
+ * Onboarding (product-requirements.md §8.1), as the owner redrew it (progress.md D269): one card per step, each headed
+ * by Coco in a scene, with Back at its top left, Skip at its top right from the results on, and the dots and the way
+ * on at its foot. The steps: a welcome, with the quiet ways to bring progress from a file or another device under it
+ * (D271), the target, the results held (D259), the daily goal, the key (D220), and a "you're set" card that saves and
+ * lands on today's plan. No assessment comes first. From 960px the picture sits beside the card, so each card fits a
+ * desktop screen without scrolling (D271).
  *
- * The order is the owner's (progress.md D224), with the results already held after the target
- * (D259): direction, target, results, goal, the key, then the placement, whose choice is where the
- * wizard lands. The target is one answer, B or C, with a target per skill folded under it for a
- * position whose profile differs; the results default to "not yet", so the step is skippable. The key step is shown unless this browser already holds a
- * key (D220): why Palier runs on the user's own key, what it costs, and how to get one, with the key
- * taken in place. It is `KeyStep`, outside the wizard's `<form>`, since the key's own form sits in
- * it. The non-affiliation statement heads the first step only; the footer carries it on every page.
+ * One fieldset per question with native radios, so keyboard and screen-reader behaviour are the platform's, and Enter
+ * is Continue. Each step's heading takes focus as it appears, so a screen-reader user hears where they are (§11: focus
+ * is never lost as a flow advances). The welcome and the key step are each outside the `<form>`, since the import's,
+ * the pairing's and the key's own forms sit in them. The wizard starts from a saved profile when there is one (`choicesFrom`), so finishing again never overwrites it.
  */
 export function OnboardingWizard() {
   const t = useTranslations("start");
   const tCommon = useTranslations("common");
   const container = useContainer();
   const router = useRouter();
-  const [step, setStep] = useState<OnboardingStep>("direction");
+  const [step, setStep] = useState<OnboardingStep>("welcome");
   const [choices, setChoices] = useState<OnboardingChoices>(DEFAULT_CHOICES);
   const [saving, setSaving] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -55,6 +56,10 @@ export function OnboardingWizard() {
   const [perSkillOpen, setPerSkillOpen] = useState(false);
   // Read once: a key saved in the key step itself keeps the step, so Back and forth never loses it.
   const [hasKey, setHasKey] = useState(false);
+  // Read again on the ready card, which says whether a key is held, saved in the key step or before.
+  const [keyHeld, setKeyHeld] = useState(false);
+  // What an import or a pairing brought over (D270): a profile lets the user go straight to today.
+  const [restored, setRestored] = useState<Restored>("none");
   const headingRef = useRef<HTMLHeadingElement>(null);
   const firstRender = useRef(true);
 
@@ -70,7 +75,16 @@ export function OnboardingWizard() {
     if (container.status !== "ready") return;
     let live = true;
     void container.container.useCases.apiKeyStatus().then(
-      (status) => live && setHasKey(status !== null),
+      (status) => {
+        if (!live) return;
+        setHasKey(status !== null);
+        // So a key held from the start reads as held on the ready card, before its own re-read answers.
+        setKeyHeld(status !== null);
+      },
+      () => undefined,
+    );
+    void readStudyProfile(container.container.settings).then(
+      (profile) => live && profile !== null && setChoices(choicesFrom(profile)),
       () => undefined,
     );
     return () => {
@@ -78,24 +92,29 @@ export function OnboardingWizard() {
     };
   }, [container]);
 
+  useEffect(() => {
+    if (step !== "ready" || container.status !== "ready") return;
+    let live = true;
+    void container.container.useCases.apiKeyStatus().then(
+      (status) => live && setKeyHeld(status !== null),
+      () => undefined,
+    );
+    return () => {
+      live = false;
+    };
+  }, [step, container]);
+
   const choose = (over: Partial<OnboardingChoices>) => setChoices((c) => ({ ...c, ...over }));
   const steps = stepsFor(hasKey);
   const index = steps.indexOf(step);
+  const ready = container.status === "ready";
 
-  const exemptBand = container.status === "ready" ? container.container.profile.exemptBand : null;
-  const bands = container.status === "ready" ? container.container.profile.bands : [];
-  const placements = exemptBand === null ? (["diagnostic", "skip"] as const) : placementsFor(choices, exemptBand);
-  const sharedTarget = oneTarget(choices.targets);
-  // A diagnostic chosen, then made pointless by the results, reads as a skip on screen and on finishing.
-  const placement = exemptBand === null ? choices.placement : settle(choices, exemptBand).placement;
-
-  const finish = async (chosen: OnboardingChoices) => {
-    if (container.status !== "ready") return;
-    const final = settle(chosen, container.container.profile.exemptBand);
+  const finish = async () => {
+    if (!ready) return;
     setSaving(true);
     try {
-      await writeStudyProfile(container.container.settings, profileFrom(final));
-      router.push(destinationFor(final));
+      await writeStudyProfile(container.container.settings, profileFrom(choices));
+      router.push("/home");
     } catch {
       setFailed(true);
       setSaving(false);
@@ -105,207 +124,123 @@ export function OnboardingWizard() {
   const after = stepAfter(step, hasKey);
   const before = stepBefore(step, hasKey);
   const onNext = () => {
-    if (after === null) void finish(choices);
+    if (after === null) void finish();
     else setStep(after);
   };
 
-  const stepper = (
-    <div className="app-stepper">
-      <p className="app-muted">{t("stepOf", { current: index + 1, total: steps.length })}</p>
-      <span className="app-stepper__bar" aria-hidden="true">
-        {stepperSegments(index, steps.length).map((done, i) => (
-          <span key={i} className={done ? "app-stepper__segment app-stepper__segment--done" : "app-stepper__segment"} />
-        ))}
-      </span>
-    </div>
-  );
+  // After an import or a pairing: a profile that came over is where the questions now start, and today is open.
+  const onRestored = async () => {
+    if (!ready) return;
+    const profile = await readStudyProfile(container.container.settings);
+    if (profile === null) {
+      setRestored("data");
+      return;
+    }
+    setChoices(choicesFrom(profile));
+    setRestored("profile");
+  };
+
+  const scene = sceneFor(step);
+  // With no picture, the card takes the whole width on a desktop screen (D271).
+  const frame = scene === null ? "app-onboarding app-onboarding--no-scene" : "app-onboarding";
+  const progress = <StepProgress index={index} total={steps.length} />;
   const failure = failed ? <Callout tone="incorrect">{tCommon("loadFailed")}</Callout> : null;
 
-  if (step === "key" && container.status === "ready") {
+  const top = (
+    <div className="app-onboarding__top">
+      {before === null ? (
+        <span />
+      ) : (
+        <IconButton glyph="chevron-left" label={t("back")} onClick={() => setStep(before)} />
+      )}
+      {skippable(step) ? (
+        <button type="button" className="app-onboarding__skip pl-focusable" disabled={saving || !ready} onClick={() => void finish()}>
+          {t("skip")}
+        </button>
+      ) : null}
+    </div>
+  );
+  // Keyed by the step, so Coco hops in again on each card.
+  const picture =
+    scene === null ? null : (
+      <Scene key={step} name={scene} className={step === "key" ? "app-onboarding__scene app-onboarding__scene--small" : "app-onboarding__scene"} />
+    );
+
+  if (step === "welcome") {
     return (
-      <div className="app-stack">
-        {stepper}
-        <KeyStep
-          useCases={container.container.useCases}
+      <div className={frame} data-step={step}>
+        {top}
+        {picture}
+        <WelcomeStep
           headingRef={headingRef}
-          onBack={() => setStep(before ?? step)}
+          progress={progress}
           onNext={onNext}
+          ready={ready}
+          bring={
+            <BringProgress
+              restored={restored}
+              onRestored={onRestored}
+              onToday={() => router.push("/home")}
+              onContinue={onNext}
+            />
+          }
         />
+      </div>
+    );
+  }
+
+  if (step === "key" && ready) {
+    return (
+      <div className={frame} data-step={step}>
+        {top}
+        {picture}
+        <KeyStep useCases={container.container.useCases} headingRef={headingRef} progress={progress} onNext={onNext} />
         {failure}
       </div>
     );
   }
 
   return (
-    <form
-      className="app-stack"
-      onSubmit={(event) => {
-        event.preventDefault();
-        onNext();
-      }}
-    >
-      {step === "direction" ? <NonAffiliation /> : null}
-      {stepper}
+    <div className={frame} data-step={step}>
+      {top}
+      {picture}
+      <form
+        className="app-stack"
+        onSubmit={(event) => {
+          event.preventDefault();
+          onNext();
+        }}
+      >
+        {step === "target" ? (
+          <TargetStep
+            headingRef={headingRef}
+            choices={choices}
+            onChoose={choose}
+            perSkillOpen={perSkillOpen}
+            onPerSkillToggle={setPerSkillOpen}
+          />
+        ) : null}
+        {step === "now" && ready ? (
+          <NowStep
+            headingRef={headingRef}
+            choices={choices}
+            onChoose={choose}
+            bands={container.container.profile.bands}
+            exemptBand={container.container.profile.exemptBand}
+          />
+        ) : null}
+        {step === "goal" ? <GoalStep headingRef={headingRef} choices={choices} onChoose={choose} /> : null}
+        {step === "ready" ? <ReadyStep headingRef={headingRef} summary={readySummary(choices, keyHeld)} /> : null}
 
-      {step === "direction" ? (
-        <fieldset className="app-fieldset">
-          <legend>
-            <h2 ref={headingRef} tabIndex={-1} className="app-step-heading">
-              {t("directionHeading")}
-            </h2>
-          </legend>
-          <label className="app-choice">
-            <input type="radio" name="direction" value="fr" defaultChecked />
-            <span className="app-choice__label">{t("directionFrench")}</span>
-            <span className="app-choice__hint">{t("directionFrenchHint")}</span>
-          </label>
-          <label className="app-choice app-choice--disabled">
-            <input type="radio" name="direction" value="en" disabled />
-            <span className="app-choice__label">{t("directionEnglish")}</span>
-            <span className="app-choice__hint">{t("directionEnglishHint")}</span>
-          </label>
-          <p className="app-muted">{t("localNote")}</p>
-        </fieldset>
-      ) : null}
+        {failure}
 
-      {step === "target" ? (
-        <fieldset className="app-fieldset">
-          <legend>
-            <h2 ref={headingRef} tabIndex={-1} className="app-step-heading">
-              {t("targetHeading")}
-            </h2>
-          </legend>
-          {(["B", "C"] as const).map((band) => (
-            <label key={band} className="app-choice">
-              <input
-                type="radio"
-                name="target"
-                value={band}
-                checked={sharedTarget === band}
-                onChange={() => choose({ targets: targetsOf(band) })}
-              />
-              <span className="app-choice__label">{t(band === "B" ? "targetB" : "targetC")}</span>
-              <span className="app-choice__hint">{t(band === "B" ? "targetBHint" : "targetCHint")}</span>
-            </label>
-          ))}
-          <details
-            className="app-key-step__more"
-            open={perSkillTargetsOpen(perSkillOpen, choices.targets)}
-            onToggle={(event) => setPerSkillOpen(event.currentTarget.open)}
-          >
-            <summary>{t("targetPerSkill")}</summary>
-            <div className="app-stack">
-              <p className="app-muted">{t("targetPerSkillHint")}</p>
-              {SKILLS.map((skill) => (
-                <TargetPicker
-                  key={skill}
-                  skill={skill}
-                  value={choices.targets[skill]}
-                  onChange={(band) => choose({ targets: { ...choices.targets, [skill]: band } })}
-                />
-              ))}
-            </div>
-          </details>
-          <label className="app-field">
-            <span>{t("testDateLabel")}</span>
-            <input
-              type="date"
-              className="app-input"
-              value={choices.testDate ?? ""}
-              onChange={(event) => choose({ testDate: event.target.value === "" ? null : event.target.value })}
-            />
-          </label>
-        </fieldset>
-      ) : null}
-
-      {step === "now" && exemptBand !== null ? (
-        <fieldset className="app-fieldset">
-          <legend>
-            <h2 ref={headingRef} tabIndex={-1} className="app-step-heading">
-              {t("nowHeading")}
-            </h2>
-          </legend>
-          <p className="app-muted">{t("nowIntro")}</p>
-          <p className="app-muted">{t("nowHint")}</p>
-          <div className="app-levels">
-            {SKILLS.map((skill) => (
-              <ResultPicker
-                key={skill}
-                skill={skill}
-                value={choices.current[skill]}
-                target={choices.targets[skill]}
-                bands={bands}
-                exemptBand={exemptBand}
-                onChange={(band) => choose({ current: { ...choices.current, [skill]: band } })}
-              />
-            ))}
-          </div>
-        </fieldset>
-      ) : null}
-
-      {step === "placement" ? (
-        <fieldset className="app-fieldset">
-          <legend>
-            <h2 ref={headingRef} tabIndex={-1} className="app-step-heading">
-              {t("placementHeading")}
-            </h2>
-          </legend>
-          {placements.length === 1 ? <p>{t("placementNothing")}</p> : null}
-          {placements.map((offered) => (
-            <label key={offered} className="app-choice">
-              <input
-                type="radio"
-                name="placement"
-                value={offered}
-                checked={placement === offered}
-                onChange={() => choose({ placement: offered })}
-              />
-              <span className="app-choice__label">
-                {t(offered === "diagnostic" ? "placementDiagnostic" : "placementSkip")}
-              </span>
-              <span className="app-choice__hint">
-                {t(offered === "diagnostic" ? "placementDiagnosticHint" : "placementSkipHint")}
-              </span>
-            </label>
-          ))}
-        </fieldset>
-      ) : null}
-
-      {step === "goal" ? (
-        <fieldset className="app-fieldset">
-          <legend>
-            <h2 ref={headingRef} tabIndex={-1} className="app-step-heading">
-              {t("goalHeading")}
-            </h2>
-          </legend>
-          {DAILY_GOALS.map((minutes) => (
-            <label key={minutes} className="app-choice">
-              <input
-                type="radio"
-                name="goal"
-                value={minutes}
-                checked={choices.dailyGoalMinutes === minutes}
-                onChange={() => choose({ dailyGoalMinutes: minutes })}
-              />
-              <span className="app-choice__label">{t("goalOption", { minutes })}</span>
-            </label>
-          ))}
-          <p className="app-muted">{t("goalHint")}</p>
-        </fieldset>
-      ) : null}
-
-      {failure}
-
-      <div className="app-actions">
-        {before === null ? null : (
-          <Button variant="secondary" onClick={() => setStep(before)}>
-            {t("back")}
+        <div className="app-onboarding__bottom">
+          {progress}
+          <Button type="submit" arrow="next" disabled={saving || !ready}>
+            {after === null ? t("finish") : t("next")}
           </Button>
-        )}
-        <Button type="submit" arrow="next" disabled={saving || container.status !== "ready"}>
-          {after === null ? t(finishLabel(placement)) : t("next")}
-        </Button>
-      </div>
-    </form>
+        </div>
+      </form>
+    </div>
   );
 }
