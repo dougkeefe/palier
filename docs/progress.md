@@ -978,6 +978,11 @@ collected to stay, and for no assessment first; then chose Coco drawn inline, a 
   as every other step's does, so `onboard()`'s first wait is real; a key held from the start reads as held on the ready
   card at once; the axe journey walks all six cards in both languages; the gate journey waits for the network to
   settle, not a second; and a comment's step count. Tests for each new branch beside them.
+- **Then CI's fast lane** blew its 120s budget on the pull request's run, while the push run of the same commit passed
+  in 78s. The common files ran 36% slower on that runner, and the packages this change touches missed Turborepo's
+  cache (check-types 27s against main's 10s); the new tests were 4.5s of it. Within the rule (make it faster, never
+  raise the number): `TargetStep` and `GoalStep` render in node now, their choosing left to the wizard's jsdom test,
+  so two jsdom start-ups go; and the gate's, the import's and the pairing's tests wait one tick, not 20 to 50ms.
 - **Docs:** D269–D272; D259 to D262 archived (rule 8); the 24 October `progress.md-archive` entry archived; PRD
   §8.1's dated amendments; `apps/web/CLAUDE.md`, `packages/ui/CLAUDE.md` and `packages/testing/CLAUDE.md`; a line in
   `docs/Palier landing page/readme.md`.

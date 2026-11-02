@@ -54,7 +54,7 @@ describe("JoinForm (D270)", () => {
     render(provided(<JoinForm onJoined={() => Promise.reject(new Error("the profile could not be read"))} />, "en"));
     enter("abc234");
     expect(await screen.findByText("This device is linked. 2 records came over.")).toBeTruthy();
-    await new Promise((resolve) => setTimeout(resolve, 20));
+    await new Promise((resolve) => setTimeout(resolve, 0));
     expect(screen.getByText("This device is linked. 2 records came over.")).toBeTruthy();
   });
 

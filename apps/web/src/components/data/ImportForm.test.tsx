@@ -55,7 +55,7 @@ describe("ImportForm (D270)", () => {
     choose(JSON.stringify(await source.useCases.exportData()));
     fireEvent.click(screen.getByRole("button", { name: "Import" }));
     expect(await screen.findByText(/^Imported/)).toBeTruthy();
-    await new Promise((resolve) => setTimeout(resolve, 20));
+    await new Promise((resolve) => setTimeout(resolve, 0));
     expect(screen.queryByText(/could not be/i)).toBeNull();
     expect(screen.getByText(/^Imported/)).toBeTruthy();
   });

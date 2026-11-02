@@ -42,20 +42,20 @@ describe("OnboardingGate (D270)", () => {
       testDate: null,
     });
     gate("/settings/data");
-    await new Promise((resolve) => setTimeout(resolve, 50));
+    await new Promise((resolve) => setTimeout(resolve, 0));
     expect(nav.replace).not.toHaveBeenCalled();
   });
 
   it("leaves the pages open before onboarding alone, with no profile", async () => {
     gate("/practice/writing/translate");
-    await new Promise((resolve) => setTimeout(resolve, 50));
+    await new Promise((resolve) => setTimeout(resolve, 0));
     expect(nav.replace).not.toHaveBeenCalled();
   });
 
   it("waits for the container before deciding", async () => {
     held.container = null;
     gate("/progress");
-    await new Promise((resolve) => setTimeout(resolve, 50));
+    await new Promise((resolve) => setTimeout(resolve, 0));
     expect(nav.replace).not.toHaveBeenCalled();
   });
 });

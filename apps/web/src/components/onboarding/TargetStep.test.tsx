@@ -1,41 +1,48 @@
-// @vitest-environment jsdom
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 
-import { provided } from "../../__tests__/render";
-import { DEFAULT_CHOICES } from "../../features/onboarding/onboarding";
+import { html } from "../../__tests__/render";
+import { DEFAULT_CHOICES, type OnboardingChoices } from "../../features/onboarding/onboarding";
 import { TargetStep } from "./TargetStep";
 
-afterEach(cleanup);
-
-const step = (onChoose = vi.fn(), choices = DEFAULT_CHOICES) => {
-  render(
-    provided(
-      <TargetStep headingRef={null} choices={choices} onChoose={onChoose} perSkillOpen={false} onPerSkillToggle={() => undefined} />,
-      "en",
-    ),
+// Rendered in node: choosing is the wizard's jsdom test's (`OnboardingWizard.test.tsx` saves a Level B chosen here).
+const step = (choices: OnboardingChoices = DEFAULT_CHOICES, perSkillOpen = false) =>
+  html(
+    <TargetStep
+      headingRef={null}
+      choices={choices}
+      onChoose={() => undefined}
+      perSkillOpen={perSkillOpen}
+      onPerSkillToggle={() => undefined}
+    />,
   );
-  return onChoose;
-};
+
+/** The value of every checked radio named `name`, in order. */
+const checked = (markup: string, name: string) =>
+  [...markup.matchAll(/<input[^>]*>/g)]
+    .map(([tag]) => tag)
+    .filter((tag) => tag.includes(`name="${name}"`) && tag.includes('checked=""'))
+    .map((tag) => /value="([^"]*)"/.exec(tag)?.[1]);
 
 describe("TargetStep (D259, D269)", () => {
-  it("sets every skill's target with one answer", () => {
-    const onChoose = step();
-    fireEvent.click(screen.getByRole("radio", { name: /^Level B\s?You/ }));
-    expect(onChoose).toHaveBeenCalledWith({ targets: { reading: "B", writing: "B", oral: "B" } });
+  it("asks B or C as one answer, with the shared target chosen", () => {
+    const markup = step();
+    expect(markup).toContain("What are you aiming for?");
+    expect(checked(markup, "target")).toEqual(["C"]);
   });
 
-  it("shows the shared target as chosen, and none when the skills differ", () => {
-    step(vi.fn(), { ...DEFAULT_CHOICES, targets: { reading: "C", writing: "B", oral: "C" } });
-    expect((screen.getByRole("radio", { name: /^Level C\s?You/ }) as HTMLInputElement).checked).toBe(false);
-    expect((screen.getByRole("radio", { name: /^Level B\s?You/ }) as HTMLInputElement).checked).toBe(false);
-    // The targets differ, so the per-skill disclosure is open.
-    expect(screen.getByText("My position needs a different level in each skill").closest("details")?.open).toBe(true);
+  it("chooses neither shared answer when the skills differ, and opens the per-skill targets to show them", () => {
+    const markup = step({ ...DEFAULT_CHOICES, targets: { reading: "C", writing: "B", oral: "C" } });
+    expect(checked(markup, "target")).toEqual([]);
+    expect(markup).toMatch(/<details[^>]*open=""/);
+    expect(checked(markup, "target-writing")).toEqual(["B"]);
   });
 
-  it("keeps the test date optional: emptied, it is none", () => {
-    const onChoose = step(vi.fn(), { ...DEFAULT_CHOICES, testDate: "2027-01-05" });
-    fireEvent.change(screen.getByLabelText("I have a test booked on (optional)"), { target: { value: "" } });
-    expect(onChoose).toHaveBeenCalledWith({ testDate: null });
+  it("keeps the per-skill targets closed while one target describes every skill and they were never opened", () => {
+    expect(step()).not.toMatch(/<details[^>]*open=""/);
+  });
+
+  it("shows a booked test date, and none as an empty field", () => {
+    expect(step({ ...DEFAULT_CHOICES, testDate: "2027-01-05" })).toMatch(/type="date"[^>]*value="2027-01-05"/);
+    expect(step()).toMatch(/type="date"[^>]*value=""/);
   });
 });
