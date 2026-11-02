@@ -51,6 +51,15 @@ export default defineConfig({
      * medium keep the default, where a slow test is a bug.
      */
     ...(process.env.CI_LANE === "nightly" ? { testTimeout: 300_000 } : {}),
+    /**
+     * On CI, one worker per core. Vitest's default for `run` is one fewer, which on the runner's
+     * four identical vCPUs left a quarter of it to a main process that mostly waits: 3 against 4
+     * workers measured 53 s against 47 s for the same suite (progress.md D275). Not locally: on a
+     * laptop with efficiency cores, the extra worker lands on a slow one, and
+     * `committed-bank.test.ts`'s pipeline run, 1.5 s alone, passed its 5 s timeout every time.
+     * Isolation is unchanged: still forks, one module graph per file, as D178 kept.
+     */
+    ...(process.env.CI === "true" ? { maxWorkers: "100%" } : {}),
     projects: [
       workspaceProject("domain", "./packages/domain"),
       workspaceProject("engine", "./packages/engine"),
