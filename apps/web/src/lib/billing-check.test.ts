@@ -62,7 +62,7 @@ const priceOf = (model: string, input: number, output: number) => {
 const models = { passage: aiModels.passage, draft: aiModels.draft, review: aiModels.review };
 
 beforeAll(() => {
-  mswServer.listen({ onUnhandledRequest: "error" });
+  mswServer.listen({ onUnhandledFrame: "error" });
 });
 afterEach(() => {
   mswServer.resetHandlers();

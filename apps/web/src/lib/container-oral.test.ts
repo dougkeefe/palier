@@ -38,7 +38,7 @@ const CONTENT_DIR = dirname(dirname(createRequire(import.meta.url).resolve("@pal
 let network: typeof fetch = fetch;
 
 beforeAll(() => {
-  mswServer.listen({ onUnhandledRequest: "error" });
+  mswServer.listen({ onUnhandledFrame: "error" });
   network = globalThis.fetch;
 });
 afterEach(async () => {

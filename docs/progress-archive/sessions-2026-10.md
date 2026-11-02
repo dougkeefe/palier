@@ -3,6 +3,36 @@
 Newest first. Moved verbatim from `docs/progress.md` on 24 October 2026 (D255). Its index there points here. The rules are
 `progress.md`'s: never edit a session entry, and mark a deviation resolved in place, updating its index line too.
 
+### 24 October 2026 — `dougkeefe/palier-library-redesign` (the library redesigned, with three photographs; D256)
+
+Not *Next, decided*, which is unchanged (D206). The human asked for the library to be easier to use and better looking,
+with royalty-free photographs credited, keeping its hierarchy, accessibility and navigation.
+- **Web:** `/library` and `/library/[subSkill]` rebuilt. `components/library/` gains `LibraryCard`, `LibraryPhoto`,
+  `PhotoCredit`, `library.css` (the library's rules, moved out of `globals.css`), and `images/` with three WebP files and
+  `SOURCES.md`.
+  - `features/library/photos.ts` and `features/library/contents.ts` are new. The article's contents and the headings
+    they link to take their ids from `contents.ts`. `lib/library.ts` gains `skillOf` and `adjacentArticles`.
+  - Twelve message keys in both languages; `back` removed and `intro` shortened.
+- **Tests:** `photos.test.ts` and `contents.test.ts` are new. `library.test.ts` gains `skillOf` and `adjacentArticles`. `motion.test.ts` now
+  reads `library.css`. `content.spec.ts`'s library test gains the assertions D256 lists.
+- **Docs:** D256; D246 and the 22 October entry for `/progress`'s tabs are archived (rule 8); `apps/web/CLAUDE.md`'s
+  library invariant; *In flight*; *Next, decided*'s human item.
+
+**Verified:**
+- `pnpm verify`: check-types, lint and boundaries clean; `pnpm test` passed 286 files, 4,602 tests (8 todo).
+- `content.spec.ts`'s three library tests on the `chromium` project, with the warmup: 4 of 4, axe clean on `/en/library`,
+  `/en/library/agreement`, `/fr/library/agreement` and `/en/library/inference`.
+- After `pnpm --filter @palier/web build`, the `offline` project's `csp-production.spec.ts` and `offline.spec.ts`: 15 of
+  15, so every page in both locales has zero violations with the photographs.
+- **Lighthouse** with `lighthouserc.json`'s desktop preset, three runs each:
+  - `/en/library`: performance 0.98, 1 and 1;
+  - `/fr/library/agreement` and `/en/library/inference`: 1 on every run;
+  - accessibility 1 and CLS 0 on all nine runs, and LCP 670–1,096 ms.
+- **On the production build** (`next start`), the worker's caches held all three library photographs after one load of
+  `/en/home`. With the network off, `/fr/library/pronouns` drew its photograph from the cache (200).
+- Screenshots at 1280px and 390px, English and French, with a keyboard pass to a card's focus ring.
+- Not run: the rest of the medium lane. CI runs it on the pull request.
+
 ### 24 October 2026 — `dougkeefe/progress.md-archive` (this file split into a live file and `progress-archive/`; D255)
 
 Not *Next, decided*, which is unchanged (D206): the human asked for `progress.md` to be cut down to its basics with an

@@ -4,7 +4,7 @@ import { mswServer } from "./node.js";
 import { type OpenAiMode, openAiHandlers } from "./openai-handlers.js";
 
 beforeAll(() => {
-  mswServer.listen({ onUnhandledRequest: "error" });
+  mswServer.listen({ onUnhandledFrame: "error" });
 });
 afterEach(() => {
   mswServer.resetHandlers();

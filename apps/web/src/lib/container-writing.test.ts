@@ -29,7 +29,7 @@ const answer = (content: unknown, prompt_tokens = 900, completion_tokens = 700):
 });
 
 beforeAll(() => {
-  mswServer.listen({ onUnhandledRequest: "error" });
+  mswServer.listen({ onUnhandledFrame: "error" });
 });
 afterEach(async () => {
   mswServer.resetHandlers();

@@ -17,7 +17,7 @@ const BASE = "http://bank.test";
 const requested: string[] = [];
 
 beforeAll(() => {
-  mswServer.listen({ onUnhandledRequest: "error" });
+  mswServer.listen({ onUnhandledFrame: "error" });
   mswServer.events.on("request:start", ({ request }) => {
     requested.push(request.url);
   });

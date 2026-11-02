@@ -32,7 +32,7 @@ const answer = (content: unknown, prompt_tokens = 1_400, completion_tokens = 1_2
 const asks = { text: MINE, source: null, target: "fr", feedbackLang: "en" } as const;
 
 beforeAll(() => {
-  mswServer.listen({ onUnhandledRequest: "error" });
+  mswServer.listen({ onUnhandledFrame: "error" });
 });
 afterEach(async () => {
   mswServer.resetHandlers();

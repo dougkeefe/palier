@@ -8,7 +8,7 @@ import { type FetchLike, httpTelemetrySink } from "./http-telemetry-sink.js";
 const BASE = "http://telemetry.test";
 
 beforeAll(() => {
-  mswServer.listen({ onUnhandledRequest: "error" });
+  mswServer.listen({ onUnhandledFrame: "error" });
 });
 afterEach(() => {
   mswServer.resetHandlers();

@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 1 November 2026 (onboarding redrawn as illustrated cards in a focus frame, Coco on each, with no assessment first, D269, every app page waits for it, D270, every card fits a desktop screen, D271, and the review's fixes, D272; next, D206's bank budget)
+**Last updated:** 1 November 2026 (`msw` 3, rebuilt from Dependabot's #109, D273, and the monthly item-statistics PR that never gets CI, D274; next, D206's bank budget)
 **Current phase:** **1.0 is reached** (24 October 2026, D253): the human passed Gate O and Gate M and read bank v4 with no
 disagreement, so Phases 6 and 7 are complete. After 1.0, reading's library articles are built (D254), and D206's bank
 budget is next. Phase 3's product pilot still runs (Gate E, D97), and Phase 8, the English mirror, is the plan's next
@@ -103,6 +103,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 | `dougkeefe/settings-shared-menu` | **One settings area**: `/settings` lists levels, the key, your data and sync, each screen carries one menu, and a gear at the header's top right and one footer link lead there (D264). | 27 October 2026 |
 | `dougkeefe/settings-subsections-navigation` | **Each settings screen opens with "On this page"**: a pill row of links to its sections, each landing on its card (D266). **The app header folds into a menu below 1100px** (D267). **Every component has a unit test, or a line on a list that only shrinks** (D268). | 28 October 2026 |
 | `dougkeefe/liny0` | **Onboarding redrawn**: a focus frame with no navigation, sync status or settings, Coco on every card, a welcome and a "you're set" card in place of the direction and placement questions, Skip from the results on, and no assessment first (D269). **Every app page waits for onboarding**, but for the translator, about, privacy and the library, and the welcome offers, in small type, to bring progress from a file or another device; every card fits a desktop screen without scrolling (D270, D271); the welcome cut to one line, and the review's smaller fixes (D272). | 31 October 2026 |
+| `dougkeefe/pull-requests-next-steps` | **`msw` 3**, rebuilt here in place of Dependabot's #109: `onUnhandledRequest` is `onUnhandledFrame` (D273). **The monthly item-statistics PR never gets CI**, recorded and not yet fixed (D274). | 1 November 2026 |
 
 *(Merged rows are removed: this table tracks current work, and the session log is the permanent record. The rows
 removed up to 24 October 2026, the last of them the reading articles (#100), are listed in
@@ -622,66 +623,8 @@ full.
 - **D260** — the E2E warmup visits one page per route file, and the levels journey onboards once: shard 2 back inside its budget · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d260--the-e2e-warmup-visits-one-page-per-route-file-and-the-levels-journey-onboards-once-shard-2-back-inside-its-budget)
 - **D261** — three dev-only advisories close with a lockfile refresh, not an override; Lighthouse's `zod` 3 is dismissed as unreachable · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d261--three-dev-only-advisories-close-with-a-lockfile-refresh-not-an-override-lighthouses-zod-3-is-dismissed-as-unreachable)
 - **D262** — the E2E lane runs three shards: the hermetic specs' heaviest files sort last, so two left shard 2 at its budget · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d262--the-e2e-lane-runs-three-shards-the-hermetic-specs-heaviest-files-sort-last-so-two-left-shard-2-at-its-budget)
-
-### D263 — the staircase is the result picker: a skill's result is picked by tapping its step, and the pill row is gone
-**Date:** 26 October 2026 · **Status:** accepted (human's request and choice; agent's design). Amends D259's "one row of
-pill radios per skill, each with its staircase"
-
-The human: on a standard monitor the six pills wrapped, leaving E alone on a second line, and the staircase beside them
-should be the control, "a much more whimsical user experience". Asked, the human chose the stair only, with no pills.
-- **`@palier/ui`'s `LevelStairPicker`**, a new primitive beside `LevelStair`, which stays read-only for Today. A
-  fieldset named by the skill holds the stair, and over each step's whole column a label holds a real radio, named by
-  the band and transparent, covering the column. The ground before the first step is "Not yet", written under it. So a
-  pointer lands on the control itself, the arrow keys walk Coco along the stair, and the E2E helpers' `group` and `radio`
-  queries are unchanged. A visually hidden radio was tried first and refused: Playwright found it covered by its label,
-  as any pointer would.
-- **The geometry is shared.** `levelStairGeometry` takes an optional `ground` (the picker's is `LEVEL_STAIR_PICK_GROUND`,
-  wide enough for "Pas encore") and returns each step's hit box, and the ground's, in percent of the drawing, so the
-  labels line up with the SVG at any width. No existing geometry value moved.
-- **The motion.** Coco is drawn about its feet and placed by `transform`, so a new result slides it over on the
-  celebration spring, and the picker keys a short hop by the result, so each choice replays it; the steps' fill eases.
-  Transform only, on the motion tokens, and off under the global switch (D160). Hover outlines the step, and the
-  keyboard's focus rings it in `accent`. Under forced colours the chosen step is ringed in `Highlight`.
-- **The caption** under the stair is D259's sentence, now visible, with no live region, since the checked radio is
-  already announced.
-- **The layout is one stair to a row.** Three across the 760px column shrank the steps' letters to about 8px.
-  `features/study/levels.ts`'s `resultChoices` and `resultValue` went with the pills, and their tests with them.
-- **The copy** says to pick the step (`start.nowHint`, now above the stairs, and `studySettings.resultsHint`), in both
-  languages.
-- **A test whose premise changed**, said here as D259 did: `e2e/levels.spec.ts` found the settings' reading stair as an
-  image named by its sentence. The stair is now a radio group, so it checks the group's E and finds the sentence as the
-  caption. Today's read-only stair is still found as an image, unchanged.
-
-### D264 — one settings area: the header's gear and the footer's one link lead to `/settings`, whose screens share a menu
-**Date:** 27 October 2026 · **Status:** accepted (human's request and choices; agent's design). Amends D201's landing
-footer ("the data, sync and key links") and the app footer's link to each settings screen; PRD §7's tree amended in place
-
-The human: the API key, the current levels, Your data and Sync are all settings, and should be one menu area, reached by
-a gear at the top right and a link in the footer. Asked, the human chose a settings page over a drop-down, and one footer
-link in place of the four.
-- **`/settings` is the overview**, a static page with no island: a card for each screen, saying what it holds. Every
-  screen keeps its address, so `NoKeyCard`'s `?next=diagnostic`, the privacy notice's links and every spec's `page.goto`
-  are unchanged.
-- **Every screen under it carries one menu** (`app/[locale]/settings/layout.tsx`, `components/settings/SettingsNav.tsx`)
-  on the header's pill track, the screen you are on `aria-current="page"`; the key's guide marks the key. The overview
-  leaves it out: its cards are the menu, and two links of each name would make every name ambiguous. The list is
-  `features/settings/settings-nav.ts`'s `SETTINGS_ITEMS`, so a new settings screen is an entry there.
-- **The header's gear** is the rightmost tool, after sync and the language: `@palier/ui`'s new `gear` glyph in a link
-  with `pl-icon-btn`'s 44px target, named and titled "Settings" / « Paramètres », and the white pill inside the area.
-  A link, not `IconButton`, which is a `<button>`. The focus order the smoke test holds (skip link, brand, nav) is
-  unchanged.
-- **The footer's four links are one, "Settings"**, and so is the landing footer's "Your device" column. Export, delete,
-  the sync switch and the key were one step from any page; they are now two. R11 asks for export, import and delete
-  "each in one action", which still holds on `/settings/data`, and WCAG 3.2.6 holds, since the gear and the link sit in
-  the same place on every page. The header's sync status still links straight to `/settings/sync` (PRD §8.11).
-- **Tests whose premise changed**, said here as D263 did: the specs that clicked "Your data", "Your API key", "Sync" or
-  "Your levels" in the footer (`journeys`, `key`, `key-leak`, `sync`, `content`, `levels`) now go through `helpers.ts`'s
-  `openSettings`: the footer's "Settings", then the card. `key.spec.ts` moves between the key and data screens by the
-  menu. `footer.levels`, `footer.yourData`, `footer.sync` and `footer.key` are gone, read by nothing.
-- **New:** `settings-nav.test.ts`; `gear` in the glyph registry's test; `e2e/settings.spec.ts` (the gear, the footer and
-  the landing footer to the overview, each card to its screen with the menu marking it, axe on both, in both languages); `/settings` in
-  `routes.json`, `csp-production.spec.ts`'s `PAGES` and the titles test. Lighthouse's list is unchanged: the overview is
-  a static page lighter than `/en/settings/key`, which it measures.
+- **D263** — the staircase is the result picker: a skill's result is picked by tapping its step, and the pill row is gone · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d263--the-staircase-is-the-result-picker-a-skills-result-is-picked-by-tapping-its-step-and-the-pill-row-is-gone)
+- **D264** — one settings area: the header's gear and the footer's one link lead to `/settings`, whose screens share a menu · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d264--one-settings-area-the-headers-gear-and-the-footers-one-link-lead-to-settings-whose-screens-share-a-menu)
 
 ### D265 — the chrome and the settings area have unit tests in node, rendered to HTML, beside their E2E
 **Date:** 27 October 2026 · **Status:** accepted (human's choice); amends `implementation-plan.md` §6.3's "rendering is
@@ -937,9 +880,67 @@ The human reviewed the cards and asked for each of these.
 - **Tests:** `WelcomeStep.test.tsx` asserts the one-line welcome and no list; its earlier assertions on the removed
   sentences went with them.
 
+### D273 — `msw` 3 is rebuilt locally rather than merged from Dependabot: `onUnhandledRequest` is `onUnhandledFrame`
+**Date:** 1 November 2026 · **Status:** accepted. Extends D246's "Dependabot's group is rebuilt locally" to a major
+
+- **Dependabot's #109 (`msw` 2.15.0 → 3.0.3) failed the fast lane at `check-types`**, with TS2353 in all four of
+  `packages/testing`'s handler tests. msw 3 renamed `listen()`'s and `start()`'s `onUnhandledRequest` to
+  `onUnhandledFrame` (`SharedOptions`), because a handler now matches a network frame, which may be a WebSocket, not
+  only a request. `dependabot.yml` reads a major rather than merging it on green, so #109 was closed and the bump redone
+  here.
+- **The change is the rename, in all 14 `mswServer.listen({ onUnhandledFrame: "error" })` calls**: four in
+  `packages/testing/src/msw/`, three in `packages/adapters`' HTTP adapters' tests, and seven in `apps/web/src/lib/`,
+  plus the comment in `container-key.test.ts` that names it. `"error"` still fails any request no handler matches.
+- **Nothing else in msw 3's breaking list reaches this repo**:
+  - it is ESM-only, and every consumer is ESM;
+  - it needs Node 22 (`.nvmrc` is 22.23.3) and TypeScript 5.9 (6.0.3);
+  - `msw/native` is gone, and nothing used it;
+  - `worker.stop()` returns a Promise, and `mswWorker` is exported but never stopped;
+  - `server.events`' `request:start` event still carries `request`, which `http-bank-repository.test.ts` reads;
+  - `http`, `HttpResponse` and `delay` are still exported from `msw`.
+- **The lockfile was rebuilt with the repo's pnpm 10.13.1** (`npx pnpm@10.13.1`). It holds one `@types/node`, 22.20.5,
+  so D246's stray major did not come back. `pnpm add` would have moved `msw` to `devDependencies`. It stays a
+  dependency of `@palier/testing`, because its `./msw/node` and `./msw/browser` exports import it.
+
+### D274 — the monthly item-statistics PR gets no CI: a PR opened with `GITHUB_TOKEN` starts no workflow
+**Date:** 1 November 2026 · **Status:** open. Found while clearing the open PRs; D94 did not anticipate it
+
+- **#59 (October) and #112 (November) were both blocked.** Neither had ever run `verify`, which `main` requires.
+  `item-statistics.yml` opens its PR with `github.token`. GitHub does not start a workflow from an event that token
+  causes, so the `pull_request` run for #112 ended with no jobs.
+- **Each month also opens a new PR rather than updating one.** The branch is named for the month, and `generatedAt`
+  changes every run, so the report always differs, even when the job finds no events and no verdicts, as both months
+  did.
+- **What was done by hand:** #59 was closed as superseded by #112, since both add the same file. #112 was closed and
+  reopened by the human's account, which starts `verify`.
+- **Resolve when** the workflow opens its PR with a GitHub App's or a fine-grained token's identity, and skips the PR
+  when `bankVersion` and `verdicts` are unchanged. Until then, reopen each month's PR by hand before merging it.
+- **`events: 0` in November**, a week after 1.0, may mean nothing reaches the telemetry database. It is not checked
+  here.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 1 November 2026 — `dougkeefe/pull-requests-next-steps` (the four open PRs cleared; `msw` 3 rebuilt; D273, D274)
+
+Not *Next, decided*, which is unchanged (D206). The human asked what to do with the four open PRs, and approved this plan:
+- **#59** (October's item statistics) was closed, superseded by #112. Both add `content/factory/item-statistics.json`,
+  which is not yet on `main`.
+- **#112** (November's) had never run `verify` (D274). It was closed and reopened to start it. It retires nothing: 0
+  events, 0 verdicts.
+- **#108** (the minor-and-patch group) failed only on its `push` run, over the fast lane's 120 s budget. Its
+  `pull_request` run on the same commit passed every lane. Its lockfile holds one `@types/node`, 22.20.5 (D246).
+  `@dependabot rebase` was asked for, to rerun it against today's `main`.
+- **#109** (`msw` 3) was closed and rebuilt here (D273).
+- The rotation moved D263 and D264 to `deviations-D200-D299.md`, and the oldest session entry to `sessions-2026-10.md`.
+
+**Verified:**
+- Run with the repo's pnpm 10.13.1, through `npx pnpm@10.13.1`.
+- `grep -rn onUnhandledRequest` over `packages/*/src` and `apps/*/src` finds nothing.
+- `pnpm verify` was green: 329 files, 4,849 tests passed (8 todo), with no dependency violations. A first run had
+  `committed-bank.test.ts` time out at 5 s, under load, before the rotation was made; it passed on the rerun, untouched.
+- Not run: the medium lane locally; CI runs it on the pull request.
 
 ### 31 October 2026 — `dougkeefe/liny0` (onboarding redrawn: a focus frame, Coco on every card, and no assessment first; every app page waits for it; each card fits a desktop screen; D269–D272)
 
@@ -1220,37 +1221,6 @@ catalogue's layout: tag pills that filter, a photograph per article, and no sect
   `offline` project's `csp-production.spec.ts` and `offline.spec.ts`, 15 of 15.
 - Screenshots at 1280px and 390px, English and French, and the pills measured on one row at 1280px in both languages.
 - Not run: the rest of the medium lane, and Lighthouse. CI runs the lane on the pull request.
-
-
-### 24 October 2026 — `dougkeefe/palier-library-redesign` (the library redesigned, with three photographs; D256)
-
-Not *Next, decided*, which is unchanged (D206). The human asked for the library to be easier to use and better looking,
-with royalty-free photographs credited, keeping its hierarchy, accessibility and navigation.
-- **Web:** `/library` and `/library/[subSkill]` rebuilt. `components/library/` gains `LibraryCard`, `LibraryPhoto`,
-  `PhotoCredit`, `library.css` (the library's rules, moved out of `globals.css`), and `images/` with three WebP files and
-  `SOURCES.md`.
-  - `features/library/photos.ts` and `features/library/contents.ts` are new. The article's contents and the headings
-    they link to take their ids from `contents.ts`. `lib/library.ts` gains `skillOf` and `adjacentArticles`.
-  - Twelve message keys in both languages; `back` removed and `intro` shortened.
-- **Tests:** `photos.test.ts` and `contents.test.ts` are new. `library.test.ts` gains `skillOf` and `adjacentArticles`. `motion.test.ts` now
-  reads `library.css`. `content.spec.ts`'s library test gains the assertions D256 lists.
-- **Docs:** D256; D246 and the 22 October entry for `/progress`'s tabs are archived (rule 8); `apps/web/CLAUDE.md`'s
-  library invariant; *In flight*; *Next, decided*'s human item.
-
-**Verified:**
-- `pnpm verify`: check-types, lint and boundaries clean; `pnpm test` passed 286 files, 4,602 tests (8 todo).
-- `content.spec.ts`'s three library tests on the `chromium` project, with the warmup: 4 of 4, axe clean on `/en/library`,
-  `/en/library/agreement`, `/fr/library/agreement` and `/en/library/inference`.
-- After `pnpm --filter @palier/web build`, the `offline` project's `csp-production.spec.ts` and `offline.spec.ts`: 15 of
-  15, so every page in both locales has zero violations with the photographs.
-- **Lighthouse** with `lighthouserc.json`'s desktop preset, three runs each:
-  - `/en/library`: performance 0.98, 1 and 1;
-  - `/fr/library/agreement` and `/en/library/inference`: 1 on every run;
-  - accessibility 1 and CLS 0 on all nine runs, and LCP 670–1,096 ms.
-- **On the production build** (`next start`), the worker's caches held all three library photographs after one load of
-  `/en/home`. With the network off, `/fr/library/pronouns` drew its photograph from the cache (200).
-- Screenshots at 1280px and 390px, English and French, with a keyboard pass to a card's focus ring.
-- Not run: the rest of the medium lane. CI runs it on the pull request.
 
 Older entries, newest first: [October 2026](progress-archive/sessions-2026-10.md) ·
 [September 2026](progress-archive/sessions-2026-09.md).

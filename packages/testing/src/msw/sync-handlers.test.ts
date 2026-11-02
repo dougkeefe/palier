@@ -7,7 +7,7 @@ import { syncHandlers } from "./sync-handlers.js";
 const BASE = "http://sync.test";
 
 beforeAll(() => {
-  mswServer.listen({ onUnhandledRequest: "error" });
+  mswServer.listen({ onUnhandledFrame: "error" });
 });
 afterEach(() => {
   mswServer.resetHandlers();

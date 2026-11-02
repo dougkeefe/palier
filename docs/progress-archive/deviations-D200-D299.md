@@ -1932,3 +1932,63 @@ passed, on a change that touched no app code. The same commit's other run passed
 - **The required checks change with it** (`docs/deploy.md`): `Medium lane: E2E 1/2` and `2/2` become `1/3`, `2/3` and
   `3/3`, in `deploy.md`'s table and, with the human's approval once CI was green, in `main`'s branch protection. `verify.yml`'s comment now counts four jobs.
 - **Not changed:** the 300 s budget, two workers, `retries: 0`, and the warmup.
+
+### D263 — the staircase is the result picker: a skill's result is picked by tapping its step, and the pill row is gone
+**Date:** 26 October 2026 · **Status:** accepted (human's request and choice; agent's design). Amends D259's "one row of
+pill radios per skill, each with its staircase"
+
+The human: on a standard monitor the six pills wrapped, leaving E alone on a second line, and the staircase beside them
+should be the control, "a much more whimsical user experience". Asked, the human chose the stair only, with no pills.
+- **`@palier/ui`'s `LevelStairPicker`**, a new primitive beside `LevelStair`, which stays read-only for Today. A
+  fieldset named by the skill holds the stair, and over each step's whole column a label holds a real radio, named by
+  the band and transparent, covering the column. The ground before the first step is "Not yet", written under it. So a
+  pointer lands on the control itself, the arrow keys walk Coco along the stair, and the E2E helpers' `group` and `radio`
+  queries are unchanged. A visually hidden radio was tried first and refused: Playwright found it covered by its label,
+  as any pointer would.
+- **The geometry is shared.** `levelStairGeometry` takes an optional `ground` (the picker's is `LEVEL_STAIR_PICK_GROUND`,
+  wide enough for "Pas encore") and returns each step's hit box, and the ground's, in percent of the drawing, so the
+  labels line up with the SVG at any width. No existing geometry value moved.
+- **The motion.** Coco is drawn about its feet and placed by `transform`, so a new result slides it over on the
+  celebration spring, and the picker keys a short hop by the result, so each choice replays it; the steps' fill eases.
+  Transform only, on the motion tokens, and off under the global switch (D160). Hover outlines the step, and the
+  keyboard's focus rings it in `accent`. Under forced colours the chosen step is ringed in `Highlight`.
+- **The caption** under the stair is D259's sentence, now visible, with no live region, since the checked radio is
+  already announced.
+- **The layout is one stair to a row.** Three across the 760px column shrank the steps' letters to about 8px.
+  `features/study/levels.ts`'s `resultChoices` and `resultValue` went with the pills, and their tests with them.
+- **The copy** says to pick the step (`start.nowHint`, now above the stairs, and `studySettings.resultsHint`), in both
+  languages.
+- **A test whose premise changed**, said here as D259 did: `e2e/levels.spec.ts` found the settings' reading stair as an
+  image named by its sentence. The stair is now a radio group, so it checks the group's E and finds the sentence as the
+  caption. Today's read-only stair is still found as an image, unchanged.
+
+### D264 — one settings area: the header's gear and the footer's one link lead to `/settings`, whose screens share a menu
+**Date:** 27 October 2026 · **Status:** accepted (human's request and choices; agent's design). Amends D201's landing
+footer ("the data, sync and key links") and the app footer's link to each settings screen; PRD §7's tree amended in place
+
+The human: the API key, the current levels, Your data and Sync are all settings, and should be one menu area, reached by
+a gear at the top right and a link in the footer. Asked, the human chose a settings page over a drop-down, and one footer
+link in place of the four.
+- **`/settings` is the overview**, a static page with no island: a card for each screen, saying what it holds. Every
+  screen keeps its address, so `NoKeyCard`'s `?next=diagnostic`, the privacy notice's links and every spec's `page.goto`
+  are unchanged.
+- **Every screen under it carries one menu** (`app/[locale]/settings/layout.tsx`, `components/settings/SettingsNav.tsx`)
+  on the header's pill track, the screen you are on `aria-current="page"`; the key's guide marks the key. The overview
+  leaves it out: its cards are the menu, and two links of each name would make every name ambiguous. The list is
+  `features/settings/settings-nav.ts`'s `SETTINGS_ITEMS`, so a new settings screen is an entry there.
+- **The header's gear** is the rightmost tool, after sync and the language: `@palier/ui`'s new `gear` glyph in a link
+  with `pl-icon-btn`'s 44px target, named and titled "Settings" / « Paramètres », and the white pill inside the area.
+  A link, not `IconButton`, which is a `<button>`. The focus order the smoke test holds (skip link, brand, nav) is
+  unchanged.
+- **The footer's four links are one, "Settings"**, and so is the landing footer's "Your device" column. Export, delete,
+  the sync switch and the key were one step from any page; they are now two. R11 asks for export, import and delete
+  "each in one action", which still holds on `/settings/data`, and WCAG 3.2.6 holds, since the gear and the link sit in
+  the same place on every page. The header's sync status still links straight to `/settings/sync` (PRD §8.11).
+- **Tests whose premise changed**, said here as D263 did: the specs that clicked "Your data", "Your API key", "Sync" or
+  "Your levels" in the footer (`journeys`, `key`, `key-leak`, `sync`, `content`, `levels`) now go through `helpers.ts`'s
+  `openSettings`: the footer's "Settings", then the card. `key.spec.ts` moves between the key and data screens by the
+  menu. `footer.levels`, `footer.yourData`, `footer.sync` and `footer.key` are gone, read by nothing.
+- **New:** `settings-nav.test.ts`; `gear` in the glyph registry's test; `e2e/settings.spec.ts` (the gear, the footer and
+  the landing footer to the overview, each card to its screen with the menu marking it, axe on both, in both languages); `/settings` in
+  `routes.json`, `csp-production.spec.ts`'s `PAGES` and the titles test. Lighthouse's list is unchanged: the overview is
+  a static page lighter than `/en/settings/key`, which it measures.

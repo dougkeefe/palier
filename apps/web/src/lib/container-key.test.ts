@@ -15,7 +15,7 @@ vi.mock("../server/db", () => ({ syncApi: () => Promise.resolve(null) }));
 const KEY = "sk-palier-container-test-7f3a";
 
 beforeAll(() => {
-  mswServer.listen({ onUnhandledRequest: "error" });
+  mswServer.listen({ onUnhandledFrame: "error" });
 });
 afterEach(async () => {
   mswServer.resetHandlers();
@@ -36,7 +36,7 @@ describe("the key check through the real OpenAI adapter", () => {
 
     await expect(c.useCases.checkApiKey()).resolves.toBeUndefined();
 
-    // `onUnhandledRequest: "error"` fails any request to another origin.
+    // `onUnhandledFrame: "error"` fails any request to another origin.
     expect(seen).toEqual([`Bearer ${KEY}`]);
   });
 

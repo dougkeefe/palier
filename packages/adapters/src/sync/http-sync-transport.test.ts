@@ -7,7 +7,7 @@ import { type FetchLike, SyncProtocolError, httpSyncTransport } from "./http-syn
 const BASE = "http://sync.test";
 
 beforeAll(() => {
-  mswServer.listen({ onUnhandledRequest: "error" });
+  mswServer.listen({ onUnhandledFrame: "error" });
 });
 afterEach(() => {
   mswServer.resetHandlers();
