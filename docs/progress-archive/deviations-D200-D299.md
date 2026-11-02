@@ -1992,3 +1992,22 @@ link in place of the four.
   the landing footer to the overview, each card to its screen with the menu marking it, axe on both, in both languages); `/settings` in
   `routes.json`, `csp-production.spec.ts`'s `PAGES` and the titles test. Lighthouse's list is unchanged: the overview is
   a static page lighter than `/en/settings/key`, which it measures.
+
+### D265 — the chrome and the settings area have unit tests in node, rendered to HTML, beside their E2E
+**Date:** 27 October 2026 · **Status:** accepted (human's choice); amends `implementation-plan.md` §6.3's "rendering is
+covered by E2E" for `apps/web`'s chrome, and `vitest.config.mts`'s note that `apps/web` tests the DOM only through Playwright
+
+The human asked for this branch to ship at candid-ship's HIGH confidence. Its gate counts a changed file as tested only
+when a test file is named for it or imports it, and Playwright cannot import a component, so `Header`, `Footer`,
+`LandingFooter`, `SettingsLink`, `SettingsNav` and `/settings`'s page and layout were "untested" though E2E drove each.
+Asked, the human chose unit tests for all seven over leaving §6.3 as it was.
+- **How:** `src/__tests__/render.tsx` renders through the real messages with `react-dom/server`, or `react-dom/static`'s
+  `prerenderToNodeStream` for a page that awaits its `params`, in the `web` project's node environment: no jsdom, and no
+  new dependency. `fakeNavigation` stands in for `src/i18n/navigation`, which needs Next's router; a test also stubs what
+  is not its subject (the sync status, the language toggle, the shortcut sheet, `next-intl/server`).
+- **What they assert is behaviour, not that something rendered**, which is §6.3's objection: the gear's address, name and
+  current state; the menu absent on the overview and marking one screen; the header's order; each footer's one settings
+  link and no direct one; the overview's cards in the menu's order, and its title in both languages. Breaking the header
+  or the footer failed four of them.
+- **The rule for the rest of `apps/web` is unchanged:** decisions in `src/features/**`, journeys in Playwright. This adds a
+  third place only for the chrome every page carries.

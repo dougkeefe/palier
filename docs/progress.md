@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 1 November 2026 (`msw` 3, rebuilt from Dependabot's #109, D273, and the monthly item-statistics PR that never gets CI, D274; next, D206's bank budget)
+**Last updated:** 2 November 2026 (the fast lane back under its budget, D275; `msw` 3, rebuilt from Dependabot's #109, D273; the monthly item-statistics PR that never gets CI, D274; next, D206's bank budget)
 **Current phase:** **1.0 is reached** (24 October 2026, D253): the human passed Gate O and Gate M and read bank v4 with no
 disagreement, so Phases 6 and 7 are complete. After 1.0, reading's library articles are built (D254), and D206's bank
 budget is next. Phase 3's product pilot still runs (Gate E, D97), and Phase 8, the English mirror, is the plan's next
@@ -103,7 +103,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 | `dougkeefe/settings-shared-menu` | **One settings area**: `/settings` lists levels, the key, your data and sync, each screen carries one menu, and a gear at the header's top right and one footer link lead there (D264). | 27 October 2026 |
 | `dougkeefe/settings-subsections-navigation` | **Each settings screen opens with "On this page"**: a pill row of links to its sections, each landing on its card (D266). **The app header folds into a menu below 1100px** (D267). **Every component has a unit test, or a line on a list that only shrinks** (D268). | 28 October 2026 |
 | `dougkeefe/liny0` | **Onboarding redrawn**: a focus frame with no navigation, sync status or settings, Coco on every card, a welcome and a "you're set" card in place of the direction and placement questions, Skip from the results on, and no assessment first (D269). **Every app page waits for onboarding**, but for the translator, about, privacy and the library, and the welcome offers, in small type, to bring progress from a file or another device; every card fits a desktop screen without scrolling (D270, D271); the welcome cut to one line, and the review's smaller fixes (D272). | 31 October 2026 |
-| `dougkeefe/pull-requests-next-steps` | **`msw` 3**, rebuilt here in place of Dependabot's #109: `onUnhandledRequest` is `onUnhandledFrame` (D273). **The monthly item-statistics PR never gets CI**, recorded and not yet fixed (D274). | 1 November 2026 |
+| `dougkeefe/pull-requests-next-steps` | **`msw` 3**, rebuilt here in place of Dependabot's #109: `onUnhandledRequest` is `onUnhandledFrame` (D273). **The monthly item-statistics PR never gets CI**, recorded and not yet fixed (D274). **The fast lane back under its budget**: `tsc`'s check cache kept between runs, one Vitest worker per core on CI (D275). | 1 November 2026 |
 
 *(Merged rows are removed: this table tracks current work, and the session log is the permanent record. The rows
 removed up to 24 October 2026, the last of them the reading articles (#100), are listed in
@@ -625,25 +625,7 @@ full.
 - **D262** — the E2E lane runs three shards: the hermetic specs' heaviest files sort last, so two left shard 2 at its budget · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d262--the-e2e-lane-runs-three-shards-the-hermetic-specs-heaviest-files-sort-last-so-two-left-shard-2-at-its-budget)
 - **D263** — the staircase is the result picker: a skill's result is picked by tapping its step, and the pill row is gone · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d263--the-staircase-is-the-result-picker-a-skills-result-is-picked-by-tapping-its-step-and-the-pill-row-is-gone)
 - **D264** — one settings area: the header's gear and the footer's one link lead to `/settings`, whose screens share a menu · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d264--one-settings-area-the-headers-gear-and-the-footers-one-link-lead-to-settings-whose-screens-share-a-menu)
-
-### D265 — the chrome and the settings area have unit tests in node, rendered to HTML, beside their E2E
-**Date:** 27 October 2026 · **Status:** accepted (human's choice); amends `implementation-plan.md` §6.3's "rendering is
-covered by E2E" for `apps/web`'s chrome, and `vitest.config.mts`'s note that `apps/web` tests the DOM only through Playwright
-
-The human asked for this branch to ship at candid-ship's HIGH confidence. Its gate counts a changed file as tested only
-when a test file is named for it or imports it, and Playwright cannot import a component, so `Header`, `Footer`,
-`LandingFooter`, `SettingsLink`, `SettingsNav` and `/settings`'s page and layout were "untested" though E2E drove each.
-Asked, the human chose unit tests for all seven over leaving §6.3 as it was.
-- **How:** `src/__tests__/render.tsx` renders through the real messages with `react-dom/server`, or `react-dom/static`'s
-  `prerenderToNodeStream` for a page that awaits its `params`, in the `web` project's node environment: no jsdom, and no
-  new dependency. `fakeNavigation` stands in for `src/i18n/navigation`, which needs Next's router; a test also stubs what
-  is not its subject (the sync status, the language toggle, the shortcut sheet, `next-intl/server`).
-- **What they assert is behaviour, not that something rendered**, which is §6.3's objection: the gear's address, name and
-  current state; the menu absent on the overview and marking one screen; the header's order; each footer's one settings
-  link and no direct one; the overview's cards in the menu's order, and its title in both languages. Breaking the header
-  or the footer failed four of them.
-- **The rule for the rest of `apps/web` is unchanged:** decisions in `src/features/**`, journeys in Playwright. This adds a
-  third place only for the chrome every page carries.
+- **D265** — the chrome and the settings area have unit tests in node, rendered to HTML, beside their E2E · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d265--the-chrome-and-the-settings-area-have-unit-tests-in-node-rendered-to-html-beside-their-e2e)
 
 ### D266 — each settings screen opens with "On this page": a pill row of links to its sections, each landing on its card
 **Date:** 28 October 2026 · **Status:** accepted (human's request and choices; agent's design). Extends D264's settings area
@@ -918,9 +900,55 @@ The human reviewed the cards and asked for each of these.
 - **`events: 0` in November**, a week after 1.0, may mean nothing reaches the telemetry database. It is not checked
   here.
 
+### D275 — the fast lane back under its budget: `tsc`'s check cache is kept between runs, and CI runs one Vitest worker per core
+**Date:** 2 November 2026 · **Status:** accepted. Extends D178's "the fast lane keeps its caches"
+
+- **`main` and #114 went over the fast lane's 120 s**, exit 124. #113's push run on `main` and both #114 runs were cut
+  off mid-test. The test phase had grown from D178's 46–56 s to 70–84 s on the runner: 299 files on 27 October, 329
+  now, most of the new ones D268's component tests. Check-types took 27–39 s whenever Turborepo missed. It misses all
+  14 tasks on any lockfile change, so every dependency update paid a cold check of every package.
+- **Each package's `check-types` is incremental**, into its own `tsconfig.vitest.tsbuildinfo` beside
+  `tsconfig.vitest.json`. CI restores and saves those files and `apps/web/tsconfig.tsbuildinfo`, which `apps/web`'s
+  `tsc --noEmit` already wrote, under `if: always()`, as D178 does for ESLint's cache.
+  - A build-info file records each source file's hash, so it holds across a checkout. A stale one costs only a
+    recheck.
+  - Locally, cold against warm: `apps/web` 7.7 s against 2.2 s, and each package about half.
+  - `packages/*/tsconfig.tsbuildinfo` is **not** cached. It is `tsc -b`'s, and restored without its `dist`, it would
+    call a missing build up to date.
+- **On CI, Vitest runs one worker per core** (`maxWorkers: "100%"` when `CI` is set). The default is one fewer, which
+  left a quarter of the four-vCPU runner to a main process that mostly waits. Locally, at 3 against 4 workers: 53 s
+  against 47 s.
+  - **Not locally.** On an M1, with four efficiency cores, the eighth worker took `committed-bank.test.ts` past its
+    5 s timeout on every run. Its pipeline run takes 1.5 s alone. On CI at four workers, it took 4.3–4.4 s.
+- **Tried and dropped:**
+  - Keeping Vitest's results cache, which orders files by their last duration: no change.
+  - Keeping its module cache (`node_modules/.vitest-cache`): 3% locally, and it is experimental.
+  - D178's two rejections, the threads pool and `isolate: false`, still stand.
+- **Revisit when** the test phase passes about 85 s on a warm runner: that leaves a cold check-types no room.
+  `committed-bank.test.ts` runs its pipeline inside its first test, so the run counts against that test's 5 s. If it
+  times out on CI, moving the run to a `beforeAll` is the fix; this deviation does not make it.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 2 November 2026 — `dougkeefe/pull-requests-next-steps` (the fast lane back under its budget; D275)
+
+Not *Next, decided*, which is unchanged (D206). The human asked for the failing CI to be fixed. #114's fast lane, like
+`main`'s after #113, went over its 120 s budget.
+- **Config:** each `tsconfig.vitest.json` is incremental, into `tsconfig.vitest.tsbuildinfo`. `vitest.config.mts` sets
+  `maxWorkers: "100%"` when `CI` is set.
+- **CI:** `verify.yml`'s fast lane restores and saves the TypeScript check cache.
+- **Docs:** D275. The rotation moved D265 to `deviations-D200-D299.md`, and the oldest session entry to
+  `sessions-2026-10.md`.
+
+**Verified:**
+- `pnpm verify` was green locally: 329 files, 4,849 tests passed (8 todo), with no dependency violations.
+- Locally, before the CI-only condition, with `maxWorkers: "100%"` on this M1: `committed-bank.test.ts` timed out
+  at 5 s on three runs of three, at 5.2–5.3 s. That is why the setting is CI's alone.
+- On CI, cold (every package's tsconfig changed, so Turborepo missed all 14 tasks, and no `tsc-` cache existed yet):
+  check-types took 37–38 s, and both runs were still cut off at 120 s, about 73 s into the tests.
+  `committed-bank.test.ts` took 4.3–4.4 s at four workers. Both runs saved their caches.
 
 ### 1 November 2026 — `dougkeefe/pull-requests-next-steps` (the four open PRs cleared; `msw` 3 rebuilt; D273, D274)
 
@@ -1195,31 +1223,6 @@ key is held, and for the French language radios to be capitalised.
   included.
 - A screenshot of `/fr/practice/writing/translate` with no key at 1280px: the card above the radios, which read
   "Détecter", "Anglais", "Français".
-- Not run: the rest of the medium lane, and Lighthouse. CI runs the lane on the pull request.
-
-### 25 October 2026 — `dougkeefe/screenshot-layout-update` (the library's index as one filterable grid, a photograph per article; D257)
-
-Not *Next, decided*, which is unchanged (D206). The human asked for the library to keep its look but take a course
-catalogue's layout: tag pills that filter, a photograph per article, and no sections.
-- **Domain:** `LIBRARY_TOPICS` and a required `topic` on `LibraryArticle` and its schema; `docs/schemas/library-article.schema.json`
-  regenerated; `packages/domain/CLAUDE.md`.
-- **Content:** a `topic` line in each of the eighteen articles.
-- **Web:** `/library` rebuilt as a hero over one grid under pills. `components/library/` gains `LibraryFilter`; `LibraryCard`
-  gains its photograph, skill badge, chips and heading level; the article page shows its own photograph, its topic and
-  its reading time. `features/library/filter.ts` and `reading-time.ts` are new; `photos.ts` names nineteen photographs.
-  Eighteen WebP files added, `reading.webp` and `writing.webp` removed, `SOURCES.md` rewritten. Messages in both languages.
-- **Tests:** `filter.test.ts` and `reading-time.test.ts` are new; `photos.test.ts`, the domain's `library.test.ts` and
-  `content.spec.ts`'s library test as D257 lists. `schemas.test.ts`'s article fixture gains the now-required `topic`; no
-  assertion changed.
-- **Docs:** D257; D247 and the 22 October entry for Today's tabs are archived (rule 8); `apps/web/CLAUDE.md`'s library
-  invariant; *In flight*; *Next, decided*'s human item.
-
-**Verified:**
-- `pnpm verify`: check-types, lint and boundaries clean; `pnpm test` passed 288 files, 4,615 tests (8 todo).
-- After `pnpm --filter @palier/web build`: `content.spec.ts`'s three library tests on the `chromium` project, with the
-  warmup, 4 of 4, axe clean on the index, the index filtered to Grammar, two articles in English and one in French; the
-  `offline` project's `csp-production.spec.ts` and `offline.spec.ts`, 15 of 15.
-- Screenshots at 1280px and 390px, English and French, and the pills measured on one row at 1280px in both languages.
 - Not run: the rest of the medium lane, and Lighthouse. CI runs the lane on the pull request.
 
 Older entries, newest first: [October 2026](progress-archive/sessions-2026-10.md) ·
