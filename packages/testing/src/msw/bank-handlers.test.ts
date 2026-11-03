@@ -7,7 +7,7 @@ import { mswServer } from "./node.js";
 const BASE = "http://bank.test";
 
 beforeAll(() => {
-  mswServer.listen({ onUnhandledRequest: "error" });
+  mswServer.listen({ onUnhandledFrame: "error" });
 });
 afterEach(() => {
   mswServer.resetHandlers();

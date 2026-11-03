@@ -69,6 +69,23 @@ jobs:
           key: eslint-${{ runner.os }}-${{ github.sha }}
           restore-keys: eslint-${{ runner.os }}-
 
+      # TypeScript's own incremental state for `check-types` (progress.md D275).
+      # Turborepo's cache misses every task when the lockfile changes, so a
+      # dependency update paid for a cold check of every package. A build-info
+      # file records each source file's hash, not its mtime, so it holds across a
+      # checkout, and `tsc` rechecks whatever changed. Only the `--noEmit`
+      # checks' files: `packages/*/tsconfig.tsbuildinfo` belongs to `tsc -b`,
+      # which would call a `dist` that is not there up to date.
+      - name: Restore TypeScript check cache
+        uses: actions/cache/restore@v6
+        with:
+          path: |
+            packages/*/tsconfig.vitest.tsbuildinfo
+            apps/factory/tsconfig.vitest.tsbuildinfo
+            apps/web/tsconfig.tsbuildinfo
+          key: tsc-${{ runner.os }}-${{ github.sha }}
+          restore-keys: tsc-${{ runner.os }}-
+
       # `turbo build` IS inside the window, because `pnpm verify` pays for it
       # and so should the budget. The script fails the step on a failing gate
       # or a blown budget alike, and stamps each phase into the summary (D177).
@@ -88,6 +105,16 @@ jobs:
         with:
           path: .eslintcache
           key: eslint-${{ runner.os }}-${{ github.sha }}
+
+      - name: Save TypeScript check cache
+        if: always()
+        uses: actions/cache/save@v6
+        with:
+          path: |
+            packages/*/tsconfig.vitest.tsbuildinfo
+            apps/factory/tsconfig.vitest.tsbuildinfo
+            apps/web/tsconfig.tsbuildinfo
+          key: tsc-${{ runner.os }}-${{ github.sha }}
 
   # The medium lane is four jobs in parallel, each held to the 5 minute budget
   # on its own wall clock (progress.md D178): the integration projects, and the

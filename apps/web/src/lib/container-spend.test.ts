@@ -59,7 +59,7 @@ const reviewPrice = (input: number, output: number): number => {
 };
 
 beforeAll(() => {
-  mswServer.listen({ onUnhandledRequest: "error" });
+  mswServer.listen({ onUnhandledFrame: "error" });
 });
 afterEach(async () => {
   mswServer.resetHandlers();

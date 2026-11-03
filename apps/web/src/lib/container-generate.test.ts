@@ -18,7 +18,7 @@ const MARKER = "Pimpernel-5521";
 const REQUEST = { subSkill: "agreement", targetBand: "C", lang: "fr" } as const;
 
 beforeAll(() => {
-  mswServer.listen({ onUnhandledRequest: "error" });
+  mswServer.listen({ onUnhandledFrame: "error" });
 });
 afterEach(async () => {
   mswServer.resetHandlers();

@@ -8,7 +8,7 @@ import { telemetryHandlers } from "./telemetry-handlers.js";
 const BASE = "http://telemetry.test";
 
 beforeAll(() => {
-  mswServer.listen({ onUnhandledRequest: "error" });
+  mswServer.listen({ onUnhandledFrame: "error" });
 });
 afterEach(() => {
   mswServer.resetHandlers();
