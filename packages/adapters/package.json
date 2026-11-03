@@ -48,6 +48,6 @@
   "dependencies": {
     "@palier/app": "workspace:*",
     "@palier/domain": "workspace:*",
-    "dexie": "4.4.6"
+    "dexie": "4.4.7"
   }
 }
