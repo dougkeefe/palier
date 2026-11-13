@@ -3,6 +3,25 @@
 Newest first. Moved verbatim from `docs/progress.md` on 24 October 2026 (D255). Its index there points here. The rules are
 `progress.md`'s: never edit a session entry, and mark a deviation resolved in place, updating its index line too.
 
+### 25 October 2026 — `dougkeefe/french-capitalization-api-warning` (the translator's no-key card above the editor, its French language labels capitalised; D258)
+
+Not *Next, decided*, which is unchanged (D206). The human asked for a clearer warning before the text areas when no
+key is held, and for the French language radios to be capitalised.
+- **Web:** `Translator.tsx` renders `NoKeyCard` first, above the translator's card; `fr.json`'s `translate.source_en`
+  and `translate.source_fr` are "Anglais" and "Français".
+- **Tests:** `translate.spec.ts` as D258 lists.
+- **Docs:** D258; D248 and the 23 October entry for the warmup's cold article route are archived (rule 8);
+  `apps/web/CLAUDE.md`'s translator invariant; *In flight*.
+
+**Verified:**
+- `pnpm verify`: check-types, lint and boundaries clean; `pnpm test` passed 288 files, 4,615 tests (8 todo).
+- `translate.spec.ts` on the `chromium` project with the warmup, on a hermetic `next dev` at port 3400 (a throwaway
+  config, since another app held 3000): 6 of 6, axe clean on every state, the new placement and French assertions
+  included.
+- A screenshot of `/fr/practice/writing/translate` with no key at 1280px: the card above the radios, which read
+  "Détecter", "Anglais", "Français".
+- Not run: the rest of the medium lane, and Lighthouse. CI runs the lane on the pull request.
+
 ### 25 October 2026 — `dougkeefe/screenshot-layout-update` (the library's index as one filterable grid, a photograph per article; D257)
 
 Not *Next, decided*, which is unchanged (D206). The human asked for the library to keep its look but take a course

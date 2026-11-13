@@ -2011,3 +2011,26 @@ Asked, the human chose unit tests for all seven over leaving §6.3 as it was.
   or the footer failed four of them.
 - **The rule for the rest of `apps/web` is unchanged:** decisions in `src/features/**`, journeys in Playwright. This adds a
   third place only for the chrome every page carries.
+
+### D266 — each settings screen opens with "On this page": a pill row of links to its sections, each landing on its card
+**Date:** 28 October 2026 · **Status:** accepted (human's request and choices; agent's design). Extends D264's settings area
+
+The human: each settings screen has subsections that should be reachable from the top of the screen. Asked, the human
+chose links at the top of each screen over links on the overview's cards, styled as a pill row like the settings menu.
+- **The list is data**, `features/settings/settings-sections.ts`'s `SETTINGS_SECTIONS`, keyed by `SETTINGS_ITEMS`' keys so
+  the two cannot drift, with `sectionId(screen, section)` the id both the link and its card read. Stable ids, never
+  `useId`'s, so a spec finds them too. A new card on a settings screen is an entry there and an id on the card.
+- **The row**, `components/settings/SettingsSections.tsx`, is a second `nav` landmark, named "On this page" / « Sur cette
+  page », apart from the menu's "Settings". Its links are plain fragments, so no `aria-current` and no router: each is a
+  place on this page. Smaller pills on the menu's track; wrapped on a phone, a rounded panel.
+- **It is rendered inside each island, first once loaded**, not by the server page: the cards exist only once the island
+  has loaded, and `/settings/study` without a profile shows one "set up" card, so a row drawn by the page would link to
+  nothing while loading and in that state. The cost is that the row arrives with the island, which `.app-island` already
+  makes room for.
+- **The sections:** levels (results, targets, goal), the key (the key's form, where it is kept, studio mode, spending, the
+  cap, the cost table), data (export, import, shared answers, recordings, delete) and sync (the switch, status, what syncs,
+  devices, add, join, the danger zone). Sync's unheaded card, the export reminder beside the danger zone, is not a section
+  of its own. `KeyEntry` is onboarding's too, so the key screen puts its id on a wrapper rather than a prop on the form.
+- **New:** `settings-sections.test.ts`, `SettingsSections.test.tsx` (D265's render helper), a journey in
+  `e2e/settings.spec.ts` (each screen's links, every target present once, the last link bringing its card into view, axe
+  clean), and two lines in `levels.spec.ts` (the study screen's links once onboarded; none before there is a profile).
