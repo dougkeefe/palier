@@ -22,7 +22,7 @@
     "clean": "rm -rf .next .lighthouseci *.tsbuildinfo public/content public/sw.js"
   },
   "dependencies": {
-    "@electric-sql/pglite": "0.5.10",
+    "@electric-sql/pglite": "0.5.15",
     "@palier/adapters": "workspace:*",
     "@palier/app": "workspace:*",
     "@palier/content": "workspace:*",
@@ -30,7 +30,7 @@
     "@palier/engine": "workspace:*",
     "@palier/ui": "workspace:*",
     "drizzle-orm": "0.45.4",
-    "next": "16.4.2",
+    "next": "16.4.5",
     "next-intl": "4.14.9",
     "postgres": "3.4.9",
     "react": "19.3.1",
@@ -39,9 +39,9 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",
-    "@lhci/cli": "0.15.1",
+    "@lhci/cli": "0.16.0",
     "@palier/testing": "workspace:*",
-    "@playwright/test": "1.64.1",
+    "@playwright/test": "1.65.0",
     "@testing-library/react": "16.3.3",
     "@types/node": "^22",
     "@types/react": "^19",

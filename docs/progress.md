@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 2 November 2026 (the fast lane back under its budget, D275; `msw` 3, rebuilt from Dependabot's #109, D273; the monthly item-statistics PR that never gets CI, D274; next, D206's bank budget)
+**Last updated:** 12 November 2026 (Dependabot's minor-and-patch group #116, rebuilt locally for its stray `@types/node` 26, D276; the fast lane back under its budget, D275; next, D206's bank budget)
 **Current phase:** **1.0 is reached** (24 October 2026, D253): the human passed Gate O and Gate M and read bank v4 with no
 disagreement, so Phases 6 and 7 are complete. After 1.0, reading's library articles are built (D254), and D206's bank
 budget is next. Phase 3's product pilot still runs (Gate E, D97), and Phase 8, the English mirror, is the plan's next
@@ -104,6 +104,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 | `dougkeefe/settings-subsections-navigation` | **Each settings screen opens with "On this page"**: a pill row of links to its sections, each landing on its card (D266). **The app header folds into a menu below 1100px** (D267). **Every component has a unit test, or a line on a list that only shrinks** (D268). | 28 October 2026 |
 | `dougkeefe/liny0` | **Onboarding redrawn**: a focus frame with no navigation, sync status or settings, Coco on every card, a welcome and a "you're set" card in place of the direction and placement questions, Skip from the results on, and no assessment first (D269). **Every app page waits for onboarding**, but for the translator, about, privacy and the library, and the welcome offers, in small type, to bring progress from a file or another device; every card fits a desktop screen without scrolling (D270, D271); the welcome cut to one line, and the review's smaller fixes (D272). | 31 October 2026 |
 | `dougkeefe/pull-requests-next-steps` | **`msw` 3**, rebuilt here in place of Dependabot's #109: `onUnhandledRequest` is `onUnhandledFrame` (D273). **The monthly item-statistics PR never gets CI**, recorded and not yet fixed (D274). **The fast lane back under its budget**: `tsc`'s check cache kept between runs, one Vitest worker per core on CI (D275). | 1 November 2026 |
+| `dougkeefe/pr-integration-plan` | **Dependabot's minor-and-patch group (#116), rebuilt locally**: the same 16 bumps, with a lockfile that holds one `@types/node`, 22.20.5, where #116's held 26.6.6 too (D276). | 12 November 2026 |
 
 *(Merged rows are removed: this table tracks current work, and the session log is the permanent record. The rows
 removed up to 24 October 2026, the last of them the reading articles (#100), are listed in
@@ -626,29 +627,7 @@ full.
 - **D263** — the staircase is the result picker: a skill's result is picked by tapping its step, and the pill row is gone · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d263--the-staircase-is-the-result-picker-a-skills-result-is-picked-by-tapping-its-step-and-the-pill-row-is-gone)
 - **D264** — one settings area: the header's gear and the footer's one link lead to `/settings`, whose screens share a menu · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d264--one-settings-area-the-headers-gear-and-the-footers-one-link-lead-to-settings-whose-screens-share-a-menu)
 - **D265** — the chrome and the settings area have unit tests in node, rendered to HTML, beside their E2E · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d265--the-chrome-and-the-settings-area-have-unit-tests-in-node-rendered-to-html-beside-their-e2e)
-
-### D266 — each settings screen opens with "On this page": a pill row of links to its sections, each landing on its card
-**Date:** 28 October 2026 · **Status:** accepted (human's request and choices; agent's design). Extends D264's settings area
-
-The human: each settings screen has subsections that should be reachable from the top of the screen. Asked, the human
-chose links at the top of each screen over links on the overview's cards, styled as a pill row like the settings menu.
-- **The list is data**, `features/settings/settings-sections.ts`'s `SETTINGS_SECTIONS`, keyed by `SETTINGS_ITEMS`' keys so
-  the two cannot drift, with `sectionId(screen, section)` the id both the link and its card read. Stable ids, never
-  `useId`'s, so a spec finds them too. A new card on a settings screen is an entry there and an id on the card.
-- **The row**, `components/settings/SettingsSections.tsx`, is a second `nav` landmark, named "On this page" / « Sur cette
-  page », apart from the menu's "Settings". Its links are plain fragments, so no `aria-current` and no router: each is a
-  place on this page. Smaller pills on the menu's track; wrapped on a phone, a rounded panel.
-- **It is rendered inside each island, first once loaded**, not by the server page: the cards exist only once the island
-  has loaded, and `/settings/study` without a profile shows one "set up" card, so a row drawn by the page would link to
-  nothing while loading and in that state. The cost is that the row arrives with the island, which `.app-island` already
-  makes room for.
-- **The sections:** levels (results, targets, goal), the key (the key's form, where it is kept, studio mode, spending, the
-  cap, the cost table), data (export, import, shared answers, recordings, delete) and sync (the switch, status, what syncs,
-  devices, add, join, the danger zone). Sync's unheaded card, the export reminder beside the danger zone, is not a section
-  of its own. `KeyEntry` is onboarding's too, so the key screen puts its id on a wrapper rather than a prop on the form.
-- **New:** `settings-sections.test.ts`, `SettingsSections.test.tsx` (D265's render helper), a journey in
-  `e2e/settings.spec.ts` (each screen's links, every target present once, the last link bringing its card into view, axe
-  clean), and two lines in `levels.spec.ts` (the study screen's links once onboarded; none before there is a profile).
+- **D266** — each settings screen opens with "On this page": a pill row of links to its sections, each landing on its card · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d266--each-settings-screen-opens-with-on-this-page-a-pill-row-of-links-to-its-sections-each-landing-on-its-card)
 
 ### D267 — below 1100px the app header is one row: the wordmark, a menu button and the gear, the destinations, sync and the language in its panel
 **Date:** 28 October 2026 · **Status:** accepted (human's request; agent's design). Amends D202's header on a narrow screen
@@ -928,9 +907,53 @@ The human reviewed the cards and asked for each of these.
   `committed-bank.test.ts` runs its pipeline inside its first test, so the run counts against that test's 5 s. If it
   times out on CI, moving the run to a `beforeAll` is the fix; this deviation does not make it.
 
+### D276 — Dependabot's #116 is rebuilt locally, as D246 has it: its lockfile brought back `@types/node` 26
+**Date:** 12 November 2026 · **Status:** accepted. Applies D246's "Dependabot's group is rebuilt locally" again
+
+- **#116 (16 minor and patch updates) passed every lane on its `pull_request` run, but its lockfile held a second
+  `@types/node`, 26.6.6**, beside 22.20.5. `packages/testing`'s `msw` 3.0.4 and `vitest` 5.1.0 resolved their
+  optional `@types/node` peer to it, and through them `vite` 8.3.6, `@vitest/mocker` and `msw`'s `@inquirer/*`. That
+  is the major D155 holds with the Node 22 runtime, which is what happened with #90 in D246.
+- **The rebuild takes #116's four `package.json` files unchanged, and starts from `main`'s lockfile**, installed with
+  the repo's pnpm 10.13.1 (`npx pnpm@10.13.1 install`). Every peer resolves to 22.20.5, and each of the 16 packages is
+  at #116's version. It also keeps `main`'s transitive versions where Dependabot had refreshed them (Babel and
+  others), so the lockfile moves less than #116's did.
+- **It does take `qs` 6.16.0 → 6.16.2 and 6.17.1, which #116's re-resolve had done in passing**, so that closing #116
+  does not leave alert #26 open (moderate, dev-only: `@stryker-mutator/core` → `typed-rest-client`, and `@lhci/cli` →
+  `express`). As D261 did, `pnpm update -r --depth Infinity qs` within the parents' ranges, with no override.
+- **`@lhci/cli` 0.16 meets D261's *revisit when*.** It moves `lighthouse` to 13.6.0, `puppeteer-core` to 25.17.0 and
+  `chromium-bidi` to one on `zod` 4, so `zod` 3 is no longer in the tree and alert #20's dismissal no longer has
+  anything to cover. D261 itself is unchanged.
+- **#116's `push` run failed the fast lane over its 120 s budget, with every test passing**, as #108's did. A
+  lockfile change misses all 14 Turborepo tasks, and check-types took 38 s there against 29 s on the `pull_request` run
+  of the same commit. That is D275's known cost, not a regression. Its test phase was 62–66 s, short of D275's
+  *revisit when* of about 85 s.
+- **Read for this group:** `eslint-plugin-boundaries` 7.4's fix #622 changes which descriptors a config block uses when
+  several blocks differ only in `basePattern` or `baseCapture`. `eslint.config.mjs` has one `boundaries/elements`
+  block and no `capture` or `basePattern`, so no rule result moves. `dependency-cruiser` 18.7 has resolver fixes
+  only. `@lhci/cli` 0.16 is a 0.x minor, and it ran in #116's medium lane. The production changes, `next` 16.4.5,
+  `@electric-sql/pglite` 0.5.15, `dexie` 4.4.7 and `msw` 3.0.4, are all patches.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 12 November 2026 — `dougkeefe/pr-integration-plan` (Dependabot's minor-and-patch group, rebuilt from #116; D276)
+
+Not *Next, decided*, which is unchanged (D206). The human asked for the outstanding PR to be evaluated and integrated.
+#116's lockfile held `@types/node` 26.6.6, so it is rebuilt here, as D246 and D273 have it, and closed as superseded.
+- **Dependencies:** #116's 16 bumps in `package.json`, `apps/web`, `packages/adapters` and `packages/testing`; the
+  lockfile regenerated with pnpm 10.13.1 from `main`'s, and `qs` refreshed for alert #26.
+- **Docs:** D276; *In flight*. The rotation moved D266 to `deviations-D200-D299.md`, and the oldest session entry to
+  `sessions-2026-10.md`.
+
+**Verified:**
+- `grep -oE "@types/node@[0-9.]+" pnpm-lock.yaml | sort -u` gives `@types/node@22.20.5` alone.
+- Each of the 16 packages resolves to #116's version, and `vite` to the one pinned 8.3.6.
+- `qs` resolves to 6.16.2 and 6.17.1, outside alert #26's `<= 6.16.0`. `zod` resolves to 4.6.7 alone.
+- `pnpm verify` exit 0: check-types, lint and boundaries clean, no dependency violations; `pnpm test` passed 329
+  files, 4,849 tests (8 todo).
+- Not run: the medium lane locally; CI runs it on the pull request.
 
 ### 2 November 2026 — `dougkeefe/pull-requests-next-steps` (the fast lane back under its budget; D275)
 
@@ -1210,25 +1233,6 @@ an E taking its skill out of the plan, and a fun indicator of mastery.
   the user when their targets agreed again (now `perSkillTargetsOpen`, tested), and `heldSkills` restated
   `SCORED_SKILLS`. A second pass found none; `pnpm verify` then passed 291 files, 4,686 tests (8 todo).
 - Not run: the rest of the `offline` project, and Lighthouse. CI runs the lane on the pull request.
-
-### 25 October 2026 — `dougkeefe/french-capitalization-api-warning` (the translator's no-key card above the editor, its French language labels capitalised; D258)
-
-Not *Next, decided*, which is unchanged (D206). The human asked for a clearer warning before the text areas when no
-key is held, and for the French language radios to be capitalised.
-- **Web:** `Translator.tsx` renders `NoKeyCard` first, above the translator's card; `fr.json`'s `translate.source_en`
-  and `translate.source_fr` are "Anglais" and "Français".
-- **Tests:** `translate.spec.ts` as D258 lists.
-- **Docs:** D258; D248 and the 23 October entry for the warmup's cold article route are archived (rule 8);
-  `apps/web/CLAUDE.md`'s translator invariant; *In flight*.
-
-**Verified:**
-- `pnpm verify`: check-types, lint and boundaries clean; `pnpm test` passed 288 files, 4,615 tests (8 todo).
-- `translate.spec.ts` on the `chromium` project with the warmup, on a hermetic `next dev` at port 3400 (a throwaway
-  config, since another app held 3000): 6 of 6, axe clean on every state, the new placement and French assertions
-  included.
-- A screenshot of `/fr/practice/writing/translate` with no key at 1280px: the card above the radios, which read
-  "Détecter", "Anglais", "Français".
-- Not run: the rest of the medium lane, and Lighthouse. CI runs the lane on the pull request.
 
 Older entries, newest first: [October 2026](progress-archive/sessions-2026-10.md) ·
 [September 2026](progress-archive/sessions-2026-09.md).
