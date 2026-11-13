@@ -104,7 +104,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 | `dougkeefe/settings-subsections-navigation` | **Each settings screen opens with "On this page"**: a pill row of links to its sections, each landing on its card (D266). **The app header folds into a menu below 1100px** (D267). **Every component has a unit test, or a line on a list that only shrinks** (D268). | 28 October 2026 |
 | `dougkeefe/liny0` | **Onboarding redrawn**: a focus frame with no navigation, sync status or settings, Coco on every card, a welcome and a "you're set" card in place of the direction and placement questions, Skip from the results on, and no assessment first (D269). **Every app page waits for onboarding**, but for the translator, about, privacy and the library, and the welcome offers, in small type, to bring progress from a file or another device; every card fits a desktop screen without scrolling (D270, D271); the welcome cut to one line, and the review's smaller fixes (D272). | 31 October 2026 |
 | `dougkeefe/pull-requests-next-steps` | **`msw` 3**, rebuilt here in place of Dependabot's #109: `onUnhandledRequest` is `onUnhandledFrame` (D273). **The monthly item-statistics PR never gets CI**, recorded and not yet fixed (D274). **The fast lane back under its budget**: `tsc`'s check cache kept between runs, one Vitest worker per core on CI (D275). | 1 November 2026 |
-| `dougkeefe/y6nu7` | **Dependabot's minor-and-patch group (#116), rebuilt locally**: the same 16 bumps, with a lockfile that holds one `@types/node`, 22.20.5, where #116's held 26.6.6 too (D276). | 12 November 2026 |
+| `dougkeefe/pr-integration-plan` | **Dependabot's minor-and-patch group (#116), rebuilt locally**: the same 16 bumps, with a lockfile that holds one `@types/node`, 22.20.5, where #116's held 26.6.6 too (D276). | 12 November 2026 |
 
 *(Merged rows are removed: this table tracks current work, and the session log is the permanent record. The rows
 removed up to 24 October 2026, the last of them the reading articles (#100), are listed in
@@ -932,7 +932,7 @@ The human reviewed the cards and asked for each of these.
 
 Newest first. One entry per session that changed something. Never edit an older entry.
 
-### 12 November 2026 — `dougkeefe/y6nu7` (Dependabot's minor-and-patch group, rebuilt from #116; D276)
+### 12 November 2026 — `dougkeefe/pr-integration-plan` (Dependabot's minor-and-patch group, rebuilt from #116; D276)
 
 Not *Next, decided*, which is unchanged (D206). The human asked for the outstanding PR to be evaluated and integrated.
 #116's lockfile held `@types/node` 26.6.6, so it is rebuilt here, as D246 and D273 have it, and closed as superseded.
