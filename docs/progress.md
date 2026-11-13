@@ -918,6 +918,12 @@ The human reviewed the cards and asked for each of these.
   the repo's pnpm 10.13.1 (`npx pnpm@10.13.1 install`). Every peer resolves to 22.20.5, and each of the 16 packages is
   at #116's version. It also keeps `main`'s transitive versions where Dependabot had refreshed them (Babel and
   others), so the lockfile moves less than #116's did.
+- **It does take `qs` 6.16.0 → 6.16.2 and 6.17.1, which #116's re-resolve had done in passing**, so that closing #116
+  does not leave alert #26 open (moderate, dev-only: `@stryker-mutator/core` → `typed-rest-client`, and `@lhci/cli` →
+  `express`). As D261 did, `pnpm update -r --depth Infinity qs` within the parents' ranges, with no override.
+- **`@lhci/cli` 0.16 meets D261's *revisit when*.** It moves `lighthouse` to 13.6.0, `puppeteer-core` to 25.17.0 and
+  `chromium-bidi` to one on `zod` 4, so `zod` 3 is no longer in the tree and alert #20's dismissal no longer has
+  anything to cover. D261 itself is unchanged.
 - **#116's `push` run failed the fast lane over its 120 s budget, with every test passing**, as #108's did. A
   lockfile change misses all 14 Turborepo tasks, and check-types took 38 s there against 29 s on the `pull_request` run
   of the same commit. That is D275's known cost, not a regression. Its test phase was 62–66 s, short of D275's
@@ -937,13 +943,14 @@ Newest first. One entry per session that changed something. Never edit an older 
 Not *Next, decided*, which is unchanged (D206). The human asked for the outstanding PR to be evaluated and integrated.
 #116's lockfile held `@types/node` 26.6.6, so it is rebuilt here, as D246 and D273 have it, and closed as superseded.
 - **Dependencies:** #116's 16 bumps in `package.json`, `apps/web`, `packages/adapters` and `packages/testing`; the
-  lockfile regenerated with pnpm 10.13.1 from `main`'s.
+  lockfile regenerated with pnpm 10.13.1 from `main`'s, and `qs` refreshed for alert #26.
 - **Docs:** D276; *In flight*. The rotation moved D266 to `deviations-D200-D299.md`, and the oldest session entry to
   `sessions-2026-10.md`.
 
 **Verified:**
 - `grep -oE "@types/node@[0-9.]+" pnpm-lock.yaml | sort -u` gives `@types/node@22.20.5` alone.
 - Each of the 16 packages resolves to #116's version, and `vite` to the one pinned 8.3.6.
+- `qs` resolves to 6.16.2 and 6.17.1, outside alert #26's `<= 6.16.0`. `zod` resolves to 4.6.7 alone.
 - `pnpm verify` exit 0: check-types, lint and boundaries clean, no dependency violations; `pnpm test` passed 329
   files, 4,849 tests (8 todo).
 - Not run: the medium lane locally; CI runs it on the pull request.
