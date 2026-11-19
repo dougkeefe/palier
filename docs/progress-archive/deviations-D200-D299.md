@@ -2034,3 +2034,29 @@ chose links at the top of each screen over links on the overview's cards, styled
 - **New:** `settings-sections.test.ts`, `SettingsSections.test.tsx` (D265's render helper), a journey in
   `e2e/settings.spec.ts` (each screen's links, every target present once, the last link bringing its card into view, axe
   clean), and two lines in `levels.spec.ts` (the study screen's links once onboarded; none before there is a profile).
+
+### D267 — below 1100px the app header is one row: the wordmark, a menu button and the gear, the destinations, sync and the language in its panel
+**Date:** 28 October 2026 · **Status:** accepted (human's request; agent's design). Amends D202's header on a narrow screen
+
+The human: on a phone the top-level menu should be a menu button, not the pill track of Today, Review and the rest, which
+wrapped the header to three rows (the wordmark; the five destinations on two lines; sync, the language and the gear).
+- **The landing header's disclosure, shared** (D232): `LandingMenu`'s body is now `components/HeaderMenu.tsx`, taking its
+  label, panel id and classes, and `LandingMenu` is a wrapper. `menuOpenAfter` moves from `features/landing/landing.ts`
+  to `features/nav/menu.ts`, its four tests with it, unchanged. A followed link closes the menu, which now matters for a
+  second reason: the app header outlives a soft navigation. For the same reason a navigation the menu did not start, the
+  browser's Back for one, closes it too: `HeaderMenu` reads next-intl's pathname and closes on a change (a fifth event,
+  `navigate`), adjusted while rendering so the new page never paints under the panel. Found by candid-review.
+- **What folds:** the destinations, the sync status and the language. The gear stays in the row, rightmost (D264), with
+  the button beside it, so the order on screen is the focus order: wordmark, button, the open panel, gear. Sync and the
+  language would not fit beside them in French at 390px (about 425px), and showing sync as its dot alone would say its
+  state by colour only (WCAG 1.4.1). Each is rendered once: from 1100px the panel is `display: contents`, so the row is
+  D202's, with the nav's auto margins doing what `space-between` did.
+- **1100px, not the landing header's 1000px:** measured, the French row wraps below 1,030px with sync on, and "Synchro
+  désactivée" is wider still.
+- **The button is `@palier/ui`'s `pl-icon-btn`**, as the gear is, white while open as the gear is inside settings. The
+  panel's colours are tokens; its shadow mixes `--ink`.
+- **New:** `menu.test.ts` (moved), a `Header.test.tsx` case (the button collapsed and controlling `app-menu`, the panel
+  holding the five destinations, sync and the language, the gear outside it), and two `smoke.spec.ts` journeys: at 390px
+  the row, the panel with the current page marked, axe, Escape back onto the button, and a followed destination closing
+  it, then Back with it open closing it (without the fix, it stayed open); at 1280px no button and the five destinations
+  in the row.

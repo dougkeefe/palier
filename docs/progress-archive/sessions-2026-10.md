@@ -3,6 +3,42 @@
 Newest first. Moved verbatim from `docs/progress.md` on 24 October 2026 (D255). Its index there points here. The rules are
 `progress.md`'s: never edit a session entry, and mark a deviation resolved in place, updating its index line too.
 
+### 25 October 2026 — `dougkeefe/current-levels-input` (the SLE results a user holds shape the plan, with a staircase for each skill; D259)
+
+Not *Next, decided*, which is unchanged (D206). The human asked for current levels in onboarding and at any time after,
+an E taking its skill out of the plan, and a fun indicator of mastery.
+- **Domain:** `ExamProfile.exemptBand`, its schema and refinement; `content/profiles/psc-sle.json`; the regenerated
+  `docs/schemas/exam-profile.schema.json`.
+- **Engine:** `standing.ts` (`skillStanding`, `declaredStart`); the planner's `maintaining` and `MAINTAIN_FACTOR`.
+- **App:** `studyFocus`'s `declared`; `planDailySession`'s `maintaining`; `startSession`'s `declared`.
+- **UI:** `LevelStair` and `levelStairGeometry`, with its stylesheet.
+- **Web:** `lib/study.ts`'s new profile shape and helpers; onboarding's *now* step and per-skill targets
+  (`components/study/LevelPickers.tsx`, `features/study/levels.ts`); `/settings/study`; Today's tabs, cards, plan lines,
+  Where you stand and the all-exempt card; each skill's own target in the drill, the diagnostic result, oral practice,
+  the workshop, fresh sets and `/progress`; the footer link; messages in both languages, `privacy.held` included.
+- **Tests:** `standing.test.ts`, the planner's, `studyFocus`'s, `startSession`'s and `planDailySession`'s new cases,
+  `LevelStair`'s, `study.test.ts`, `onboarding.test.ts`, `today-view.test.ts`, `next-step.test.ts`, `levels.test.ts`,
+  `study-view.test.ts`, the schema's two refusals, and `e2e/levels.spec.ts`; the changed premises as D259 lists.
+- **Docs:** D259; D249 and the 23 October entry for the translator are archived (rule 8); the PRD's §8.1, §8.2 and §7;
+  `apps/web/CLAUDE.md`, and the engine's, app's, ui's and domain's.
+
+**Verified:**
+- `pnpm verify` exit 0: check-types, lint and boundaries clean; `pnpm test` passed 291 files, 4,683 tests (8 todo).
+  The engine's goldens are unmoved.
+- After `pnpm --filter @palier/web build`, the whole hermetic `chromium` project with the warmup: 94 of 94, the new
+  `levels.spec.ts` (4 tests, axe clean on the results step, Today with an exempt and a held skill, the study settings,
+  the all-exempt card and French) and every onboarding journey with its new step counts included. It ran on a hermetic
+  `next dev` at port 3010 from a throwaway config, since another app held 3000. The `offline` project's
+  `csp-production.spec.ts` and `offline.spec.ts`: 17 of 17, `/settings/study` in both locales included.
+- Screenshots on the production build: the results step at 1280px, and in French at 390px; Today with reading exempt,
+  writing held and oral working; the study settings; and Today with all three exempt.
+- **26 October 2026, CI:** shard 2 of the medium lane ran past its 300 s budget, as it had on `main`; the warmup visits
+  one page per route file and the levels journey onboards once (D260). Shard 2 measured 137 s locally against 151 s.
+- A candid review loop of the branch found two issues, both fixed: the target step's per-skill disclosure closed under
+  the user when their targets agreed again (now `perSkillTargetsOpen`, tested), and `heldSkills` restated
+  `SCORED_SKILLS`. A second pass found none; `pnpm verify` then passed 291 files, 4,686 tests (8 todo).
+- Not run: the rest of the `offline` project, and Lighthouse. CI runs the lane on the pull request.
+
 ### 25 October 2026 — `dougkeefe/french-capitalization-api-warning` (the translator's no-key card above the editor, its French language labels capitalised; D258)
 
 Not *Next, decided*, which is unchanged (D206). The human asked for a clearer warning before the text areas when no
