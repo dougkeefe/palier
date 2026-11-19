@@ -957,6 +957,12 @@ one PR.
 - `pnpm verify` exit 0: check-types, lint (on `typescript-eslint` 8.73.0) and boundaries clean; `pnpm test` passed 329
   files, 4,849 tests (8 todo).
 - Not run: the medium lane locally; CI runs it on the pull request.
+- **19 November 2026, CI:** the `pull_request` run passed every lane. The `push` run of the same commit went over the
+  fast lane's 120 s budget, with every test that ran passing, as #116's did (D276). The lockfile change missed all 14
+  Turborepo tasks (check-types 22 s), the `typescript-eslint` bump re-linted everything (20 s), and the tests were cut
+  off after 72 s. The `pull_request` run took 15 s, 14 s and 56 s for the same steps. Rerun with this commit's caches
+  warm, it passed: check-types 0 s (all 14 tasks from the cache), lint 2 s, tests 74 s. D275's *revisit when*, a test
+  phase of about 85 s on a warm runner, is not met.
 
 ### 12 November 2026 — `dougkeefe/pr-integration-plan` (Dependabot's minor-and-patch group, rebuilt from #116; D276)
 
