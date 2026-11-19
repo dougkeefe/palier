@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 12 November 2026 (Dependabot's minor-and-patch group #116, rebuilt locally for its stray `@types/node` 26, D276; the fast lane back under its budget, D275; next, D206's bank budget)
+**Last updated:** 18 November 2026 (Dependabot alerts #28 and #29, `minimatch` and `basic-ftp`, closed D155's way, D277; Dependabot's #116 rebuilt locally, D276; next, D206's bank budget)
 **Current phase:** **1.0 is reached** (24 October 2026, D253): the human passed Gate O and Gate M and read bank v4 with no
 disagreement, so Phases 6 and 7 are complete. After 1.0, reading's library articles are built (D254), and D206's bank
 budget is next. Phase 3's product pilot still runs (Gate E, D97), and Phase 8, the English mirror, is the plan's next
@@ -105,6 +105,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 | `dougkeefe/liny0` | **Onboarding redrawn**: a focus frame with no navigation, sync status or settings, Coco on every card, a welcome and a "you're set" card in place of the direction and placement questions, Skip from the results on, and no assessment first (D269). **Every app page waits for onboarding**, but for the translator, about, privacy and the library, and the welcome offers, in small type, to bring progress from a file or another device; every card fits a desktop screen without scrolling (D270, D271); the welcome cut to one line, and the review's smaller fixes (D272). | 31 October 2026 |
 | `dougkeefe/pull-requests-next-steps` | **`msw` 3**, rebuilt here in place of Dependabot's #109: `onUnhandledRequest` is `onUnhandledFrame` (D273). **The monthly item-statistics PR never gets CI**, recorded and not yet fixed (D274). **The fast lane back under its budget**: `tsc`'s check cache kept between runs, one Vitest worker per core on CI (D275). | 1 November 2026 |
 | `dougkeefe/pr-integration-plan` | **Dependabot's minor-and-patch group (#116), rebuilt locally**: the same 16 bumps, with a lockfile that holds one `@types/node`, 22.20.5, where #116's held 26.6.6 too (D276). | 12 November 2026 |
+| `dougkeefe/6jrj8` | **Dependabot alerts #28 and #29**: `minimatch` 10.2.6 and `basic-ftp` 6.2.3, dev-only, closed D155's way: `typescript-eslint` 8.73.0, the `basic-ftp` override raised to ^6.2.4, and Stryker's `minimatch` overridden to ^11.0.1 (D277). | 18 November 2026 |
 
 *(Merged rows are removed: this table tracks current work, and the session log is the permanent record. The rows
 removed up to 24 October 2026, the last of them the reading articles (#100), are listed in
@@ -628,32 +629,7 @@ full.
 - **D264** — one settings area: the header's gear and the footer's one link lead to `/settings`, whose screens share a menu · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d264--one-settings-area-the-headers-gear-and-the-footers-one-link-lead-to-settings-whose-screens-share-a-menu)
 - **D265** — the chrome and the settings area have unit tests in node, rendered to HTML, beside their E2E · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d265--the-chrome-and-the-settings-area-have-unit-tests-in-node-rendered-to-html-beside-their-e2e)
 - **D266** — each settings screen opens with "On this page": a pill row of links to its sections, each landing on its card · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d266--each-settings-screen-opens-with-on-this-page-a-pill-row-of-links-to-its-sections-each-landing-on-its-card)
-
-### D267 — below 1100px the app header is one row: the wordmark, a menu button and the gear, the destinations, sync and the language in its panel
-**Date:** 28 October 2026 · **Status:** accepted (human's request; agent's design). Amends D202's header on a narrow screen
-
-The human: on a phone the top-level menu should be a menu button, not the pill track of Today, Review and the rest, which
-wrapped the header to three rows (the wordmark; the five destinations on two lines; sync, the language and the gear).
-- **The landing header's disclosure, shared** (D232): `LandingMenu`'s body is now `components/HeaderMenu.tsx`, taking its
-  label, panel id and classes, and `LandingMenu` is a wrapper. `menuOpenAfter` moves from `features/landing/landing.ts`
-  to `features/nav/menu.ts`, its four tests with it, unchanged. A followed link closes the menu, which now matters for a
-  second reason: the app header outlives a soft navigation. For the same reason a navigation the menu did not start, the
-  browser's Back for one, closes it too: `HeaderMenu` reads next-intl's pathname and closes on a change (a fifth event,
-  `navigate`), adjusted while rendering so the new page never paints under the panel. Found by candid-review.
-- **What folds:** the destinations, the sync status and the language. The gear stays in the row, rightmost (D264), with
-  the button beside it, so the order on screen is the focus order: wordmark, button, the open panel, gear. Sync and the
-  language would not fit beside them in French at 390px (about 425px), and showing sync as its dot alone would say its
-  state by colour only (WCAG 1.4.1). Each is rendered once: from 1100px the panel is `display: contents`, so the row is
-  D202's, with the nav's auto margins doing what `space-between` did.
-- **1100px, not the landing header's 1000px:** measured, the French row wraps below 1,030px with sync on, and "Synchro
-  désactivée" is wider still.
-- **The button is `@palier/ui`'s `pl-icon-btn`**, as the gear is, white while open as the gear is inside settings. The
-  panel's colours are tokens; its shadow mixes `--ink`.
-- **New:** `menu.test.ts` (moved), a `Header.test.tsx` case (the button collapsed and controlling `app-menu`, the panel
-  holding the five destinations, sync and the language, the gear outside it), and two `smoke.spec.ts` journeys: at 390px
-  the row, the panel with the current page marked, axe, Escape back onto the button, and a followed destination closing
-  it, then Back with it open closing it (without the fix, it stayed open); at 1280px no button and the five destinations
-  in the row.
+- **D267** — below 1100px the app header is one row: the wordmark, a menu button and the gear, the destinations, sync and the language in its panel · accepted → [deviations-D200-D299.md](progress-archive/deviations-D200-D299.md#d267--below-1100px-the-app-header-is-one-row-the-wordmark-a-menu-button-and-the-gear-the-destinations-sync-and-the-language-in-its-panel)
 
 ### D268 — every component has a unit test beside it, held by a ratchet; `apps/web`'s component tests may run in jsdom
 **Date:** 28 October 2026 · **Status:** accepted (human's choices). Amends D265 ("the rule for the rest of `apps/web` is
@@ -934,9 +910,53 @@ The human reviewed the cards and asked for each of these.
   only. `@lhci/cli` 0.16 is a 0.x minor, and it ran in #116's medium lane. The production changes, `next` 16.4.5,
   `@electric-sql/pglite` 0.5.15, `dexie` 4.4.7 and `msw` 3.0.4, are all patches.
 
+### D277 — Dependabot alerts #28 and #29 close D155's way: one parent bumped, one override raised, one added
+**Date:** 18 November 2026 · **Status:** accepted. Applies D155 and D236 again
+
+- **Two medium, dev-only, transitive advisories.** #28, GHSA-5pm8-86m8-9m6r: `basic-ftp` ≤ 6.2.3 throws on an MLSD
+  listing with a `__proto__` fact, reached through `@lhci/cli` → Lighthouse → `puppeteer-core` → `proxy-agent` →
+  `get-uri`. #29, GHSA-g3hv-75wg-m249: `minimatch` ≥ 7 < 11.0.1 amplifies a crafted pattern's glob parts. It was
+  reached at 10.2.6 through `@typescript-eslint/typescript-estree` and through `@stryker-mutator/core`. ESLint's own
+  `minimatch` 3.1.5 is outside the range and stays.
+- **`basic-ftp`: D236's override `"get-uri>basic-ftp"` goes from ^6.2.3 to ^6.2.4.** That is a patch release in the
+  major the override already chose, and it resolves to 6.2.6.
+- **`typescript-eslint` 8.72.1 → 8.73.0, the parent's own fix.** Its `typescript-estree` 8.73.0 depends on
+  `minimatch` ^11.0.1. `eslint-config-next`'s copy dedupes onto 8.73.0, so it needs no override.
+- **Stryker gets an override, `"@stryker-mutator/core>minimatch": ^11.0.1`.** Its latest, 10.1.1, pins
+  `minimatch` ~10.2.4, so no Stryker release fixes it. Stryker calls `minimatch(path, pattern, { dot })`,
+  `new Minimatch(…).hasMagic()`, `.match(path[, partial])` and `.negate`. 11 keeps all four, and removes `makeRe`,
+  `regexp`, `AST`, `matchOne` and `debug`, none of which Stryker calls. 11's behaviour changes touch an empty last
+  path portion and `partial` matching with `**`. Stryker uses `partial` only for a negated ignore pattern, and
+  `stryker.config.json` sets no `ignorePatterns`. The mutation run is a one-off and never in a CI lane (D77).
+- **The lockfile now holds `minimatch` 3.1.5 and 11.0.8 only, `basic-ftp` 6.2.6 only, and one `@types/node`,
+  22.20.5** (D276). The only other move: `ignore` 7.0.12 dedupes onto the 7.0.14 already there.
+- **Revisit when** a Stryker release depends on `minimatch` ≥ 11.0.1, or `@lhci/cli` moves to `proxy-agent` 8, whose
+  `get-uri` 8 asks for `basic-ftp` ^6.2.4 itself. Either override can then go.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 18 November 2026 — `dougkeefe/6jrj8` (Dependabot alerts #28 and #29, `minimatch` and `basic-ftp`; D277)
+
+Not *Next, decided*, which is unchanged (D206). The human asked for the two open Dependabot alerts to be resolved in
+one PR.
+- **Dependencies:** `typescript-eslint` 8.72.1 → 8.73.0 in the root `package.json`. In `pnpm-workspace.yaml`,
+  `"get-uri>basic-ftp"` goes from ^6.2.3 to ^6.2.4, and `"@stryker-mutator/core>minimatch": ^11.0.1` is new. The
+  lockfile is regenerated with pnpm 10.13.1 from `main`'s.
+- **Docs:** D277; *In flight*. The rotation moved D267 to `deviations-D200-D299.md`, and the oldest session entry to
+  `sessions-2026-10.md`.
+
+**Verified:**
+- The lockfile holds `minimatch` 3.1.5 and 11.0.8, `basic-ftp` 6.2.6, and `@types/node` 22.20.5 alone.
+- `pnpm audit` exit 0: the only two findings are the two ignored for `content` (D135).
+- Stryker's resolved `minimatch` is 11.0.8. Under it, `hasMagic()`, `negate`, `match()` (and with `partial`) and
+  `minimatch(…, { dot })` gave the expected results on the config's own patterns.
+  `pnpm exec stryker run --dryRunOnly` exit 0: 18 of 3,061 files to mutate, the same 18 as `packages/engine/src`
+  without tests and `index.ts`, 1,285 mutants instrumented, and the initial test run passed.
+- `pnpm verify` exit 0: check-types, lint (on `typescript-eslint` 8.73.0) and boundaries clean; `pnpm test` passed 329
+  files, 4,849 tests (8 todo).
+- Not run: the medium lane locally; CI runs it on the pull request.
 
 ### 12 November 2026 — `dougkeefe/pr-integration-plan` (Dependabot's minor-and-patch group, rebuilt from #116; D276)
 
@@ -1197,42 +1217,6 @@ resolved.
   the split. Three workers on CI: E2E 2/2 260 s, then 289 s with one timeout. Three shards on CI: green on both runs, the
   slowest at 223 s (D262). `main`'s required checks were then swapped to the three shards through `gh api`, and #106
   read as mergeable.
-
-### 25 October 2026 — `dougkeefe/current-levels-input` (the SLE results a user holds shape the plan, with a staircase for each skill; D259)
-
-Not *Next, decided*, which is unchanged (D206). The human asked for current levels in onboarding and at any time after,
-an E taking its skill out of the plan, and a fun indicator of mastery.
-- **Domain:** `ExamProfile.exemptBand`, its schema and refinement; `content/profiles/psc-sle.json`; the regenerated
-  `docs/schemas/exam-profile.schema.json`.
-- **Engine:** `standing.ts` (`skillStanding`, `declaredStart`); the planner's `maintaining` and `MAINTAIN_FACTOR`.
-- **App:** `studyFocus`'s `declared`; `planDailySession`'s `maintaining`; `startSession`'s `declared`.
-- **UI:** `LevelStair` and `levelStairGeometry`, with its stylesheet.
-- **Web:** `lib/study.ts`'s new profile shape and helpers; onboarding's *now* step and per-skill targets
-  (`components/study/LevelPickers.tsx`, `features/study/levels.ts`); `/settings/study`; Today's tabs, cards, plan lines,
-  Where you stand and the all-exempt card; each skill's own target in the drill, the diagnostic result, oral practice,
-  the workshop, fresh sets and `/progress`; the footer link; messages in both languages, `privacy.held` included.
-- **Tests:** `standing.test.ts`, the planner's, `studyFocus`'s, `startSession`'s and `planDailySession`'s new cases,
-  `LevelStair`'s, `study.test.ts`, `onboarding.test.ts`, `today-view.test.ts`, `next-step.test.ts`, `levels.test.ts`,
-  `study-view.test.ts`, the schema's two refusals, and `e2e/levels.spec.ts`; the changed premises as D259 lists.
-- **Docs:** D259; D249 and the 23 October entry for the translator are archived (rule 8); the PRD's §8.1, §8.2 and §7;
-  `apps/web/CLAUDE.md`, and the engine's, app's, ui's and domain's.
-
-**Verified:**
-- `pnpm verify` exit 0: check-types, lint and boundaries clean; `pnpm test` passed 291 files, 4,683 tests (8 todo).
-  The engine's goldens are unmoved.
-- After `pnpm --filter @palier/web build`, the whole hermetic `chromium` project with the warmup: 94 of 94, the new
-  `levels.spec.ts` (4 tests, axe clean on the results step, Today with an exempt and a held skill, the study settings,
-  the all-exempt card and French) and every onboarding journey with its new step counts included. It ran on a hermetic
-  `next dev` at port 3010 from a throwaway config, since another app held 3000. The `offline` project's
-  `csp-production.spec.ts` and `offline.spec.ts`: 17 of 17, `/settings/study` in both locales included.
-- Screenshots on the production build: the results step at 1280px, and in French at 390px; Today with reading exempt,
-  writing held and oral working; the study settings; and Today with all three exempt.
-- **26 October 2026, CI:** shard 2 of the medium lane ran past its 300 s budget, as it had on `main`; the warmup visits
-  one page per route file and the levels journey onboards once (D260). Shard 2 measured 137 s locally against 151 s.
-- A candid review loop of the branch found two issues, both fixed: the target step's per-skill disclosure closed under
-  the user when their targets agreed again (now `perSkillTargetsOpen`, tested), and `heldSkills` restated
-  `SCORED_SKILLS`. A second pass found none; `pnpm verify` then passed 291 files, 4,686 tests (8 todo).
-- Not run: the rest of the `offline` project, and Lighthouse. CI runs the lane on the pull request.
 
 Older entries, newest first: [October 2026](progress-archive/sessions-2026-10.md) ·
 [September 2026](progress-archive/sessions-2026-09.md).
