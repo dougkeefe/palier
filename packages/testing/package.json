@@ -34,11 +34,11 @@
     "vitest": "5.1.0"
   },
   "dependencies": {
-    "@electric-sql/pglite": "0.5.15",
+    "@electric-sql/pglite": "0.5.16",
     "@palier/app": "workspace:*",
     "@palier/domain": "workspace:*",
-    "fake-indexeddb": "6.2.7",
-    "msw": "3.0.4"
+    "fake-indexeddb": "6.2.8",
+    "msw": "3.0.6"
   },
   "peerDependencies": {
     "vitest": "^5.0.0"
